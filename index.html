@@ -20,7 +20,7 @@
 <body>
     <div class="d-flex">
         <div class="col-6">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="auto" style="border:1px solid #fff"
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60%" height="auto" style="border:1px solid #fff"
                 viewBox="0 0 600 496.05">
                 <defs>
                     <style>
@@ -123,6 +123,12 @@
                             opacity: 0;
                             offset-path: path('M0 40 C200 0,220 80,260,120');
                             offset-distance: 100%;
+
+                        }
+
+                        .airplain-stroke {
+                            stroke: none;
+                            fill: #fff;
                         }
 
                         #airTrack {
@@ -147,14 +153,17 @@
                             }
                         }
 
+                        #mapPin {
+                            transform: scale(0.8)
+                        }
 
                         #mapPin path {
                             opacity: 0;
-
                         }
 
                         #mapPin.show path {
                             opacity: 1;
+                            width: 10px;
                             fill-rule: evenodd;
                             filter: url(#filter);
                         }
@@ -276,8 +285,8 @@
             })
             airTrack.classList.add('show')
             pin.classList.add('show')
-            console.log(event.x / 2)
-            pin.style.transform = `translate(${event.x / 2}px,${event.y / 2}px)`
+            pin.style.transform = `translate(${event.x}px,${event.y - 40}px) scale(0.8)`
+            console.log(event)
         })
 
         Taichung.addEventListener('mouseover', function (obj) {
