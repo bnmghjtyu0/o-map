@@ -111,7 +111,7 @@
                     <use xlink:href="#paper_planeStroke" />
                 </g>
 
-                <g id="airplanePath" fill="none" stroke="black " stroke-width="1 ">
+                <g id="airplanePath" style="opacity: 0" fill="none" stroke="black " stroke-width="1 ">
                     <path stroke-dasharray="1.5 " d="M0 60 C120 0,200 80,200,80" stroke="#fff " fill="none " />
                 </g>
 
@@ -162,6 +162,7 @@
             let areaClient = this.children[0].getBoundingClientRect();
             let areaCenterX = areaClient.x;
             let areaCenterY = areaClient.y;
+            $airplanePath.style.opacity = 1
             $airplanePath.children[0].setAttributeNS(null,'d',`M0 60 C120 0,200 80,${areaCenterX},${areaCenterY}`)
         })
 
@@ -181,9 +182,9 @@
             TweenMax.to(mapPin, 0.5, { opacity: 1 })
 
         })
-        $Taichung.addEventListener('mouseout', function (event) {
-            TweenMax.set(mapPin, { opacity: 0 })
-        })
+        // $Taichung.addEventListener('mouseout', function (event) {
+        //     TweenMax.set(mapPin, { opacity: 0 })
+        // })
 
     </script>
 </body>
