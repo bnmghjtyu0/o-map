@@ -178,13 +178,13 @@
             // mapPinShadow.top = areaClient.y
             mapPin.setAttributeNS(null, 'x', areaCenterX - 50);
             mapPin.setAttributeNS(null, 'y', areaCenterY / 2 + 10);
-            TweenMax.set(mapPin, { opacity: 0 })
-            TweenMax.to(mapPin, 0.5, { opacity: 1 })
+            TweenMax.set(mapPin, { opacity: 1 })
+            // TweenMax.to(mapPin, 0.5, { opacity: 1 })
 
         })
-        // $Taichung.addEventListener('mouseout', function (event) {
-        //     TweenMax.set(mapPin, { opacity: 0 })
-        // })
+        $Taichung.addEventListener('mouseout', function (event) {
+            TweenMax.set(mapPin, { opacity: 1 })
+        })
 
     </script>
 </body>
