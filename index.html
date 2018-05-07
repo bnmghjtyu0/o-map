@@ -32,7 +32,7 @@
         <div class="col-4">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="mysvg" width="100%" viewBox="0 0 600 500"
                 style="border:1px solid #fff">
-      
+
                 <g id="Taiwan" style="transform:translate(100px, 10px)" fill="#fff">
                     <g id="TaiwanShadow">
                         <g class="cls-2">
@@ -147,7 +147,7 @@
         var svg = document.querySelector('#mysvg')
         var group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         var mapPin = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-        
+
         mapPin.setAttributeNS(null, 'x', 0);
         mapPin.setAttributeNS(null, 'y', 0);
         mapPin.setAttributeNS(null, 'width', 30);
@@ -163,7 +163,7 @@
             let areaCenterX = areaClient.x;
             let areaCenterY = areaClient.y;
             $airplanePath.style.opacity = 1
-            $airplanePath.children[0].setAttributeNS(null,'d',`M0 60 C120 0,200 80,${areaCenterX},${areaCenterY}`)
+            $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C120 0,200 80,${areaCenterX},${areaCenterY}`)
         })
 
         $Taichung.addEventListener('mouseover', function (event) {
