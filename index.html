@@ -94,7 +94,7 @@
                 <div id="areaInfo" class="pattern-circle h-100 text-white p-4"></div>
             </div>
             <div class="col">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" viewBox="0 0 600 600" style="border:1px solid #fff;">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" viewBox="0 0 600 600">
                     <defs>
                         <linearGradient id="TaiwanGradient" x1="100%" y1="100%" x2="100%" y2="0%">
                             <stop offset="0%" style="stop-color:rgba(255,255,255); stop-opacity:0.6" />
@@ -209,88 +209,7 @@
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/TweenMax-latest-beta.js?v=333"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=1899"></script>
     <script>
-        // 宣告 o.o
-        let isClicked = false;
-        let posX = 120;
-        let posY = 60;
-        let $Taiwan = document.querySelector('#Taiwan');
-        // 台中
-        let $Taichung = document.querySelector('#Taichung');
-        let $TaichungArea = document.querySelector('#TaichungArea');
-        let $TaichungAreaShadow = document.querySelector('#TaichungAreaShadow');
-        let TaichungposX = 130 + Number(`${posX}`)
-        let TaichungposY = 80 + Number(`${posY}`)
-        // 台北
-        let $Taipei = document.querySelector('#Taipei');
-
-        let $airplanePath = document.querySelector('#airplanePath');
-        let tween,
-            opacity = false,
-            motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
-
-        // 飛機動畫
-        motionPath.reverse()
-        TweenLite.set("#paperAirplane", { xPercent: 0, yPercent: -100, scale: 1 });
-        // 位置
-        TweenLite.fromTo($Taiwan, 2, { x: 10 + Number(`${posX}`), y: 10 + Number(`${posY}`), autoAlpha: 0 }, { x: Number(`${posX}`), y: Number(`${posY}`), autoAlpha: 1, ease: Power3.easeOut });
-        TweenLite.set($Taichung, { x: 120 + Number(`${posX}`), y: 60 + Number(`${posY}`) })
-        TweenLite.set($Taipei, { x: 200 + Number(`${posX}`), y: Number(`${posY}`) })
-        // 新增 svg
-        var s = Snap('#svg');
-        var svg = document.querySelector('#svg')
-
-        // 宣告 pin 圖標與陰影
-        var mapPin = s.image("img/Pin icon.svg", 0, 0, 30, 36);
-        var mapPinShadow = s.image("img/shadow.png", 0, 0, 30, 14);
-        mapPin.attr({
-            style: ['opacity:0']
-        })
-
-        let array = []
-        function areaClick(event) {
-            let areaId = event.target.parentNode.getAttribute('id');
-            areaDOM(areaId)
-            array.push(areaId)
-            if (isClicked != false) return false
-            tween = TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
-            $airplanePath.style.opacity = 1
-            $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C150 0,${TaichungposX} ${TaichungposY},${TaichungposX},${TaichungposY}`)
-            motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
-            motionPath.reverse()
-            TweenLite.set("#paperAirplane", { xPercent: 0, yPercent: -100, scale: 1 });
-            isClicked = true
-        }
-
-        function areaMouseover(event) {
-            // mapPin 屬性設定
-            mapPin.attr({
-                x: Number(`${TaichungposX}`) + 10,
-                y: Number(`${TaichungposY}`) - 34,
-                style: [
-                    'opacity:1'
-                ]
-
-            })
-            mapPinShadow.attr({
-                x: Number(`${TaichungposX}`) + 10,
-                y: Number(`${TaichungposY}`) + 6,
-            })
-            // mapPinShadow.top = areaClient.y
-
-            TweenMax.set(mapPin, { opacity: 1 })
-            // TweenMax.to(mapPin, 0.5, { opacity: 1 })
-
-        }
-        function areaMouseout(event) {
-            TweenMax.set(mapPin, { opacity: 1 })
-        }
-        // $Taichung.addEventListener('click', areaClick, { once: true })
-        let areaAll = document.querySelector('.areaAll');
-        areaAll.addEventListener('click', areaClick, false)
-        $Taichung.addEventListener('mouseover', areaMouseover, false)
-        $Taichung.addEventListener('mouseout', areaMouseout, false)
-
-
+        // Api
         const json =
             {
                 TaipeiArea: {
@@ -329,19 +248,124 @@
                         }
                 }
             }
+        // 宣告 o.o
+        // --------------------------------------------------------------------------------------
+        let isClicked = false;
+        let posX = 120;
+        let posY = 60;
+        let $Taiwan = document.querySelector('#Taiwan');
+        var s = Snap('#svg');
+        var svg = document.querySelector('#svg')
 
+        // 宣告 pin 圖標與陰影
+        var mapPin = s.image("img/Pin icon.svg", 0, 0, 30, 36);
+        var mapPinShadow = s.image("img/shadow.png", 0, 0, 30, 14);
+        mapPin.attr({
+            style: ['opacity:0']
+        })
 
-        function areaBlock(num, areaId) {
-            let ul = document.querySelector(`#areaBlock`)
-            ul.innerHTML = ''
-            let li = document.createElement('li')
-            let str = ''
-            let year = json[areaId].year[num];
-            year.forEach(x => {
-                str += `<li>${x}</li>`
-            })
-            ul.innerHTML = str
+        // --------------------------------------------------------------------------------------
+        // 宣告地區的座標
+        // --------------------------------------------------------------------------------------
+        // 台中
+        let $Taichung = document.querySelector('#Taichung');
+        let $TaichungArea = document.querySelector('#TaichungArea');
+        let $TaichungAreaShadow = document.querySelector('#TaichungAreaShadow');
+        let TaichungposX = 130 + Number(`${posX}`)
+        let TaichungposY = 80 + Number(`${posY}`)
+        // 台北
+        let $Taipei = document.querySelector('#Taipei');
+        let TaipeiposX = 190 + Number(`${posX}`)
+        let TaipeiposY = 20 + Number(`${posY}`)
+        // --------------------------------------------------------------------------------------
+
+        // --------------------------------------------------------------------------------------
+        // 飛機初始化設定 - 宣告飛行路線
+        // --------------------------------------------------------------------------------------
+        let $airplanePath = document.querySelector('#airplanePath');
+        // 設置起飛位置
+        TweenLite.set("#paperAirplane", { xPercent: 0, yPercent: -100, scale: 0.6 });
+        // 台灣動畫
+        TweenLite.fromTo($Taiwan, 2, { x: 10 + Number(`${posX}`), y: 10 + Number(`${posY}`), autoAlpha: 0 }, { x: Number(`${posX}`), y: Number(`${posY}`), autoAlpha: 1, ease: Power3.easeOut });
+
+        // 調整地區所在位置
+        TweenLite.set($Taichung, { x: 120 + Number(`${posX}`), y: 60 + Number(`${posY}`) })
+        TweenLite.set($Taipei, { x: 200 + Number(`${posX}`), y: Number(`${posY}`) })
+        // --------------------------------------------------------------------------------------
+
+        // --------------------------------------------------------------------------------------
+        // 點擊地區時，讓飛機延著路線前進
+        // --------------------------------------------------------------------------------------
+        function areaClick(e) {
+            e.preventDefault();
+            let areaId = e.target.parentNode.getAttribute('id');
+            areaDOM(areaId)
+            //    顯示飛機路徑
+            $airplanePath.style.opacity = 1
+
+            switch (areaId) {
+                case 'TaichungArea':
+                    $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C150 0,${TaichungposX} ${TaichungposY},${TaichungposX},${TaichungposY}`)
+                    motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
+                    // 改變飛機起飛位置
+                    motionPath.reverse()
+                    TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
+                    break;
+                case 'TaipeiArea':
+                    $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C150 0,${TaipeiposX} ${TaipeiposY},${TaipeiposX},${TaipeiposY}`)
+                    motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
+                    // 改變飛機起飛位置
+                    motionPath.reverse()
+                    TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
+                    break
+            }
         }
+
+        // --------------------------------------------------------------------------------------
+        // 滑鼠移入地區後，出現 mapPin
+        // --------------------------------------------------------------------------------------
+        function areaMouseover(e) {
+            let areaId = e.target.parentNode.getAttribute('id');
+            // mapPin 屬性設定
+            switch (areaId) {
+                case 'TaichungArea':
+                    mapPin.attr({
+                        x: Number(`${TaichungposX}`) + 10,
+                        y: Number(`${TaichungposY}`) - 34,
+                        style: [
+                            'opacity:1'
+                        ]
+                    })
+
+                    mapPinShadow.attr({
+                        x: Number(`${TaichungposX}`) + 10,
+                        y: Number(`${TaichungposY}`) + 6,
+                    })
+                    break;
+                case 'TaipeiArea':
+                    mapPin.attr({
+                        x: Number(`${TaipeiposX}`) + 25,
+                        y: Number(`${TaipeiposY}`) - 35,
+                        style: [
+                            'opacity:1'
+                        ]
+                    })
+                    mapPinShadow.attr({
+                        x: Number(`${TaipeiposX}`) + 25,
+                        y: Number(`${TaipeiposY}`) + 6,
+                    })
+                    break;
+            }
+        }
+
+        // --------------------------------------------------------------------------------------
+        // 滑鼠移開地區後，隱藏 mapPin
+        // --------------------------------------------------------------------------------------
+        function areaMouseout(e) {
+            TweenMax.set(mapPin, { opacity: 1 })
+        }
+
+        // 點擊地區印出相關年分
 
         function areaDOM(areaId) {
             let areaInfo = document.querySelector('#areaInfo')
@@ -351,12 +375,10 @@
             <h4 class="title"></h4>
             <ul id="tabs" class="tabs"></ul>
             <ul id="areaBlock" class="text-white"></ul>
-            `;
+            `
 
             // 將模板傳回 dom
-
             areaInfo.insertAdjacentHTML('beforeend', newCategory);
-
             // api 地區英文轉中文，輸出標題 .title
             let title = document.querySelector('.title')
             switch (areaId) {
@@ -379,20 +401,37 @@
             }
             tabs.innerHTML = yearLi
 
-            // 點擊 tabs 裡面的 a 連結時觸發
             let li = Array.from(document.querySelectorAll('#tabs li a'))
             li.forEach(link => {
-                link.addEventListener('click', function (event) {
+                link.addEventListener('click', function (e) {
                     li.forEach(x => {
+                        e.preventDefault()
                         x.classList.remove('active')
                     })
-                    event.target.classList.add('active')
+                    e.target.classList.add('active')
                     areaBlock(link.textContent, areaId)
                     // get dom id=year2018 回傳到 year()
                 })
             })
-
         }
+        // 印出地區年份內的資訊
+        function areaBlock(num, areaId) {
+            let ul = document.querySelector(`#areaBlock`)
+            ul.innerHTML = ''
+            let li = document.createElement('li')
+            let str = ''
+            let year = json[areaId].year[num];
+            year.forEach(x => {
+                str += `<li>${x}</li>`
+            })
+            ul.innerHTML = str
+        }
+
+        // 監聽地區的事件
+        let areaAll = document.querySelector('.areaAll');
+        areaAll.addEventListener('click', areaClick, false)
+        areaAll.addEventListener('mouseover', areaMouseover, false)
+        areaAll.addEventListener('mouseout', areaMouseout, false)
 
     </script>
 </body>
