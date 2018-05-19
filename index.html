@@ -30,7 +30,7 @@
 <body>
     <div class="d-flex">
         <div class="col-4">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="mysvg" width="100%" viewBox="0 0 600 500"
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" width="100%" viewBox="0 0 600 500"
                 style="border:1px solid #fff">
 
                 <g id="Taiwan" style="transform:translate(100px, 10px)" fill="#fff">
@@ -123,13 +123,18 @@
         </div>
     </div>
 
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- snap.js 可用 javascript 寫 svg -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+    <!-- greensock.js 用來優化 svg 動畫 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenLite.min.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/TweenMax-latest-beta.js?v=333"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=1899"></script>
     <script>
         // 宣告 o.o 
         var $Taiwan = document.querySelector('#Taiwan');
+        var $TaiwanPath = document.querySelector('#Taiwan path')
         var $Taichung = document.querySelector('#Taichung');
         var $TaichungArea = document.querySelector('#TaichungArea');
         var $TaichungAreaShadow = document.querySelector('#TaichungAreaShadow');
@@ -144,18 +149,15 @@
         TweenLite.fromTo($Taiwan, 2, { x: '120px', y: '10px', autoAlpha: 0 }, { x: '110px', y: '0px', autoAlpha: 1, ease: Power3.easeOut });
 
         // 新增 svg
-        var svg = document.querySelector('#mysvg')
-        var group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        var mapPin = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        var svg = document.querySelector('#svg')
+        // 定義 snap.js
+        var s = Snap('#svg')
+        // 載入 pin 圖片
 
-        mapPin.setAttributeNS(null, 'x', 0);
-        mapPin.setAttributeNS(null, 'y', 0);
-        mapPin.setAttributeNS(null, 'width', 30);
-        mapPin.setAttributeNS(null, 'height', 30);
-        mapPin.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'img/Pin icon.svg')
-        mapPin.style.opacity = 0
-        group.appendChild(mapPin);
-        svg.appendChild(group);
+        var pin = s.image('img/Pin icon.svg', 0, 0, 30, 36) //x,y,w,h
+        pin.attr({
+            style: 'opacity:1'
+        })
 
         $Taichung.addEventListener('click', function (event) {
             tween = TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
@@ -167,7 +169,6 @@
         })
 
         $Taichung.addEventListener('mouseover', function (event) {
-            // mapPin
             let areaClient = this.children[0].getBoundingClientRect();
             let areaCenterX = areaClient.x;
             let areaCenterY = areaClient.y;
@@ -176,15 +177,25 @@
             mapPinShadow.style.left = areaClient.x + 30 + 'px'
             mapPinShadow.style.top = areaClient.y + 36 + 'px'
             // mapPinShadow.top = areaClient.y
-            mapPin.setAttributeNS(null, 'x', areaCenterX - 50);
-            mapPin.setAttributeNS(null, 'y', areaCenterY / 2 + 10);
-            TweenMax.set(mapPin, { opacity: 0 })
-            TweenMax.to(mapPin, 0.5, { opacity: 1 })
+            console.log(pin.node.attributes.width.value)
+            console.log(pin.node.attributes.height.value)
+
+            pin.attr({
+                x: areaCenterX - (pin.node.attributes.width.value / 2),
+                y: areaCenterY - (pin.node.attributes.height.value),
+                style: 'opacity:1'
+            })
 
         })
         // $Taichung.addEventListener('mouseout', function (event) {
         //     TweenMax.set(mapPin, { opacity: 0 })
         // })
+
+
+
+
+
+
 
     </script>
 </body>
