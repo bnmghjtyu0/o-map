@@ -73,6 +73,7 @@
         .tabs li a:hover::before,
         .tabs li a.active::before {
             content: '';
+            opacity: 1;
             position: absolute;
             left: 50%;
             bottom: -23px;
@@ -83,6 +84,24 @@
             height: 25px;
             background-color: hsla(202, 72%, 63%, 0.408);
             z-index: 1;
+            animation: spread 1200ms linear alternate infinite;
+        }
+
+        .tabs li a.active::after {
+            background: #5db4e5;
+        }
+
+
+
+        /* 動畫   */
+
+        @keyframes spread {
+            0% {
+                transform: scale(.5)
+            }
+            100% {
+                transform: scale(1)
+            }
         }
     </style>
 </head>
@@ -90,7 +109,7 @@
 <body>
     <div class="container d-flex mt-5">
         <div class="row w-100 align-items-stretch">
-            <div class="col">
+            <div class="col mt-5">
                 <div id="areaInfo" class="pattern-circle h-100 text-white p-4"></div>
             </div>
             <div class="col">
@@ -249,15 +268,17 @@
                         }
                 }
             }
-        let MapIIFE = (function () {
+        var MapIIFE = (function () {
             // 宣告 o.o
             // --------------------------------------------------------------------------------------
-            let isClicked = false;
-            let posX = 120;
-            let posY = 60;
-            let $Taiwan = document.querySelector('#Taiwan');
+            var isClicked = false;
+            var posX = 120;
+            var posY = 100;
+            var $Taiwan = document.querySelector('#Taiwan');
             var s = Snap('#svg');
             var svg = document.querySelector('#svg')
+            // 初始化地區
+            var areaId = 'TaipeiArea';
 
             // 宣告 pin 圖標與陰影
             var mapPin = s.image("img/Pin icon.svg", 0, 0, 30, 36);
@@ -269,22 +290,24 @@
             // --------------------------------------------------------------------------------------
             // 宣告地區的座標
             // --------------------------------------------------------------------------------------
+            // 所有地區
+            var areaAll = document.querySelector('.areaAll');
             // 台中
-            let $Taichung = document.querySelector('#Taichung');
-            let $TaichungArea = document.querySelector('#TaichungArea');
-            let $TaichungAreaShadow = document.querySelector('#TaichungAreaShadow');
-            let TaichungposX = 130 + Number(`${posX}`)
-            let TaichungposY = 80 + Number(`${posY}`)
+            var $Taichung = document.querySelector('#Taichung');
+            var $TaichungArea = document.querySelector('#TaichungArea');
+            var $TaichungAreaShadow = document.querySelector('#TaichungAreaShadow');
+            var TaichungposX = 130 + Number(`${posX}`)
+            var TaichungposY = 80 + Number(`${posY}`)
             // 台北
-            let $Taipei = document.querySelector('#Taipei');
-            let TaipeiposX = 190 + Number(`${posX}`)
-            let TaipeiposY = 20 + Number(`${posY}`)
+            var $Taipei = document.querySelector('#Taipei');
+            var TaipeiposX = 190 + Number(`${posX}`)
+            var TaipeiposY = 20 + Number(`${posY}`)
             // --------------------------------------------------------------------------------------
 
             // --------------------------------------------------------------------------------------
             // 飛機初始化設定 - 宣告飛行路線
             // --------------------------------------------------------------------------------------
-            let $airplanePath = document.querySelector('#airplanePath');
+            var $airplanePath = document.querySelector('#airplanePath');
             // 設置起飛位置
             TweenLite.set("#paperAirplane", { xPercent: 0, yPercent: -100, scale: 0.6 });
             // 台灣動畫
@@ -299,9 +322,12 @@
             // 點擊地區時，讓飛機延著路線前進
             // --------------------------------------------------------------------------------------
             function areaClick(e) {
+                let yearMax;
                 e.preventDefault();
-                let areaId = e.target.parentNode.getAttribute('id');
+                areaId = e.target.parentNode.getAttribute('id');
                 areaDOM(areaId)
+                yearMax = Math.max(...Object.keys(json[areaId].year))
+
                 //    顯示飛機路徑
                 $airplanePath.style.opacity = 1
 
@@ -321,13 +347,15 @@
                         TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
                         break
                 }
+                areaBlock(yearMax, areaId)
+                document.querySelector('#tabs li a').classList.add('active')
             }
 
             // --------------------------------------------------------------------------------------
             // 滑鼠移入地區後，出現 mapPin
             // --------------------------------------------------------------------------------------
             function areaMouseover(e) {
-                let areaId = e.target.parentNode.getAttribute('id');
+                areaId = e.target.parentNode.getAttribute('id');
                 // mapPin 屬性設定
                 switch (areaId) {
                     case 'TaichungArea':
@@ -368,12 +396,12 @@
             }
 
             // 點擊地區印出相關年分
-
             function areaDOM(areaId) {
-                let areaInfo = document.querySelector('#areaInfo')
+                var newCategory;
+                var areaInfo = document.querySelector('#areaInfo')
                 areaInfo.innerHTML = ''
                 // 建立模板
-                var newCategory = `
+                newCategory = `
             <h4 class="title"></h4>
             <ul id="tabs" class="tabs"></ul>
             <ul id="areaBlock" class="text-white"></ul>
@@ -381,7 +409,7 @@
                 // 將模板傳回 dom
                 areaInfo.insertAdjacentHTML('beforeend', newCategory);
                 // api 地區英文轉中文，輸出標題 .title
-                let title = document.querySelector('.title')
+                var title = document.querySelector('.title')
                 switch (areaId) {
                     case 'TaichungArea':
                         title.textContent = '台中市'
@@ -394,15 +422,20 @@
                 }
 
                 // tabs 加入地區的年份
-                let tabs = document.querySelector('#tabs')
-                let year = Object.keys(json[areaId].year)
-                let yearLi = ''
-                for (let i = 0, len = year.length; i < len; i++) {
+                var year;
+                var tabs;
+                var yearLi;
+                tabs = document.querySelector('#tabs')
+                year = Object.keys(json[areaId].year)
+                year.sort((a, b) => b - a)
+                yearLi = ''
+                for (var i = 0, len = year.length; i < len; i++) {
                     yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
                 }
                 tabs.innerHTML = yearLi
+                var li = Array.from(document.querySelectorAll('#tabs li a'))
 
-                let li = Array.from(document.querySelectorAll('#tabs li a'))
+                // 點擊年份切換資訊
                 li.forEach(link => {
                     link.addEventListener('click', function (e) {
                         li.forEach(x => {
@@ -417,25 +450,84 @@
             }
             // 印出地區年份內的資訊
             function areaBlock(num, areaId) {
-                let ul = document.querySelector(`#areaBlock`)
+                var ul, li, str, year;
+                ul = document.querySelector(`#areaBlock`)
                 ul.innerHTML = ''
-                let li = document.createElement('li')
-                let str = ''
-                let year = json[areaId].year[num];
+                li = document.createElement('li')
+                str = ''
+                year = json[areaId].year[num];
                 year.forEach(x => {
                     str += `<li>${x}</li>`
                 })
                 ul.innerHTML = str
             }
 
+
+            // --------------------------------------------------------------------------------------
+            // 進入網頁後，先載入資料
+            // --------------------------------------------------------------------------------------
+            function areaInitial(areaId) {
+                // 地標
+                switch (areaId) {
+                    case 'TaichungArea':
+                        mapPin.attr({
+                            x: Number(`${TaichungposX}`) + 10,
+                            y: Number(`${TaichungposY}`) - 34,
+                            style: [
+                                'opacity:1'
+                            ]
+                        })
+
+                        mapPinShadow.attr({
+                            x: Number(`${TaichungposX}`) + 10,
+                            y: Number(`${TaichungposY}`) + 6,
+                        })
+                        break;
+                    case 'TaipeiArea':
+                        mapPin.attr({
+                            x: Number(`${TaipeiposX}`) + 25,
+                            y: Number(`${TaipeiposY}`) - 35,
+                            style: [
+                                'opacity:1'
+                            ]
+                        })
+                        mapPinShadow.attr({
+                            x: Number(`${TaipeiposX}`) + 25,
+                            y: Number(`${TaipeiposY}`) + 6,
+                        })
+                        break;
+                }
+                // 飛機起飛
+                //    顯示飛機路徑
+                $airplanePath.style.opacity = 1
+                switch (areaId) {
+                    case 'TaichungArea':
+                        $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C150 0,${TaichungposX} ${TaichungposY},${TaichungposX},${TaichungposY}`)
+                        motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
+                        // 改變飛機起飛位置
+                        motionPath.reverse()
+                        TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
+                        break;
+                    case 'TaipeiArea':
+                        $airplanePath.children[0].setAttributeNS(null, 'd', `M0 60 C150 0,${TaipeiposX} ${TaipeiposY},${TaipeiposX},${TaipeiposY}`)
+                        motionPath = MorphSVGPlugin.pathDataToBezier("#airplanePath path", { align: "#paperAirplane" });
+                        // 改變飛機起飛位置
+                        motionPath.reverse()
+                        TweenLite.to("#paperAirplane ", 2, { bezier: { values: motionPath, type: "cubic" }, scale: 0.6 });
+                        break
+                }
+            }
+            areaInitial(areaId)
+            areaDOM(areaId)
+            areaBlock(2013, areaId)
+            var li = document.querySelector('#tabs li a')
+            li.classList.add('active')
+
             // 監聽地區的事件
-            let areaAll = document.querySelector('.areaAll');
             areaAll.addEventListener('click', areaClick, false)
             areaAll.addEventListener('mouseover', areaMouseover, false)
             areaAll.addEventListener('mouseout', areaMouseout, false)
         })()
-
-        MapIIFE()
 
     </script>
 </body>
