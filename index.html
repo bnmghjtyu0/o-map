@@ -170,6 +170,8 @@
                     <g id="Waves02">
                         <path id="_路徑_" data-name="&lt;路徑&gt;" d="M490.59,1906h49.19a25.85,25.85,0,0,1-24.52-26h-.15A25.85,25.85,0,0,1,490.59,1906Z"
                             transform="translate(-450.59 -1860)" style="fill:#355364" />
+                    </g>
+                    <g id="Waves025">
                         <path id="_路徑_" data-name="&lt;路徑&gt;" d="M490.59,1906h49.19a25.85,25.85,0,0,1-24.52-26h-.15A25.85,25.85,0,0,1,490.59,1906Z"
                             transform="translate(-460.59 -1780)" style="fill:#355364" />
                     </g>
@@ -234,7 +236,6 @@
                 TaichungArea: {
                     year:
                         {
-                            "2012": ['2017A', '2017B'],
                             "2013": ['2017A', '2017B'],
                             "2014": ['2017A', '2017B'],
                             "2015": ['2017A', '2017B'],
@@ -304,43 +305,60 @@
             // 飛機初始化設定 - 宣告飛行路線
             // --------------------------------------------------------------------------------------
             var $airplanePath = document.querySelector('#airplanePath');
+
             // 設置起飛位置
             TweenLite.set("#paperAirplane", { xPercent: 0, yPercent: -100, scale: 0.6 });
             // 台灣動畫
-            TweenLite.fromTo($Taiwan, 2, { x: 10 + Number(`${posX}`), y: 10 + Number(`${posY}`), autoAlpha: 0 }, { x: Number(`${posX}`), y: Number(`${posY}`), autoAlpha: 1, ease: Power3.easeOut });
-
+            TweenLite.fromTo($Taiwan, 2, { x: 10 + Number(`${posX}`), y: 10 + Number(`${posY}`), autoAlpha: 0 }, { x: Number(`${posX}`), y: Number(`${posY}`), autoAlpha: 1, ease: Power3.easeOut, delay: 0.2 });
             // 調整地區所在位置
-            TweenLite.set($Taichung, { x: 120 + Number(`${posX}`), y: 60 + Number(`${posY}`) })
+            TweenLite.fromTo($Taichung, 2, { opacity: 0, x: 120 + Number(`${posX}`), y: 70 + Number(`${posY}`) }, { opacity: 1, x: 120 + Number(`${posX}`), y: 60 + Number(`${posY}`), delay: 0.6 })
+
             // TweenLite.set($Taipei, { x: 200 + Number(`${posX}`), y: Number(`${posY}`) })
+
             // --------------------------------------------------------------------------------------
 
             // Island
             var $Island01 = document.querySelector('#Island01');
             TweenMax.set($Island01, { x: 150, y: 170, scale: 0.7 })
-            TweenMax.to($Island01, 2.2, { x: 144, y: 150, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
 
             var $Island02 = document.querySelector('#Island02');
             TweenMax.set($Island02, { x: 50, y: 340, scale: 0.7 })
-            TweenMax.to($Island02, 1.9, { y: 360, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
 
             var $Island03 = document.querySelector('#Island03');
-            TweenMax.set($Island03, { x: 100, y: 500, scale: 0.7, duration: 2 })
-            TweenMax.to($Island03, 1.8, { y: 520, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+            TweenMax.set($Island03, { x: 100, y: 500, scale: 0.7 })
+
             // Waves
             var $Waves00 = document.querySelector('#Waves00');
-            TweenMax.set($Waves00, { x: 200, y: 60, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves00, { x: 200, y: 60, scale: 0.7 })
+            TweenMax.to($Waves00, 1.8, { x: 180, y: 60, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves01 = document.querySelector('#Waves01');
-            TweenMax.set($Waves01, { x: 60, y: 220, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves01, { x: 60, y: 220, scale: 0.7 })
+            TweenMax.to($Waves01, 1.6, { x: 80, y: 220, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves02 = document.querySelector('#Waves02');
-            TweenMax.set($Waves02, { x: 400, y: 220, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves02, { x: 400, y: 220, scale: 0.7 })
+            TweenMax.to($Waves02, 1.7, { x: 380, y: 220, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
+            var $Waves025 = document.querySelector('#Waves025');
+            TweenMax.set($Waves025, { x: 400, y: 180, scale: 0.7 })
+            TweenMax.to($Waves025, 2, { x: 380, y: 180, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves03 = document.querySelector('#Waves03');
-            TweenMax.set($Waves03, { x: 20, y: 280, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves03, { x: 20, y: 280, scale: 0.7 })
+            TweenMax.to($Waves03, 1.8, { x: 40, y: 280, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves04 = document.querySelector('#Waves04');
-            TweenMax.set($Waves04, { x: 20, y: 420, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves04, { x: 0, y: 420, scale: 0.7 })
+            TweenMax.to($Waves04, 1.6, { x: 20, y: 420, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves05 = document.querySelector('#Waves05');
-            TweenMax.set($Waves05, { x: 360, y: 420, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves05, { x: 360, y: 420, scale: 0.7 })
+            TweenMax.to($Waves05, 1.3, { x: 340, y: 420, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
+
             var $Waves06 = document.querySelector('#Waves06');
-            TweenMax.set($Waves06, { x: 330, y: 480, scale: 0.7, duration: 2 })
+            TweenMax.set($Waves06, { x: 330, y: 480, scale: 0.7 })
+            TweenMax.to($Waves06, 1.2, { x: 340, y: 480, scale: 0.7, repeat: -1, yoyo: true, ease: Linear.easeNone })
 
 
             // --------------------------------------------------------------------------------------
@@ -429,7 +447,7 @@
                 newCategory = `
             <h4 class="title"></h4>
             <ul id="tabs" class="tabs scrollbar overflow-x"></ul>
-            <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:400px"></ul>
+            <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
             `
                 // 將模板傳回 dom
                 areaInfo.insertAdjacentHTML('beforeend', newCategory);

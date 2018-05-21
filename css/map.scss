@@ -59,6 +59,7 @@ body {
         }
         ul {
           padding-left: 25px;
+          padding-right: 20px;
           li {
             list-style-type: disc;
             a {
@@ -69,8 +70,8 @@ body {
         #areaBlock {
           margin-top: 0;
           li {
-            font-size: 16px;
-            line-height: 1.5em;
+            font-size: 15px;
+            line-height: 2em;
           }
         }
       }
@@ -97,7 +98,7 @@ body {
       position: relative;
       display: inline-block;
       list-style: none;
-      margin-right: 30px;
+      margin-right: 50px;
       a {
         display: inline-block;
         color: #fff;
