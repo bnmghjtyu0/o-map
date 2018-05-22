@@ -203,6 +203,7 @@
                         <path id="_路徑_" data-name="&lt;路徑&gt;" d="M490.59,1906h49.19a25.85,25.85,0,0,1-24.52-26h-.15A25.85,25.85,0,0,1,490.59,1906Z"
                             transform="translate(-300.59 -1880)" style="fill:#355364" />
                     </g>
+                    <image xlink:href="img/Pin icon.svg" preserveAspectRatio="none" x="260" y="146" width="30" height="36" style="opacity: 1;"></image>
                 </svg>
 
             </div>
@@ -272,6 +273,7 @@
             var posX = 120;
             var posY = 100;
             var $Taiwan = document.querySelector('#Taiwan');
+
             var s = Snap('#svg');
             var svg = document.querySelector('#svg')
             // 初始化地區
@@ -283,7 +285,10 @@
             mapPin.attr({
                 style: ['opacity:0']
             })
+            console.log(mapPin.paper.node)
 
+            TweenLite.fromTo(mapPin, 2, { x: Number(`${TaichungposX}`) + 10, y: Number(`${TaichungposY}`) - 24, },
+                { x: Number(`${TaichungposX}`) + 10, y: Number(`${TaichungposY}`) - 24 });
             // --------------------------------------------------------------------------------------
             // 宣告地區的座標
             // --------------------------------------------------------------------------------------
@@ -510,15 +515,15 @@
             // 進入網頁後，先載入資料
             // --------------------------------------------------------------------------------------
             function areaInitial(areaId) {
+
                 // 地標
                 switch (areaId) {
                     case 'TaichungArea':
+
                         mapPin.attr({
                             x: Number(`${TaichungposX}`) + 10,
                             y: Number(`${TaichungposY}`) - 24,
-                            style: [
-                                'opacity:1'
-                            ]
+                            opacity: 1
                         })
 
                         mapPinShadow.attr({
@@ -529,10 +534,7 @@
                     case 'TaipeiArea':
                         mapPin.attr({
                             x: Number(`${TaipeiposX}`) + 25,
-                            y: Number(`${TaipeiposY}`) - 35,
-                            style: [
-                                'opacity:1'
-                            ]
+                            y: Number(`${TaipeiposY}`) - 35
                         })
                         mapPinShadow.attr({
                             x: Number(`${TaipeiposX}`) + 25,
