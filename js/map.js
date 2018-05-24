@@ -196,12 +196,110 @@ taiwan.addEventListener(
       }
       update()
     }
-    taiwan.addEventListener('mouseover', tipA, false)
   },
   false
 )
 
-function tipA(e) {
-  tip.textContent = e.target.getAttribute('countryid')
-  tip.setAttribute('style', 'position:absolute;left:' + e.clientX + 'px;top:' + e.clientY + 'px')
+taiwan.addEventListener('mouseover', function tipA(e) {
+  let tipPos = {
+    x: e.clientX,
+    y: e.clientY
+  }
+  let tipId = e.target.getAttribute('countryid')
+  switch (tipId) {
+    case 'TW-TPE':
+      tip.textContent = '台北市'
+      break
+    case 'TW-TPQ':
+      tip.textContent = '台北縣'
+      break
+    case 'TW-KEE':
+      tip.textContent = '基隆'
+      break
+    case 'TW-TAO':
+      tip.textContent = '桃園'
+      break
+    case 'TW-HUA':
+      tip.textContent = '花蓮'
+      break
+    case 'TW-TTT':
+      tip.textContent = '台東'
+      break
+    case 'TW-PIF':
+      tip.textContent = '屏東'
+      break
+    case 'TW-KHQ':
+      tip.textContent = '高雄'
+      break
+    case 'TW-TNQ':
+      tip.textContent = '台南'
+      break
+    case 'TW-CYI':
+      tip.textContent = '嘉義市'
+      break
+    case 'TW-CYQ':
+      tip.textContent = '嘉義縣'
+      break
+    case 'TW-YUN':
+      tip.textContent = '雲林縣'
+      break
+    case 'TW-CHQ':
+      tip.textContent = '彰化縣'
+      break
+    case 'TW-NAN':
+      tip.textContent = '南投縣'
+      break
+    case 'TW-TXQ':
+      tip.textContent = '台中'
+      break
+    case 'TW-MIA':
+      tip.textContent = '苗栗'
+      break
+    case 'TW-HSQ':
+      tip.textContent = '新竹縣'
+      break
+    case 'TW-HSZ':
+      tip.textContent = '新竹市'
+      break
+    case 'TW-PEN':
+      tip.textContent = '澎湖'
+      break
+    case 'TW-ILA':
+      tip.textContent = '宜蘭'
+      break
+  }
+  tip.setAttribute(`style`, `position:absolute; left:${tipPos.x}px; top:${tipPos.y}px;`)
+})
+
+china.addEventListener('mouseover', function tipA(e) {
+  let tipPos = {
+    x: e.clientX,
+    y: e.clientY
+  }
+  let tipId = e.target.getAttribute('aria-label')
+  tip.textContent = tipId
+
+  tip.setAttribute(`style`, `position:absolute; left:${tipPos.x}px; top:${tipPos.y}px;`)
+})
+
+taiwan.onmousemove = function(ev) {
+  var ev = ev || window.event
+  var ofLeft = document.documentElement.offsetLeft || document.body.offsetLeft
+  var ofTop = document.documentElement.offsetTop || document.body.offsetTop
+  var oLeft = ev.clientX + ofLeft
+  var oTop = ev.clientY + ofTop
+  tip.style.display = 'block'
+  tip.style.left = oLeft + 'px'
+  tip.style.top = oTop + 'px'
+}
+
+china.onmousemove = function(ev) {
+  var ev = ev || window.event
+  var ofLeft = document.documentElement.offsetLeft || document.body.offsetLeft
+  var ofTop = document.documentElement.offsetTop || document.body.offsetTop
+  var oLeft = ev.clientX + ofLeft
+  var oTop = ev.clientY + ofTop
+  tip.style.display = 'block'
+  tip.style.left = oLeft + 'px'
+  tip.style.top = oTop + 'px'
 }
