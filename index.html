@@ -13,14 +13,27 @@
             box-shadow: 0 0 1px 1px #333
         }
 
+        #taiwan [d] {
+            fill: #333
+        }
+
+        #palau [d] {
+            fill: #333
+        }
+
         [d] {
-            fill: #333;
+            fill: #ccc;
+            stroke-width: 0.5px;
             transition: .7s;
             cursor: pointer;
         }
 
         [d]:hover {
-            fill: #f90
+            fill: #f90 !important
+        }
+
+        [countryId="TW"] {
+            fill: #333;
         }
     </style>
     <!--[if lt IE 9]>
@@ -32,7 +45,7 @@
 <body>
 
     <div class="col-sm-6">
-        <svg id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox='0 0 1920 1080'
+        <svg id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox='848.0003662109375 403.45123291015625 480 270'
             preserveAspectRadio="xMinYMin meet" xml:space="preserve">
             <desc>JavaScript chart by amCharts 3.21.12</desc>
             <desc>This map was created using Pixel Map Generator by amCharts and is licensed under the Creative Commons Attribution
@@ -559,10 +572,157 @@
                             transform="translate(0,-230)" stroke-width="0.7232666693793403" fill="#818181" fill-opacity="1" stroke="#505050"
                             stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TR" role="menuitem" aria-label="Turkey  "
                             countryId="TR"></path>
-                        <path cs="100,100" d="M816.7,393.27L815.01,398.14L813.81,400.62L812.33,398.07L812.01,395.82L813.66,392.82L815.91,390.5L817.19,391.41z"
+                        <!-- <path cs="100,100" d="M816.7,393.27L815.01,398.14L813.81,400.62L812.33,398.07L812.01,395.82L813.66,392.82L815.91,390.5L817.19,391.41z"
                             transform="translate(0,-230)" stroke-width="0.7232666693793403" fill="#818181" fill-opacity="1" stroke="#505050"
                             stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW" role="menuitem" aria-label="Taiwan  "
-                            countryId="TW"></path>
+                            countryId="TW"></path> -->
+
+                        <g id="taiwan" transform="translate(803.5,157.32519215328577) scale(0.02)">
+                            <g transform="translate(0,0) scale(0.9349938109732191)">
+
+                                <path cs="100,100" d="M251.46,726.5L251.61,720.34L247.88,722.34L251.46,726.5zM250.57,717.1L245.68,715.14L247.47,719.01L250.57,717.1zM288.91,714.57L289.8,712.84L287.87,713.02L288.91,714.57zM289.83,712.67L289.68,712.11L289.53,712.67L289.83,712.67zM299.83,710.97L300.47,714.75L301.9,711.13L299.83,710.97zM298.39,710.55L297.45,711.15L298.44,711.55L298.39,710.55zM267.82,709.37L267.34,708.6L266.41,710L267.82,709.37zM231.75,698.99L231.68,698.58L231.16,698.67L231.75,698.99zM228.69,697.75L228.52,697.24L228.12,697.44L228.69,697.75zM231.78,697.63L231.16,697.21L231.45,698.41L231.78,697.63zM273.54,687.69L271.3,686.24L269.57,688.9L273.54,687.69zM266.93,682.46L262.55,679.26L262.73,689.82L266.93,682.46zM228.1,677.95L227.83,680.88L229.97,679.72L228.1,677.95zM274.06,658.51L267.42,659.22L267.15,661.11L274.06,658.51zM289.33,636.53L272.54,648.89L301.73,646.91L289.33,636.53zM257.98,643.83L265.24,641.9L267.22,624.02L257.98,643.83zM284.52,629.8L280.66,617.53L276.29,620.74L284.52,629.8zM286.62,605.89L290.24,601.6L287.87,599.68L286.62,605.89z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-PEN" role="menuitem"
+                                    aria-label="Penghu  " countryId="TW-PEN"></path>
+                                <path cs="100,100" d="M546.22,479.04L498.47,441.87L468.34,498.27L507.95,540.57L647.57,491.84L670.95,460.74L641.99,446.4L630.86,447.01L546.22,479.04z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TXQ" role="menuitem"
+                                    aria-label="Taichung City  " countryId="TW-TXQ"></path>
+                                <path cs="100,100" d="M464.04,670.2L471.34,657.41L450.26,655.82L464.04,670.2z" transform="translate(0,-153)" stroke-width="1.0695257960682296"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-CYI"
+                                    role="menuitem" aria-label="Chiayi City  " countryId="TW-CYI"></path>
+                                <path cs="100,100" d="M652.98,353.4L661.02,309.06L635.99,290.02L570.81,329.19L573.31,330.07L661.77,410.22L676.44,390.77L652.98,353.4z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TAO" role="menuitem"
+                                    aria-label="Taoyuan  " countryId="TW-TAO"></path>
+                                <path cs="100,100" d="M707.97,267.4L679.43,254.63L635.99,290.02L661.02,309.06L652.98,353.4L676.44,390.77L777.41,321.15L733.83,285.7L727.17,304.55L707.82,288.29L718.96,279.57L707.97,267.4zM674.74,286.6L697.83,273.96L701.12,324.9L674.74,286.6zM799.61,174.24L797.67,173.06L797.96,175.38L799.61,174.24z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TPQ" role="menuitem"
+                                    aria-label="New Taipei City  " countryId="TW-TPQ"></path>
+                                <path cs="100,100" d="M701.12,324.9L697.83,273.96L674.74,286.6L701.12,324.9z" transform="translate(0,-153)" stroke-width="1.0695257960682296"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TPE"
+                                    role="menuitem" aria-label="Taipei City  " countryId="TW-TPE"></path>
+                                <path cs="100,100" d="M564.68,384.11L550.37,375.61L498.47,441.87L546.22,479.04L630.86,447.01L568.44,383.05L564.68,384.11z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-MIA" role="menuitem"
+                                    aria-label="Miaoli  " countryId="TW-MIA"></path>
+                                <path cs="100,100" d="M733.83,285.7L718.96,279.57L707.82,288.29L727.17,304.55L733.83,285.7z" transform="translate(0,-153)"
+                                    stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-TW-KEE" role="menuitem" aria-label="Keelung City  "
+                                    countryId="TW-KEE"></path>
+                                <path cs="100,100" d="M771.16,351.63L768.1,352.68L773.55,355.51L771.16,351.63zM758.73,408.28L744.85,356.51L777.41,321.15L676.44,390.77L661.77,410.22L641.99,446.4L670.95,460.74L701.45,470.3L734.26,471.38L758.73,408.28z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-ILA" role="menuitem"
+                                    aria-label="Yilan  " countryId="TW-ILA"></path>
+                                <path cs="100,100" d="M573.31,330.07L570.81,329.19L559.03,351.58L586.13,366.31L568.44,383.05L630.86,447.01L641.99,446.4L661.77,410.22L573.31,330.07z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-HSZ" role="menuitem"
+                                    aria-label="Hsinchu  " countryId="TW-HSZ"></path>
+                                <path cs="100,100" d="M568.44,383.05L586.13,366.31L559.03,351.58L550.37,375.61L564.68,384.11L568.44,383.05z" transform="translate(0,-153)"
+                                    stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-TW-HSQ" role="menuitem" aria-label="Hsinchu City  "
+                                    countryId="TW-HSQ"></path>
+                                <path cs="100,100" d="M446.8,914.48L442.1,922.33L448.16,917.55L446.8,914.48zM543.69,1014.98L551.05,940.77L525.75,911.78L546.37,802.02L521.61,795.45L467.8,806.75L455.22,886.03L498.45,927.97L517.68,1007.66L543.69,1014.98z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-PIF" role="menuitem"
+                                    aria-label="Pingtung  " countryId="TW-PIF"></path>
+                                <path cs="100,100" d="M391.96,700.38L393.69,695.11L390.57,701.42L391.96,700.38zM393.74,690.44L395.44,686.65L392.98,691.33L393.74,690.44zM397.59,683.37L397.94,682.51L397.52,679.92L397.59,683.37zM398.65,675.76L397.67,675.46L398.08,677.04L398.65,675.76zM397.64,670.97L396.23,670.38L397.24,672.05L397.64,670.97zM374.22,671.77L395.94,646.54L371.76,673.07L374.22,671.77zM480.26,634.59L395.84,653.39L404.16,689.02L394.24,698.87L460.8,677.27L481.11,702.19L505.1,718.93L568.84,663.44L523.11,631.7L480.26,634.59zM450.26,655.82L471.34,657.41L464.04,670.2L450.26,655.82z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-CYQ" role="menuitem"
+                                    aria-label="Chiayi  " countryId="TW-CYQ" cursor="pointer"></path>
+                                <path cs="100,100" d="M701.71,1004.06L700.79,1003.28L700.15,1004.37L701.71,1004.06zM697.98,990.66L693.63,975.44L678.24,975.44L697.98,990.66zM679.13,851.24L679.89,842.79L670.68,843.33L679.13,851.24zM655.44,745.43L675.65,672.48L638.85,746.4L586.89,703.04L553.49,732.47L546.37,802.02L525.75,911.78L551.05,940.77L655.44,745.43z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TTT" role="menuitem"
+                                    aria-label="Taitung  " countryId="TW-TTT" cursor="pointer"></path>
+                                <path cs="100,100" d="M507.95,540.57L468.34,498.27L420.55,581.6L426.52,585.04L503.86,595.93L507.95,540.57z" transform="translate(0,-153)"
+                                    stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-TW-CHQ" role="menuitem" aria-label="Changhua  "
+                                    countryId="TW-CHQ" cursor="pointer"></path>
+                                <path cs="100,100" d="M426.52,585.04L420.55,581.6L395.84,653.39L480.26,634.59L523.11,631.7L503.86,595.93L426.52,585.04z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-YUN" role="menuitem"
+                                    aria-label="Yunlin  " countryId="TW-YUN" cursor="pointer"></path>
+                                <path cs="100,100" d="M647.57,491.84L507.95,540.57L503.86,595.93L523.11,631.7L568.84,663.44L580.64,672.15L622.34,633.46L647.57,491.84z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-NAN" role="menuitem"
+                                    aria-label="Nantou  " countryId="TW-NAN" cursor="pointer"></path>
+                                <path cs="100,100" d="M580.64,672.15L568.84,663.44L505.1,718.93L453.12,788.31L404.76,785.54L455.22,886.03L467.8,806.75L521.61,795.45L546.37,802.02L553.49,732.47L586.89,703.04L580.64,672.15z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-KHQ" role="menuitem"
+                                    aria-label="Kaohsiung City  " countryId="TW-KHQ" cursor="pointer"></path>
+                                <path cs="100,100" d="M701.45,470.3L670.95,460.74L647.57,491.84L622.34,633.46L580.64,672.15L586.89,703.04L638.85,746.4L675.65,672.48L734.26,471.38L701.45,470.3z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-HUA" role="menuitem"
+                                    aria-label="Hualien  " countryId="TW-HUA" cursor="pointer"></path>
+                                <path cs="100,100" d="M379.59,759.29L376.23,754.39L377.34,758.66L379.59,759.29zM380.01,737.62L380.8,732.52L377.73,743.11L380.01,737.62zM382.7,727.56L386.05,721.2L385.91,719.78L382.7,727.56zM387.71,709.94L387.86,703.51L387.46,711.87L387.71,709.94zM481.11,702.19L460.8,677.27L394.24,698.87L381,757.74L404.76,785.54L453.12,788.31L505.1,718.93L481.11,702.19z"
+                                    transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TNQ" role="menuitem"
+                                    aria-label="Tainan City  " countryId="TW-TNQ" cursor="pointer"></path>
+                            </g>
+                        </g>
+                        <g id="palau" transform="translate(830,202) scale(0.05)">
+                            <g transform="translate(0,0) scale(0.8271593825602356)">
+                                <path cs="100,100" d="M242.45,627.65L243.86,624.95L241.01,624.33L242.45,627.65z" transform="translate(0,-6)" stroke-width="1.208956848080216"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-SO"
+                                    role="menuitem" aria-label="Sonsorol  " countryId="PW-SO"></path>
+                                <path cs="100,100" d="M698.33,229.18L690.38,243.97L690.09,249.38L701.34,233.64L698.33,229.18z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-PE" role="menuitem" aria-label="Peleliu  "
+                                    countryId="PW-PE"></path>
+                                <path cs="100,100" d="M784.29,113.43L776.6,111.4L775.77,117.47L773.07,124.38L777.07,127.01L784.29,113.43z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-NW" role="menuitem" aria-label="Ngiwal  " countryId="PW-NW"></path>
+                                <path cs="100,100" d="M775.77,117.47L759.6,115.82L751.69,127.64L755.42,130.23L758.96,128.57L767.05,139.67L770.17,131.08L773.07,124.38L775.77,117.47z"
+                                    transform="translate(0,-6)" stroke-width="1.208956848080216" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-NL" role="menuitem"
+                                    aria-label="Ngeremlengui  " countryId="PW-NL"></path>
+                                <path cs="100,100" d="M777.61,136.31L770.17,131.08L767.05,139.67L763.73,149.09L770.07,151.52L777.61,136.31z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-NS" role="menuitem" aria-label="Ngchesar  "
+                                    countryId="PW-NS"></path>
+                                <path cs="100,100" d="M767.05,139.67L758.96,128.57L755.42,130.23L757.75,133.91L746.36,140.59L758.54,142.6L763.73,149.09L767.05,139.67z"
+                                    transform="translate(0,-6)" stroke-width="1.208956848080216" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-NP" role="menuitem"
+                                    aria-label="Ngatpang  " countryId="PW-NP"></path>
+                                <path cs="100,100" d="M776.6,111.4L776.45,105.62L764.48,108.35L759.6,115.82L775.77,117.47L776.6,111.4z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-NM" role="menuitem" aria-label="Ngardmau  "
+                                    countryId="PW-NM"></path>
+                                <path cs="100,100" d="M784.72,92.13L780.98,83.06L776.98,81.35L779.16,92.57L784.72,92.13z" transform="translate(0,-6)" stroke-width="1.208956848080216"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-NC"
+                                    role="menuitem" aria-label="Ngarchelong  " countryId="PW-NC"></path>
+                                <path cs="100,100" d="M784.29,113.43L784.72,92.13L779.16,92.57L780.45,101.11L776.45,105.62L776.6,111.4L784.29,113.43z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-ND" role="menuitem" aria-label="Ngaraard  "
+                                    countryId="PW-ND"></path>
+                                <path cs="100,100" d="M777.07,127.01L773.07,124.38L770.17,131.08L777.61,136.31L777.07,127.01z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-ME" role="menuitem" aria-label="Melekeok  "
+                                    countryId="PW-ME"></path>
+                                <path cs="100,100" d="M730.57,190.33L741.09,186.83L737.84,180.9L723.02,192.57L715.97,185.13L715.59,192.61L725.32,195.58L730.57,190.33zM751.77,168.07L739.54,164.62L737.89,172.32L747.17,169.11L751.77,176.75L755.2,171.6L751.77,168.07z"
+                                    transform="translate(0,-6)" stroke-width="1.208956848080216" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-KO" role="menuitem"
+                                    aria-label="Koror  " countryId="PW-KO"></path>
+                                <path cs="100,100" d="M795.73,0L791.98,4.73L793.85,10.41L799.65,3.08L795.73,0z" transform="translate(0,-6)" stroke-width="1.208956848080216"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-KA"
+                                    role="menuitem" aria-label="Kayangel  " countryId="PW-KA"></path>
+                                <path cs="100,100" d="M151.91,1147.3L147.13,1143.45L143.55,1146.5L151.91,1147.3zM6.88,1133.43L13.9,1127.63L6.97,1125.41L0.35,1131.93L6.88,1133.43z"
+                                    transform="translate(0,-6)" stroke-width="1.208956848080216" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-HA" role="menuitem"
+                                    aria-label="Hatobohei  " countryId="PW-HA"></path>
+                                <path cs="100,100" d="M673.48,271.74L676.48,262.69L669.03,260.59L673.48,271.74z" transform="translate(0,-6)" stroke-width="1.208956848080216"
+                                    fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-AN"
+                                    role="menuitem" aria-label="Angaur  " countryId="PW-AN"></path>
+                                <path cs="100,100" d="M770.07,151.52L763.73,149.09L755.84,156.83L751.46,155.32L754.41,164.99L763.7,161.79L769.49,163.68L770.07,151.52z"
+                                    transform="translate(0,-6)" stroke-width="1.208956848080216" fill="#818181" fill-opacity="1"
+                                    stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-PW-AR" role="menuitem"
+                                    aria-label="Airai  " countryId="PW-AR"></path>
+                                <path cs="100,100" d="M763.73,149.09L758.54,142.6L746.36,140.59L751.46,155.32L755.84,156.83L763.73,149.09z" transform="translate(0,-6)"
+                                    stroke-width="1.208956848080216" fill="#818181" fill-opacity="1" stroke="#505050" stroke-opacity="1"
+                                    class="amcharts-map-area amcharts-map-area-PW-AM" role="menuitem" aria-label="Aimeliik  "
+                                    countryId="PW-AM"></path>
+                            </g>
+                        </g>
                         <path cs="100,100" d="M570.31,466.03L570.79,466.34L580.95,472.01L581.15,473.63L585.17,476.42L583.88,479.87L584.04,481.46L585.84,482.48L585.92,483.21L585.15,484.91L585.31,485.76L585.13,487.11L586.11,488.87L587.27,491.66L588.29,492.28L586.06,493.92L583,495.02L581.32,494.98L580.32,495.83L578.37,495.9L577.63,496.26L574.26,495.46L572.15,495.69L571.37,491.83L570.42,490.51L569.85,489.73L567.11,489.21L565.51,488.36L563.73,487.89L562.61,487.41L561.44,486.7L559.93,483.15L558.3,481.58L557.74,479.96L558.02,478.5L557.52,475.93L558.68,475.8L559.69,474.79L560.79,473.33L561.48,472.75L561.45,471.84L560.85,471.21L560.69,470.11L561.49,469.76L561.66,468.12L560.54,466.55L561.53,466.21L564.6,466.25z"
                             transform="translate(0,-230)" stroke-width="0.7232666693793403" fill="#818181" fill-opacity="1" stroke="#505050"
                             stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TZ" role="menuitem" aria-label="Tanzania  "

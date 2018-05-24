@@ -3,15 +3,9 @@ let _SVG = document.querySelector('#map')
 
 // 設定常數
 const NF = 16,
-  NAV_MAP = {
-    187: { dir: 1, act: 'zoom', name: 'in' } /* + */,
-    107: { dir: 1, act: 'zoom', name: 'in' } /* + */,
-    189: { dir: -1, act: 'zoom', name: 'out' } /* - */,
-    109: { dir: -1, act: 'zoom', name: 'out' } /* - */,
-    37: { dir: -1, act: 'move', name: 'left', axis: 0 } /* ⇦ */,
-    38: { dir: -1, act: 'move', name: 'up', axis: 1 } /* ⇧ */,
-    39: { dir: 1, act: 'move', name: 'right', axis: 0 } /* ⇨ */,
-    40: { dir: 1, act: 'move', name: 'down', axis: 1 } /* ⇩ */
+  Event_MAP = {
+    1: { act: 'wheel' },
+    2: { act: 'mousemove' }
   },
   VB = _SVG
     .getAttribute('viewBox')
@@ -29,14 +23,24 @@ function stopAni() {
   cancelAnimationFrame(rID)
   rID = null
 }
+
 function update() {
   let k = ++f / NF,
     j = 1 - k,
     cvb = VB.slice()
-  if (nav.act === 'zoom') {
-    for (let i = 0; i < 4; i++) cvb[i] = j * VB[i] + k * tg[i]
+
+  if (nav.act === 'wheel') {
+    for (let i = 0; i < 4; i++) {
+      cvb[i] = j * VB[i] + k * tg[i]
+    }
+    rID = requestAnimationFrame(update)
   }
-  if (nav.act === 'move') cvb[nav.axis] = j * VB[nav.axis] + k * tg[nav.axis]
+
+  if (nav.act === 'mousemove') {
+    for (let i = 0; i < 4; i++) {
+      cvb[i] = tg[i]
+    }
+  }
 
   _SVG.setAttribute('viewBox', cvb.join(' '))
   if (!(f % NF)) {
@@ -47,75 +51,65 @@ function update() {
     stopAni()
     return
   }
-  rID = requestAnimationFrame(update)
 }
 
-function updateWheel() {
-  let k = ++f / NF,
-    j = 1 - k,
-    cvb = VB.slice()
-
-  for (let i = 0; i < 4; i++) {
-    cvb[i] = j * VB[i] + k * tg[i]
-  }
-
-  _SVG.setAttribute('viewBox', cvb.join(' '))
-
-  if (!(f % NF)) {
-    f = 0
-    VB.splice(0, 4, ...cvb)
-    console.log(VB)
-    nav = {}
-    tg = Array(4)
-    stopAni()
-    return
-  }
-  rID = requestAnimationFrame(updateWheel)
-}
-
-function updateMove() {
-  console.log(tg)
-  let k = ++f / NF,
-    j = 1 - k,
-    cvb = VB.slice()
-  for (let i = 0; i < 4; i++) {
-    cvb[0] = j * VB[0] + k * tg[0]
-    cvb[1] = j * VB[1] + k * tg[1]
-  }
-
-  console.log(cvb)
-
-  _SVG.setAttribute('viewBox', cvb.join(' '))
-
-  if (!(f % NF)) {
-    f = 0
-    VB.splice(0, 4, ...cvb)
-    nav = {}
-    tg = Array(4)
-    stopAni()
-    return
-  }
-  //   rID = requestAnimationFrame(updateMove)
-}
-// 鍵盤
-addEventListener(
-  'keyup',
+// 滑鼠滾輪
+_SVG.addEventListener(
+  'wheel',
   e => {
-    if (!rID && e.keyCode in NAV_MAP) {
-      nav = NAV_MAP[e.keyCode]
-      if (nav.act === 'zoom') {
-        if ((nav.dir === -1 && VB[2] >= DMAX[0]) || (nav.dir === 1 && VB[2] <= WMIN)) {
-          return false
+    if (!rID && Event_MAP) {
+      nav = Event_MAP['1']
+      if (nav.act === 'wheel') {
+        const dir = e.deltaY / 100
+        if ((dir === 1 && VB[2] >= DMAX[0]) || (dir === -1 && VB[2] <= WMIN)) {
+          // return false
         }
-        for (let i = 0; i < 2; i++) {
-          tg[i + 2] = VB[i + 2] / Math.pow(1.5, nav.dir)
-          tg[i] = 0.5 * (DMAX[i] - tg[i + 2])
+        //  1.取得一開始的 viewBox。
+        let startViewBox = _SVG
+          .getAttribute('viewBox')
+          .split(' ')
+          .map(n => parseFloat(n))
+        //  2.取得滑鼠執行縮放位置的 viewPort Client 座標，並利用 CTM 對應取得 SVG 座標。
+
+        //  2.1 取得滑鼠執行縮放的位置
+        let startClient = {
+          x: e.clientX,
+          y: e.clientY
         }
-      } else if (nav.act === 'move') {
-        if ((nav.dir === -1 && VB[nav.axis] <= 0) || (nav.dir === 1 && VB[nav.axis] >= DMAX[nav.axis] - VB[2 + nav.axis])) {
-          return
+        //  2.2 轉換成 SVG 座標系統中的 SVG 座標點
+        let newSVGPoint = _SVG.createSVGPoint()
+        let CTM = _SVG.getScreenCTM()
+        newSVGPoint.x = startClient.x
+        newSVGPoint.y = startClient.y
+        let startSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+        //  3.進行縮放，如果要讓原本的尺寸縮放兩倍的話。
+        //  3.1 設定縮放倍率
+        let r
+        if (e.deltaY > 0) {
+          r = 0.5
+        } else if (e.deltaY < 0) {
+          r = 2
+        } else {
+          r = 1
         }
-        tg[nav.axis] = VB[nav.axis] + 0.5 * nav.dir * VB[2 + nav.axis]
+        //  3.2 進行縮放
+        _SVG.setAttribute('viewBox', `${startViewBox[0]} ${startViewBox[1]} ${startViewBox[2] * r} ${startViewBox[3] * r}`)
+        //  4.將一開始滑鼠的執行縮放位置的 viewPort Client 座標利用新的 CTM ，轉換出對應的 SVG 座標。
+        CTM = _SVG.getScreenCTM()
+        let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+
+        //  5.取得在縮放過程中該圓點的位移量 `(svgX0 - svgX1)`。
+        let delta = {
+          dx: startSVGPoint.x - moveToSVGPoint.x,
+          dy: startSVGPoint.y - moveToSVGPoint.y
+        }
+        //  6.設定最終的 viewBox2
+        let middleViewBox = _SVG
+          .getAttribute('viewBox')
+          .split(' ')
+          .map(n => parseFloat(n))
+        let moveBackViewBox = `${middleViewBox[0] + delta.dx} ${middleViewBox[1] + delta.dy} ${middleViewBox[2]} ${middleViewBox[3]}`
+        tg = moveBackViewBox.split(' ')
       }
       update()
     }
@@ -123,35 +117,12 @@ addEventListener(
   false
 )
 
-// 滑鼠滾輪
-_SVG.addEventListener(
-  'wheel',
-  e => {
-    if (!rID) {
-      const dir = e.deltaY / 100
-      if ((dir === 1 && VB[2] >= DMAX[0]) || (dir === -1 && VB[2] <= WMIN)) {
-        // return false
-      }
-      for (let i = 0; i < 2; i++) {
-        tg[i + 2] = VB[i + 2] / Math.pow(2, dir)
-        tg[i] = 0.5 * (DMAX[i] - tg[i + 2])
-      }
-      updateWheel()
-    }
-  },
-  false
-)
-
 // 拖拉事件
-// 1. 滑鼠按下後 觸發 滑鼠移動
-// mousedown -> mousemove
 let isMousedown = false
 let startX
 let startY
 _SVG.addEventListener('mousedown', e => {
   isMousedown = true
-  startX = e.pageX
-  startY = e.pageY
 })
 
 _SVG.addEventListener('mouseup', e => {
@@ -161,15 +132,46 @@ _SVG.addEventListener('mouseup', e => {
 _SVG.addEventListener(
   'mousemove',
   e => {
-    e.preventDefault()
-    if (isMousedown === false) return false
-    let x = e.pageX
-    let y = e.pageY
-    let distanceX = x - startX
-    let distanceY = y - startY
-    tg[0] = VB[0] - distanceX
-    tg[1] = VB[1] - distanceY
-    updateMove()
+    if (!rID && Event_MAP) {
+      nav = Event_MAP['2']
+      if (nav.act === 'mousemove') {
+        if (isMousedown === false) return false
+        // 1. 取得一開始的 viewBox 值，原本是字串，拆成陣列，方便之後運算
+        let startViewBox = _SVG
+          .getAttribute('viewBox')
+          .split(' ')
+          .map(n => Number(n))
+        //  2. 取得滑鼠當前 viewport 中 client 座標值
+        let startClient = {
+          x: e.clientX,
+          y: e.clientY
+        }
+        //  3. 計算對應回去的 SVG 座標值
+        let newSVGPoint = _SVG.createSVGPoint()
+        let CTM = _SVG.getScreenCTM()
+        newSVGPoint.x = startClient.x
+        newSVGPoint.y = startClient.y
+        let startSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+        //  4. 計算拖曳後滑鼠所在的 viewport client 座標值
+        let moveToClient = {
+          x: e.clientX + e.movementX, //  movement 可以取得滑鼠位移量
+          y: e.clientY + e.movementY
+        }
+        //  5. 計算對應回去的 SVG 座標值
+        newSVGPoint = _SVG.createSVGPoint()
+        CTM = _SVG.getScreenCTM()
+        newSVGPoint.x = moveToClient.x
+        newSVGPoint.y = moveToClient.y
+        let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+        //  6. 計算位移量
+        let delta = {
+          dx: startSVGPoint.x - moveToSVGPoint.x,
+          dy: startSVGPoint.y - moveToSVGPoint.y
+        }
+        tg = [startViewBox[0] + delta.dx, startViewBox[1] + delta.dy, startViewBox[2], startViewBox[3]]
+      }
+      update()
+    }
   },
   false
 )
