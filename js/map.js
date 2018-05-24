@@ -4,8 +4,9 @@ let _SVG = document.querySelector('#map')
 // 設定常數
 const NF = 16,
   Event_MAP = {
-    1: { act: 'wheel' },
-    2: { act: 'mousemove' }
+    1: { act: 'zoom' },
+    2: { act: 'mousemove' },
+    3: { act: 'show' }
   },
   VB = _SVG
     .getAttribute('viewBox')
@@ -29,7 +30,7 @@ function update() {
     j = 1 - k,
     cvb = VB.slice()
 
-  if (nav.act === 'wheel') {
+  if (nav.act === 'zoom') {
     for (let i = 0; i < 4; i++) {
       cvb[i] = j * VB[i] + k * tg[i]
     }
@@ -37,6 +38,11 @@ function update() {
   }
 
   if (nav.act === 'mousemove') {
+    for (let i = 0; i < 4; i++) {
+      cvb[i] = tg[i]
+    }
+  }
+  if (nav.act === 'show') {
     for (let i = 0; i < 4; i++) {
       cvb[i] = tg[i]
     }
@@ -53,24 +59,17 @@ function update() {
   }
 }
 
-// 滑鼠滾輪
+// 縮放
 _SVG.addEventListener(
   'wheel',
   e => {
     if (!rID && Event_MAP) {
       nav = Event_MAP['1']
-      if (nav.act === 'wheel') {
+      if (nav.act === 'zoom') {
         const dir = e.deltaY / 100
         if ((dir === 1 && VB[2] >= DMAX[0]) || (dir === -1 && VB[2] <= WMIN)) {
           // return false
         }
-        //  1.取得一開始的 viewBox。
-        let startViewBox = _SVG
-          .getAttribute('viewBox')
-          .split(' ')
-          .map(n => parseFloat(n))
-        //  2.取得滑鼠執行縮放位置的 viewPort Client 座標，並利用 CTM 對應取得 SVG 座標。
-
         //  2.1 取得滑鼠執行縮放的位置
         let startClient = {
           x: e.clientX,
@@ -93,7 +92,7 @@ _SVG.addEventListener(
           r = 1
         }
         //  3.2 進行縮放
-        _SVG.setAttribute('viewBox', `${startViewBox[0]} ${startViewBox[1]} ${startViewBox[2] * r} ${startViewBox[3] * r}`)
+        _SVG.setAttribute('viewBox', `${VB[0]} ${VB[1]} ${VB[2] * r} ${VB[3] * r}`)
         //  4.將一開始滑鼠的執行縮放位置的 viewPort Client 座標利用新的 CTM ，轉換出對應的 SVG 座標。
         CTM = _SVG.getScreenCTM()
         let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
@@ -119,8 +118,6 @@ _SVG.addEventListener(
 
 // 拖拉事件
 let isMousedown = false
-let startX
-let startY
 _SVG.addEventListener('mousedown', e => {
   isMousedown = true
 })
@@ -140,7 +137,7 @@ _SVG.addEventListener(
         let startViewBox = _SVG
           .getAttribute('viewBox')
           .split(' ')
-          .map(n => Number(n))
+          .map(n => +n)
         //  2. 取得滑鼠當前 viewport 中 client 座標值
         let startClient = {
           x: e.clientX,
@@ -175,3 +172,36 @@ _SVG.addEventListener(
   },
   false
 )
+
+var taiwan = document.querySelector('#taiwan')
+var tip = document.querySelector('.tip')
+taiwan.addEventListener(
+  'click',
+  function(e) {
+    if (!rID && Event_MAP) {
+      nav = Event_MAP['3']
+      // 1. 取得一開始的 viewBox 值，原本是字串，拆成陣列，方便之後運算
+      let taiwanPath = Array.from(document.querySelectorAll('#taiwan path'))
+      taiwanPath.map(path => {
+        path.classList.remove('active')
+      })
+      e.target.classList.add('active')
+
+      let startViewBox = _SVG
+        .getAttribute('viewBox')
+        .split(' ')
+        .map(n => +n)
+      if (nav.act === 'show') {
+        tg = [1094.9037475585938, 530.9351196289062, 60, 33.75]
+      }
+      update()
+    }
+    taiwan.addEventListener('mouseover', tipA, false)
+  },
+  false
+)
+
+function tipA(e) {
+  tip.textContent = e.target.getAttribute('countryid')
+  tip.setAttribute('style', 'position:absolute;left:' + e.clientX + 'px;top:' + e.clientY + 'px')
+}

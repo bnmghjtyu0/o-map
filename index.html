@@ -10,11 +10,16 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
     <style>
         #map {
+            background: #333;
             box-shadow: 0 0 1px 1px #333
         }
 
+        #map [d].active {
+            fill: #57B2E2
+        }
+
         #taiwan [d] {
-            fill: #333
+            fill: #fff
         }
 
         #palau [d] {
@@ -22,18 +27,26 @@
         }
 
         [d] {
-            fill: #ccc;
-            stroke-width: 0.5px;
+            fill: #7F7F7F;
+            stroke: #fff;
+            stroke-width: 0.2px;
             transition: .7s;
             cursor: pointer;
         }
 
         [d]:hover {
-            fill: #f90 !important
+            fill: #57B2E2 !important
         }
 
         [countryId="TW"] {
             fill: #333;
+        }
+
+        .tip {
+            background: #fff;
+            width: 120px;
+            height: 60px;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, .4)
         }
     </style>
     <!--[if lt IE 9]>
@@ -45,6 +58,7 @@
 <body>
 
     <div class="col-sm-6">
+        <div class="tip">213321</div>
         <svg id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox='848.0003662109375 403.45123291015625 480 270'
             preserveAspectRadio="xMinYMin meet" xml:space="preserve">
             <desc>JavaScript chart by amCharts 3.21.12</desc>
@@ -54,6 +68,7 @@
                 visit http://creativecommons.org/licenses/by/4.0/ If you would like to use this map without any attribution,
                 you can acquire a commercial license for the JavaScript Maps - a tool that was used to produce this map.
                 To do so, visit amCharts Online Store: http://www.amcharts.com/online-store/</desc>
+
             <g>
                 <g transform="translate(0,318) scale(1)">
                     <g transform="translate(0,0) scale(1.382615904114777)">
@@ -583,7 +598,7 @@
                                 <path cs="100,100" d="M251.46,726.5L251.61,720.34L247.88,722.34L251.46,726.5zM250.57,717.1L245.68,715.14L247.47,719.01L250.57,717.1zM288.91,714.57L289.8,712.84L287.87,713.02L288.91,714.57zM289.83,712.67L289.68,712.11L289.53,712.67L289.83,712.67zM299.83,710.97L300.47,714.75L301.9,711.13L299.83,710.97zM298.39,710.55L297.45,711.15L298.44,711.55L298.39,710.55zM267.82,709.37L267.34,708.6L266.41,710L267.82,709.37zM231.75,698.99L231.68,698.58L231.16,698.67L231.75,698.99zM228.69,697.75L228.52,697.24L228.12,697.44L228.69,697.75zM231.78,697.63L231.16,697.21L231.45,698.41L231.78,697.63zM273.54,687.69L271.3,686.24L269.57,688.9L273.54,687.69zM266.93,682.46L262.55,679.26L262.73,689.82L266.93,682.46zM228.1,677.95L227.83,680.88L229.97,679.72L228.1,677.95zM274.06,658.51L267.42,659.22L267.15,661.11L274.06,658.51zM289.33,636.53L272.54,648.89L301.73,646.91L289.33,636.53zM257.98,643.83L265.24,641.9L267.22,624.02L257.98,643.83zM284.52,629.8L280.66,617.53L276.29,620.74L284.52,629.8zM286.62,605.89L290.24,601.6L287.87,599.68L286.62,605.89z"
                                     transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
                                     stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-PEN" role="menuitem"
-                                    aria-label="Penghu  " countryId="TW-PEN"></path>
+                                    aria-label="Penghu" countryId="TW-PEN"></path>
                                 <path cs="100,100" d="M546.22,479.04L498.47,441.87L468.34,498.27L507.95,540.57L647.57,491.84L670.95,460.74L641.99,446.4L630.86,447.01L546.22,479.04z"
                                     transform="translate(0,-153)" stroke-width="1.0695257960682296" fill="#818181" fill-opacity="1"
                                     stroke="#505050" stroke-opacity="1" class="amcharts-map-area amcharts-map-area-TW-TXQ" role="menuitem"
@@ -788,7 +803,6 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="js/map.js"></script>
-
 
 
 </body>
