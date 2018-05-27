@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
     <style>
         body {
-            overflow:hidden;
+            overflow: hidden;
         }
+
         #map {
             background: #333;
             box-shadow: 0 0 1px 1px #333
@@ -73,10 +74,11 @@
         [d].border-primary:hover {
             fill: none !important
         }
+
         #Home {
-            position:fixed;
-            left:50%;
-            top:1rem;
+            position: fixed;
+            left: 50%;
+            top: 1rem;
             z-index: 9999;
 
         }
@@ -88,7 +90,7 @@
 </head>
 
 <body>
-<button id="Home" class="btn btn-primary">Home</button>
+    <button id="Home" class="btn btn-primary">Home</button>
     <div class="col-xs-12">
         <div class="row">
             <div class="tip"></div>
@@ -973,12 +975,16 @@
             </svg>
         </div>
     </div>
-    <!-- bootstrap -->
     <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- [UI] Bootstrap 3.3.5 -->
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- [視覺化圖表] D3js -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- [動畫] greensock -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenLite.min.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/TweenMax-latest-beta.js?v=333"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=1899"></script>
+    <!-- [客製化] -->
     <script src="js/map.js"></script>
 
 
