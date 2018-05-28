@@ -1,21 +1,19 @@
 // JavaScript IIFE
 ;(function() {
   let map = function() {
-    this.svgPath01
-    this.svgPath02
+    this.airplanePathGroup
     this.isMousedown = false
     this.eventMap = {
       1: { act: 'zoom' },
       2: { act: 'mousemove' },
       3: { act: 'show' },
-      4: { act: 'Home' }
+      4: { act: 'reset' }
     }
     this.NF = 16
     this.nav = null
     this.tg = Array(4)
     this.rID = null
     this.f = 0
-    this.pinClose = true
 
     // 取得 svg
     this.svg = document.querySelector('#map')
@@ -28,6 +26,10 @@
     this.stopAni = function() {
       cancelAnimationFrame(rID)
       rID = null
+    }
+    this.stopAirplaneAnimation = function() {
+      airplanePathGroup.style.display = 'none'
+      document.querySelector('#airplane').style.display = 'none'
     }
 
     // 計算貝茲曲線
@@ -78,7 +80,7 @@
           cvb[i] = tg[i]
         }
       }
-      if (nav.act === 'Home') {
+      if (nav.act === 'reset') {
         for (let i = 0; i < 4; i++) {
           cvb[i] = tg[i]
         }
@@ -109,9 +111,9 @@
           } else if (this.getAttribute('id') === 'palau') {
             tg = [1146.765625, 581.84375, 90, 50.625]
           }
+          stopAirplaneAnimation()
         }
         update()
-        pin(pinClose)
       }
     }
     // 地圖縮放
@@ -205,11 +207,13 @@
         update()
       }
     }
-    this.home = function() {
+    this.reset = function() {
       if (!rID && eventMap) {
-        nav = eventMap['1']
-        if (nav.act === 'zoom') {
+        nav = eventMap['4']
+        if (nav.act === 'reset') {
           tg = [1014, 485.75, 240, 135]
+          airplanePathGroup.style.display = 'block'
+          document.querySelector('#airplane').style.display = 'block'
         }
       }
       update()
@@ -236,29 +240,36 @@
       let pin1 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       let pin2 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       let pin3 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-
+      let svgPath01 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      let svgPath02 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      airplanePathGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      airplanePathGroup.setAttributeNS(null, 'id', 'airplanePathGroup')
+      // 圖標
       pin1.setAttributeNS(null, 'href', 'img/pin.svg')
       pin2.setAttributeNS(null, 'href', 'img/pin.svg')
       pin3.setAttributeNS(null, 'href', 'img/pin.svg')
+
+      // 圖標位置與大小
       TweenLite.set(pin1, { scale: 0.016, x: 816 - 1, y: 142.5 - 2.44 })
       TweenLite.set(pin2, { scale: 0.016, x: 814 - 1, y: 164 - 2.44 })
       TweenLite.set(pin3, { scale: 0.016, x: 861.5 - 1, y: 207 - 2.44 })
 
-      this.svgMain.appendChild(pin1)
-      this.svgMain.appendChild(pin2)
-      this.svgMain.appendChild(pin3)
-
+      // 繪製曲線圖
       let TaichungToShanghaiPath = svgPathCurv({ x: 816, y: 142.5 }, { x: 814, y: 164 }, 0.2)
       let TaichungToPalau = svgPathCurv({ x: 814, y: 164 }, { x: 861.5, y: 207 }, 0.2)
-      svgPath01 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-      svgPath02 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
       svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
       svgPath01.setAttributeNS(null, 'class', 'border-primary')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
       svgPath02.setAttributeNS(null, 'class', 'border-primary')
 
-      this.svgMain.appendChild(svgPath01)
-      this.svgMain.appendChild(svgPath02)
+      // 將物件置入 group
+      airplanePathGroup.appendChild(svgPath01)
+      airplanePathGroup.appendChild(svgPath02)
+      airplanePathGroup.appendChild(pin1)
+      airplanePathGroup.appendChild(pin2)
+      airplanePathGroup.appendChild(pin3)
+      // 將 group 置入 svg
+      this.svgMain.appendChild(airplanePathGroup)
 
       var tween,
         opacity = false,
@@ -304,7 +315,7 @@
 
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
-    document.querySelector('#Home').addEventListener('click', this.home, false)
+    document.querySelector('#Home').addEventListener('click', this.reset, false)
     document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#taiwan').addEventListener('click', this.zoomIn, false)
@@ -322,7 +333,7 @@
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
-    pin()
   }
   map()
+  pin()
 })()
