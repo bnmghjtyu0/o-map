@@ -1,6 +1,8 @@
 // JavaScript IIFE
 ;(function() {
   let map = function() {
+    this.svgPath01
+    this.svgPath02
     this.isMousedown = false
     this.eventMap = {
       1: { act: 'zoom' },
@@ -13,6 +15,7 @@
     this.tg = Array(4)
     this.rID = null
     this.f = 0
+    this.pinClose = true
 
     // 取得 svg
     this.svg = document.querySelector('#map')
@@ -71,7 +74,6 @@
         rID = requestAnimationFrame(update)
       }
       if (nav.act === 'mousemove') {
-        console.log(tg)
         for (let i = 0; i < 4; i++) {
           cvb[i] = tg[i]
         }
@@ -109,6 +111,7 @@
           }
         }
         update()
+        pin(pinClose)
       }
     }
     // 地圖縮放
@@ -227,7 +230,7 @@
         tip.style.display = 'none'
       }
     }
-    this.pin = function(areaPath) {
+    this.pin = function() {
       let s = document.querySelector('#Shanghai')
       let t = document.querySelector('#taiwan')
       let pin1 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
@@ -247,8 +250,8 @@
 
       let TaichungToShanghaiPath = svgPathCurv({ x: 816, y: 142.5 }, { x: 814, y: 164 }, 0.2)
       let TaichungToPalau = svgPathCurv({ x: 814, y: 164 }, { x: 861.5, y: 207 }, 0.2)
-      let svgPath01 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-      let svgPath02 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      svgPath01 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      svgPath02 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
       svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
       svgPath01.setAttributeNS(null, 'class', 'border-primary')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
@@ -312,8 +315,6 @@
     document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
 
-    pin()
-
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
@@ -321,6 +322,7 @@
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
+    pin()
   }
   map()
 })()
