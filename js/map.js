@@ -1,6 +1,13 @@
 // JavaScript IIFE
 ;(function() {
   let map = function() {
+    this.config = {
+      btnGroup: {
+        Home: document.querySelector('#Home'),
+        zoomIn: document.querySelector('#zoom-in'),
+        zoomOut: document.querySelector('#zoom-out')
+      }
+    }
     this.airplanePathGroup
     this.isMousedown = false
     this.eventMap = {
@@ -105,7 +112,7 @@
         nav = eventMap['3']
         if (nav.act === 'show') {
           if (this.getAttribute('id') === 'taiwan') {
-            tg = [1094.9037475585938, 530.9351196289062, 60, 33.75]
+            tg = [1083, 519, 90, 50.625]
           } else if (this.getAttribute('id') === 'Shanghai') {
             tg = [1099.34375, 499.84375, 60, 33.75]
           } else if (this.getAttribute('id') === 'palau') {
@@ -121,8 +128,8 @@
       if (!rID && eventMap) {
         nav = eventMap['1']
         if (nav.act === 'zoom') {
-          let newSVGPoint = this.createSVGPoint(),
-            CTM = this.getScreenCTM(),
+          let newSVGPoint = svg.createSVGPoint(),
+            CTM = svg.getScreenCTM(),
             r
           // dir = 滾輪上下滾動
           const dir = e.wheelDeltaY / 120,
@@ -136,27 +143,36 @@
               y: newSVGPoint.matrixTransform(CTM.inverse()).y
             }
           // 縮放倍率
-
           // 宣告結束 ============================================================================
-          if (dir > 0) {
+
+          if (dir > 0 || this.getAttribute('id') === 'zoom-in') {
             r = 0.5
-          } else if (dir < 0) {
+          } else if (dir < 0 || this.getAttribute('id') === 'zoom-out') {
             r = 1.5
           } else {
             r = 1
           }
-          this.setAttribute('viewBox', `${svgViewBox[0]} ${svgViewBox[1]} ${svgViewBox[2] * r} ${svgViewBox[3] * r}`)
+          svg.setAttribute('viewBox', `${svgViewBox[0]} ${svgViewBox[1]} ${svgViewBox[2] * r} ${svgViewBox[3] * r}`)
           // 以滑鼠為中心點縮放
           // 重新取得 viewBox 值  = moveToSVGPoint
-          CTM = this.getScreenCTM()
-          let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+          CTM = svg.getScreenCTM()
 
-          let delta = {
-            dx: startSVGPoint.x - moveToSVGPoint.x,
-            dy: startSVGPoint.y - moveToSVGPoint.y
+          let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+          let delta
+          if (this.getAttribute('id') === 'zoom-out') {
+            delta = {
+              dx: startSVGPoint.x - moveToSVGPoint.x,
+              dy: startSVGPoint.y - moveToSVGPoint.y
+            }
+          } else {
+            delta = {
+              dx: startSVGPoint.x - moveToSVGPoint.x,
+              dy: startSVGPoint.y - moveToSVGPoint.y
+            }
           }
           //  6.設定最終的 viewBox2
-          let middleViewBox = this.getAttribute('viewBox')
+          let middleViewBox = svg
+            .getAttribute('viewBox')
             .split(' ')
             .map(n => Number(n))
           let moveBackViewBox = `${middleViewBox[0] + delta.dx} ${middleViewBox[1] + delta.dy} ${middleViewBox[2]} ${middleViewBox[3]}`
@@ -325,7 +341,8 @@
     document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
-
+    this.config.btnGroup.zoomOut.addEventListener('click', zoom, false)
+    this.config.btnGroup.zoomIn.addEventListener('click', zoom, false)
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
