@@ -1,5 +1,136 @@
+// Api
+const json = {
+  Palau: {
+    year: {
+      '2020': ['PalauA', 'PalauB'],
+      '2021': ['PalauC', 'PalauD']
+    }
+  },
+  Shanghai: {
+    year: {
+      '2020': ['ShanghaiA', 'ShanghaiB'],
+      '2021': ['ShanghaiC', 'ShanghaiD']
+    }
+  },
+  TaipeiArea: {
+    year: {
+      '2012': ['淡江大學', '台北藝術大學'],
+      '2013': ['台北科技大學', '台灣大學']
+    }
+  },
+  TaichungArea: {
+    year: {
+      '2013': ['2017A', '2017B'],
+      '2014': ['2017A', '2017B'],
+      '2015': ['2017A', '2017B'],
+      '2016': ['2017A', '2017B'],
+      '2017': ['2017A', '2017B'],
+      '2018': [
+        '大臺中勞工行政管理資訊系統維護',
+        '中彰投區勞動力發展策略聯盟資訊平台網站維運案',
+        '國立臺中科技大學_106年國中小代理代課教師暨幼兒園教保服務人員人才庫平臺客服及管理維運',
+        '勞動部勞動力發展署中彰投分署「106年學員輔導管理資訊系統功能擴充暨維護」採購案',
+        '晶鑽時尚診所管理系統建置',
+        '勤美天地會員電子化服務開發案',
+        '綠道睿峰軟件開發案',
+        '臺中市車輛行車事故鑑定及覆議作業系統維護-裁決處',
+        '臺中市政府資訊中心_人民陳情管理系統維護與改版建置案',
+        '臺中市政府衛生局_「建構臺中市緊急醫療救護作業系統」資訊服務採購案',
+        '臺中市政府衛生局_臺中市食品藥物稽查資訊系統採購案',
+        '臺中市政府環境保護局_檢警環查緝環保犯罪通報系統改版增修案',
+        '臺中市政府環境保護局全球資訊網及局內網維護',
+        '臺中榮民總醫院_「全球資訊網站改版及網站管理平台」建置案',
+        '臺中榮民總醫院_「多功能互動式自助服務站」壹年期單價合約',
+        '臺中榮民總醫院_整合高齡病房床邊照護暨資通訊整合應用系統採購案',
+        '衛生福利部食品藥物管理署_106年度「GDP廠商線上申請系統建置案」',
+        '機車排氣稽查與定檢站管理計畫'
+      ]
+    }
+  }
+}
+
 // JavaScript IIFE
 ;(function() {
+  let Cases = document.querySelector('.Cases')
+  let sidebar = function() {
+    this.closeCases = document.querySelector('.close-Cases')
+    this.areaDOM = function(areaId) {
+      var newCategory
+      var areaInfo = document.querySelector('#areaInfo')
+      areaInfo.innerHTML = ''
+      // 建立模板
+      newCategory = `
+  <h4 class="title"></h4>
+  <ul id="tabs" class="tabs scrollbar overflow-x"></ul>
+  <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
+  `
+      // 將模板傳回 dom
+      areaInfo.insertAdjacentHTML('beforeend', newCategory)
+      // api 地區英文轉中文，輸出標題 .title
+      var title = document.querySelector('.title')
+      switch (areaId) {
+        case 'Palau':
+          title.textContent = '帛琉案例'
+          break
+        case 'Shanghai':
+          title.textContent = '上海案例'
+          break
+        case 'TaichungArea':
+          title.textContent = '台中案例'
+          break
+        case 'TaipeiArea':
+          title.textContent = '台北案例'
+          break
+        default:
+          title.textContent = null
+      }
+      // tabs 加入地區的年份
+      var year
+      var tabs
+      var yearLi
+      tabs = document.querySelector('#tabs')
+      year = Object.keys(json[areaId].year)
+      year.sort((a, b) => b - a)
+      yearLi = ''
+      for (var i = 0, len = year.length; i < len; i++) {
+        yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
+      }
+      tabs.innerHTML = yearLi
+      var li = Array.from(document.querySelectorAll('#tabs li a'))
+      // 點擊年份切換資訊
+      li.forEach(link => {
+        link.addEventListener('click', function(e) {
+          li.forEach(x => {
+            e.preventDefault()
+            x.classList.remove('active')
+          })
+          e.target.classList.add('active')
+          areaBlock(link.textContent, areaId)
+          // get dom id=year2018 回傳到 year()
+        })
+      })
+    }
+
+    this.areaBlock = function(num, areaId) {
+      var ul, li, str, year
+      ul = document.querySelector(`#areaBlock`)
+      ul.innerHTML = ''
+      li = document.createElement('li')
+      str = ''
+      year = json[areaId].year[num]
+      year.forEach(x => {
+        str += `<li>${x}</li>`
+      })
+      ul.innerHTML = str
+    }
+    this.closeCases.addEventListener(
+      'click',
+      function() {
+        Cases.style.left = '-600px'
+      },
+      false
+    )
+  }
   let map = function() {
     this.config = {
       btnGroup: {
@@ -121,6 +252,17 @@
           stopAirplaneAnimation()
         }
         update()
+      }
+
+      // areaId
+      // e.target.setAttribute(null, 'fill', '#57B2E2')
+      let areaId = e.target.getAttribute('countryid')
+      if (areaId in json) {
+        // Cases 展開
+        Cases.style.left = '0'
+        areaDOM(areaId)
+        let maxYear = Math.max(...Object.keys(json[areaId].year))
+        areaBlock(maxYear, areaId)
       }
     }
     // 地圖縮放
@@ -272,7 +414,7 @@
 
       // 繪製曲線圖
       let TaichungToShanghaiPath = svgPathCurv({ x: 816, y: 142.5 }, { x: 814, y: 164 }, 0.2)
-      let TaichungToPalau = svgPathCurv({ x: 814, y: 164 }, { x: 861.5, y: 207 }, 0.2)
+      let TaichungToPalau = svgPathCurv({ x: 814, y: 164 }, { x: 861.5, y: 207 }, 0.6)
       svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
       svgPath01.setAttributeNS(null, 'class', 'border-primary')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
@@ -286,7 +428,8 @@
       airplanePathGroup.appendChild(pin3)
       // 將 group 置入 svg
       this.svgMain.appendChild(airplanePathGroup)
-
+      motionPath = MorphSVGPlugin.pathDataToBezier(TaichungToPalau, { align: '#paperAirplane' })
+      console.log(motionPath)
       var tween,
         opacity = false,
         Taichung2Shanghei = [{ x: 814, y: 138 }, { x: 819, y: 150 }, { x: 818, y: 157 }, { x: 812, y: 164 }],
@@ -352,5 +495,6 @@
     })
   }
   map()
+  sidebar()
   pin()
 })()
