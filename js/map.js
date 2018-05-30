@@ -52,6 +52,7 @@ const json = {
 // JavaScript IIFE
 ;(function() {
   let Cases = document.querySelector('.Cases')
+
   let sidebar = function() {
     this.closeCases = document.querySelector('.close-Cases')
     this.areaDOM = function(areaId) {
@@ -123,15 +124,27 @@ const json = {
       })
       ul.innerHTML = str
     }
-    this.closeCases.addEventListener(
-      'click',
-      function() {
-        Cases.style.left = '-600px'
-      },
-      false
-    )
+    this.closeCases.addEventListener('click', removeAreaActive, false)
   }
+
   let map = function() {
+    this.Coordination = {
+      TaichungArea: {
+        x: 813.5,
+        y: 162.5,
+        pinScale: 0.01
+      },
+      Shanghai: {
+        x: 815.5,
+        y: 141,
+        pinScale: 0.01
+      },
+      Palau: {
+        x: 861,
+        y: 206,
+        pinScale: 0.01
+      }
+    }
     this.config = {
       btnGroup: {
         Home: document.querySelector('#Home'),
@@ -160,6 +173,24 @@ const json = {
       .split(' ')
       .map(c => Number(c))
     this.svgMain = document.querySelector('#mapMain')
+
+    // 移除選取地區的效果
+    this.removeAreaActive = function() {
+      Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
+        x.classList.remove('active')
+      })
+      Cases.style.left = '-600px'
+    }
+    // 新增選取地區的效果
+    this.addAreaActive = function(e) {
+      if (e.target.getAttribute('countryid') === 'Palau') {
+        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
+          palau.classList.add('active')
+        })
+      }
+      e.target.classList.add('active')
+      Cases.style.left = '0'
+    }
 
     this.stopAni = function() {
       cancelAnimationFrame(rID)
@@ -255,15 +286,29 @@ const json = {
       }
 
       // areaId
-      // e.target.setAttribute(null, 'fill', '#57B2E2')
       let areaId = e.target.getAttribute('countryid')
-      if (areaId in json) {
-        // Cases 展開
-        Cases.style.left = '0'
-        areaDOM(areaId)
-        let maxYear = Math.max(...Object.keys(json[areaId].year))
-        areaBlock(maxYear, areaId)
+
+      // 新增 pin
+      // let pinN = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+      // pinN.setAttributeNS(null, 'href', 'img/pin.svg')
+
+      // 取得點擊地區的座標
+
+      if (e.type === 'click') {
+        removeAreaActive()
+        if (areaId in Coordination || areaId in json) {
+          // 點擊地區後顯示該地區的顏色
+          // 點擊地區後顯該地區的 pin
+          // TweenLite.set(pinN, { scale: Coordination[areaId].pinScale, x: Coordination[areaId].x, y: Coordination[areaId].y })
+
+          // Cases 展開地區資訊
+          areaDOM(areaId)
+          let maxYear = Math.max(...Object.keys(json[areaId].year))
+          areaBlock(maxYear, areaId)
+          addAreaActive(e)
+        }
       }
+      // svgMain.appendChild(pinN)
     }
     // 地圖縮放
     this.zoom = function(e) {
@@ -375,6 +420,7 @@ const json = {
         }
       }
       update()
+      removeAreaActive()
     }
     this.isShowAreaName = function(e) {
       let tip = document.querySelector('.tip'),
@@ -408,13 +454,21 @@ const json = {
       pin3.setAttributeNS(null, 'href', 'img/pin.svg')
 
       // 圖標位置與大小
-      TweenLite.set(pin1, { scale: 0.016, x: 816 - 1, y: 142.5 - 2.44 })
-      TweenLite.set(pin2, { scale: 0.016, x: 814 - 1, y: 164 - 2.44 })
-      TweenLite.set(pin3, { scale: 0.016, x: 861.5 - 1, y: 207 - 2.44 })
+      TweenLite.set(pin1, { scale: Coordination.Shanghai.pinScale, x: Coordination.Shanghai.x, y: Coordination.Shanghai.y })
+      TweenLite.set(pin2, { scale: Coordination.TaichungArea.pinScale, x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y })
+      TweenLite.set(pin3, { scale: Coordination.Palau.pinScale, x: Coordination.Palau.x, y: Coordination.Palau.y })
 
-      // 繪製曲線圖
-      let TaichungToShanghaiPath = svgPathCurv({ x: 816, y: 142.5 }, { x: 814, y: 164 }, 0.2)
-      let TaichungToPalau = svgPathCurv({ x: 814, y: 164 }, { x: 861.5, y: 207 }, 0.6)
+      // 繪製二元貝茲曲線圖
+      let TaichungToShanghaiPath = svgPathCurv(
+        { x: Coordination.TaichungArea.x + 0.65, y: Coordination.TaichungArea.y + 1.4 },
+        { x: Coordination.Shanghai.x + 0.65, y: Coordination.Shanghai.y + 1.4 },
+        0.2
+      )
+      let TaichungToPalau = svgPathCurv(
+        { x: Coordination.TaichungArea.x + 0.65, y: Coordination.TaichungArea.y + 1.4 },
+        { x: Coordination.Palau.x + 0.65, y: Coordination.Palau.y + 0.4 },
+        0.6
+      )
       svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
       svgPath01.setAttributeNS(null, 'class', 'border-primary')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
@@ -428,12 +482,16 @@ const json = {
       airplanePathGroup.appendChild(pin3)
       // 將 group 置入 svg
       this.svgMain.appendChild(airplanePathGroup)
-      motionPath = MorphSVGPlugin.pathDataToBezier(TaichungToPalau, { align: '#paperAirplane' })
-      console.log(motionPath)
+      motionPath = MorphSVGPlugin.pathDataToBezier(svgPath01, { align: '#paperAirplane' })
       var tween,
         opacity = false,
-        Taichung2Shanghei = [{ x: 814, y: 138 }, { x: 819, y: 150 }, { x: 818, y: 157 }, { x: 812, y: 164 }],
-        Taichung2Palau = [{ x: 874, y: 220 }, { x: 848, y: 180 }, { x: 833, y: 175 }, { x: 814, y: 164 }]
+        Taichung2Shanghei = [
+          { x: Coordination.Shanghai.x, y: Coordination.Shanghai.y - 4 },
+          { x: 819, y: 150 },
+          { x: 818, y: 157 },
+          { x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y }
+        ],
+        Taichung2Palau = [{ x: 876, y: 220 }, { x: 866, y: 170 }, { x: 853, y: 170 }, { x: Coordination.TaichungArea.x + 4, y: Coordination.TaichungArea.y + 1 }]
 
       const tl = new TimelineMax({ repeat: -1 })
       tl.set('#airplane', {
@@ -455,6 +513,7 @@ const json = {
           autoRotate: ['x', 'y', 'rotation', 120, false]
         }
       })
+
       tl.from('#airplane', 2, {
         bezier: {
           type: 'cubic',
