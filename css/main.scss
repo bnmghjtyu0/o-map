@@ -38,6 +38,9 @@ body {
   height: 100vh;
   z-index: 9999;
   transition: left 200ms ease-in;
+  @media (max-width: 767px) {
+    width: 100% !important;
+  }
   .close-Cases {
     position: absolute;
     right: 1rem;
