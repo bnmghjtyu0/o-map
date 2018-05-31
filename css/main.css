@@ -71,11 +71,22 @@ body {
   overflow: hidden;
 }
 
+.mapSection #mapMenu {
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  z-index: 999;
+}
+
+.mapSection #mapMenu i {
+  color: #fff;
+}
+
 .mapSection .mapSidebar {
   position: absolute;
-  left: -600px;
+  left: -500px;
   background: #000;
-  width: 600px;
+  width: 500px;
   height: 100vh;
   z-index: 1024;
   transition: left 200ms ease-in;
@@ -89,13 +100,14 @@ body {
   }
 }
 
-.mapSection .mapSidebar .close-Cases {
+.mapSection .mapSidebar .closeCase {
   position: absolute;
   right: 1rem;
   top: 1rem;
+  z-index: 1023;
 }
 
-.mapSection .mapSidebar .close-Cases i {
+.mapSection .mapSidebar .closeCase i {
   color: #fff;
 }
 

@@ -52,12 +52,13 @@ const json = {
 // JavaScript IIFE
 ;(function() {
   let $map = document.querySelector('.map')
-
   let Cases = document.querySelector('.mapSidebar')
+
   // ------------------------------------------------------------------------------------
   // 地圖函式 start
   // ------------------------------------------------------------------------------------
   let map = function() {
+    // 定義座標
     this.Coordination = {
       TaichungArea: {
         x: 813.5,
@@ -75,13 +76,18 @@ const json = {
         pinScale: 0.01
       }
     }
+
+    // 所有 DOM 宣告
     this.config = {
       btnGroup: {
         Home: document.querySelector('#Home'),
         zoomIn: document.querySelector('#zoom-in'),
         zoomOut: document.querySelector('#zoom-out')
-      }
+      },
+      $mapMenu: document.querySelector('#mapMenu'),
+      $closeCases: document.querySelector('.closeCase')
     }
+
     this.airplanePathGroup
     this.isMousedown = false
     this.eventMap = {
@@ -112,9 +118,16 @@ const json = {
       Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
         x.classList.remove('fill-blue')
       })
-      Cases.style.left = '-600px'
+      closeSidebar()
     }
     // 新增選取地區的效果
+    this.openSidebar = function() {
+      Cases.style.left = '0'
+    }
+    this.closeSidebar = function() {
+      console.log(123)
+      Cases.style.left = '-600px'
+    }
     this.addAreaActive = function(e) {
       if (e.target.getAttribute('countryid') === 'Palau') {
         Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
@@ -122,7 +135,7 @@ const json = {
         })
       }
       e.target.classList.add('fill-blue')
-      Cases.style.left = '0'
+      openSidebar()
     }
 
     this.stopAni = function() {
@@ -375,7 +388,6 @@ const json = {
 
     // 地區資訊 側邊
     this.sidebar = function() {
-      this.closeCases = document.querySelector('.close-Cases')
       this.areaDOM = function(areaId) {
         var newCategory
         var areaInfo = document.querySelector('#areaInfo')
@@ -445,7 +457,6 @@ const json = {
         })
         ul.innerHTML = str
       }
-      this.closeCases.addEventListener('click', removeAreaActive, false)
     }
     // ------------------------------------------------------------------------------------
     // 地圖函式 ending
@@ -543,7 +554,7 @@ const json = {
         }
       })
     }
-
+    config.$closeCases.addEventListener('click', this.closeSidebar, false)
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
     this.svg.addEventListener('touchmove', this.move, false)
@@ -566,6 +577,14 @@ const json = {
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
+    this.config.$mapMenu.addEventListener(
+      'click',
+      function(e) {
+        e.preventDefault()
+        openSidebar()
+      },
+      false
+    )
   }
   map()
 
