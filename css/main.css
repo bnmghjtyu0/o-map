@@ -2,6 +2,7 @@
 body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
+  background: #5d59c4;
 }
 
 .btn-primary {
@@ -29,93 +30,133 @@ body {
   margin-bottom: 25px;
 }
 
-.Cases {
-  position: fixed;
+.touch_mode_grab {
+  cursor: grab !important;
+  cursor: -moz-grab !important !important;
+  cursor: -webkit-grab !important;
+  cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur"), n-resize;
+  /* standard */
+  cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur"), n-resize\9;
+  /* IE 8 and below */
+  *cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur"), n-resize;
+  /* IE 7 and below */
+  _cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur"), n-resize;
+  /* IE 6 */
+}
+
+.touch_mode_grabbing {
+  cursor: grabbing !important;
+  cursor: -moz-grabbing !important;
+  cursor: -webkit-grabbing !important;
+  cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur"), n-resize;
+  /* standard */
+  cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur"), n-resize\9;
+  /* IE 8 and below */
+  *cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur"), n-resize;
+  /* IE 7 and below */
+  _cursor: url("https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur"), n-resize;
+  /* IE 6 */
+}
+
+.mapSection {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -300px;
+  margin-left: -35%;
+  width: 70%;
+  height: 600px;
+  border-radius: 6px;
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.mapSection .mapSidebar {
+  position: absolute;
   left: -600px;
-  right: 0;
   background: #000;
   width: 600px;
   height: 100vh;
-  z-index: 9999;
+  z-index: 1024;
   transition: left 200ms ease-in;
   /* bs4 */
   /* 動畫   */
 }
 
 @media (max-width: 767px) {
-  .Cases {
-    width: 100% !important;
+  .mapSection .mapSidebar {
+    width: 90% !important;
   }
 }
 
-.Cases .close-Cases {
+.mapSection .mapSidebar .close-Cases {
   position: absolute;
   right: 1rem;
   top: 1rem;
 }
 
-.Cases .close-Cases i {
+.mapSection .mapSidebar .close-Cases i {
   color: #fff;
 }
 
-.Cases .Cases-heading .title {
+.mapSection .mapSidebar .Cases-heading .title {
   font-size: 45px;
 }
 
-.Cases .Cases-heading p {
+.mapSection .mapSidebar .Cases-heading p {
   font-size: 18px;
 }
 
-.Cases .Cases-heading .btn {
+.mapSection .mapSidebar .Cases-heading .btn {
   padding: 5px 15px;
   font-size: 18px;
 }
 
-.Cases .Cases-body {
+.mapSection .mapSidebar .Cases-body {
   width: 100%;
   display: flex;
   align-items: stretch;
 }
 
-.Cases .Cases-body .left {
+.mapSection .mapSidebar .Cases-body .left {
   width: 100%;
   /* areaInfo */
 }
 
-.Cases .Cases-body .left #areaInfo {
+.mapSection .mapSidebar .Cases-body .left #areaInfo {
   padding: 30px;
   height: 100%;
 }
 
-.Cases .Cases-body .left #areaInfo .title {
+.mapSection .mapSidebar .Cases-body .left #areaInfo .title {
   font-size: 25px;
   margin-bottom: 20px;
   margin-top: 0;
 }
 
-.Cases .Cases-body .left #areaInfo ul {
+.mapSection .mapSidebar .Cases-body .left #areaInfo ul {
   padding-left: 25px;
   padding-right: 20px;
 }
 
-.Cases .Cases-body .left #areaInfo ul li {
+.mapSection .mapSidebar .Cases-body .left #areaInfo ul li {
   list-style-type: disc;
 }
 
-.Cases .Cases-body .left #areaInfo ul li a {
+.mapSection .mapSidebar .Cases-body .left #areaInfo ul li a {
   font-size: 16px;
 }
 
-.Cases .Cases-body .left #areaInfo #areaBlock {
+.mapSection .mapSidebar .Cases-body .left #areaInfo #areaBlock {
   margin-top: 0;
 }
 
-.Cases .Cases-body .left #areaInfo #areaBlock li {
+.mapSection .mapSidebar .Cases-body .left #areaInfo #areaBlock li {
   font-size: 15px;
   line-height: 2em;
 }
 
-.Cases #tabs {
+.mapSection .mapSidebar #tabs {
   position: relative;
   padding-left: 0;
   display: flex;
@@ -124,7 +165,7 @@ body {
   padding-left: 40px;
 }
 
-.Cases #tabs::after {
+.mapSection .mapSidebar #tabs::after {
   content: '';
   position: absolute;
   min-width: 120%;
@@ -134,21 +175,21 @@ body {
   top: calc(50% + 10px / 2);
 }
 
-.Cases #tabs li {
+.mapSection .mapSidebar #tabs li {
   position: relative;
   display: inline-block;
   list-style: none;
   margin-right: 50px;
 }
 
-.Cases #tabs li a {
+.mapSection .mapSidebar #tabs li a {
   display: inline-block;
   color: #fff;
   font-size: 18px;
   text-decoration: none;
 }
 
-.Cases #tabs li a::before {
+.mapSection .mapSidebar #tabs li a::before {
   content: '';
   opacity: 0;
   position: absolute;
@@ -163,7 +204,7 @@ body {
   z-index: 1;
 }
 
-.Cases #tabs li a::after {
+.mapSection .mapSidebar #tabs li a::after {
   content: '';
   position: absolute;
   top: 36px;
@@ -178,30 +219,30 @@ body {
   z-index: 2;
 }
 
-.Cases #tabs li a:hover {
+.mapSection .mapSidebar #tabs li a:hover {
   text-decoration: none;
 }
 
-.Cases #tabs li a:hover::before {
+.mapSection .mapSidebar #tabs li a:hover::before {
   content: '';
   opacity: 1;
   animation: spread 1200ms linear alternate infinite;
 }
 
-.Cases #tabs li a:hover::after {
+.mapSection .mapSidebar #tabs li a:hover::after {
   background: #5db4e5;
 }
 
-.Cases #tabs li a.active::before {
+.mapSection .mapSidebar #tabs li a.active::before {
   content: '';
   opacity: 1;
 }
 
-.Cases #tabs li a.active::after {
+.mapSection .mapSidebar #tabs li a.active::after {
   background: #5db4e5;
 }
 
-.Cases .animation-upDown {
+.mapSection .mapSidebar .animation-upDown {
   animation: upDown 1s linear alternate infinite;
 }
 
@@ -223,38 +264,100 @@ body {
   }
 }
 
-.Cases .pattern-circle {
+.mapSection .mapSidebar .pattern-circle {
   background-color: transparent;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJklEQVQoU2P09fXdvHnzZl8GBgYGZDaIDwKMMAYumrACOlhBsSMBwAAQCePjcEkAAAAASUVORK5CYII=);
 }
 
-.Cases .scrollbar.overflow-x {
+.mapSection .mapSidebar .scrollbar.overflow-x {
   height: 60px;
   overflow-y: visible;
   overflow-x: scroll;
 }
 
-.Cases .scrollbar.overflow-y {
+.mapSection .mapSidebar .scrollbar.overflow-y {
   overflow-x: hidden;
   overflow-y: scroll;
 }
 
-.Cases .scrollbar::-webkit-scrollbar-track {
+.mapSection .mapSidebar .scrollbar::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 16px;
   background-color: #908f8f;
 }
 
-.Cases .scrollbar::-webkit-scrollbar {
+.mapSection .mapSidebar .scrollbar::-webkit-scrollbar {
   border-radius: 16px;
   width: 6px !important;
   height: 0px;
   background-color: #908f8f;
 }
 
-.Cases .scrollbar::-webkit-scrollbar-thumb {
+.mapSection .mapSidebar .scrollbar::-webkit-scrollbar-thumb {
   border-radius: 16px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #fff;
+}
+
+.mapSection .map {
+  position: relative;
+}
+
+.mapSection .map .btnWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 600px;
+  pointer-events: none;
+}
+
+.mapSection .map .btnWrap .btnGroup {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  pointer-events: auto;
+}
+
+.mapSection .map #map {
+  width: 100%;
+  height: 100vh;
+  background: #333;
+  box-shadow: 0 0 1px 1px #333;
+}
+
+.mapSection .map #map #mapMain [d] {
+  stroke: #7f7f7f;
+}
+
+.mapSection .map #map #mapMain .fill-blue {
+  fill: #57b2e2 !important;
+}
+
+.mapSection .map #map #mapMain #taiwan [d] {
+  fill: #fff;
+  stroke-width: 0.2px;
+  cursor: default;
+}
+
+.mapSection .map #map #mapMain #taiwan [countryid='TaichungArea']:hover,
+.mapSection .map #map #mapMain #taiwan [countryid='TaipeiArea']:hover {
+  fill: #57b2e2 !important;
+}
+
+.mapSection .map #map #mapMain #palau [d] {
+  fill: #fff;
+}
+
+.mapSection .map #map #mapMain #Shanghai:hover {
+  fill: #57b2e2 !important;
+}
+
+.mapSection .map #map #mapMain #china [d] {
+  stroke-width: 0;
+}
+
+.mapSection .map #map #mapMain #china [aria-label='上海市'] {
+  fill: #fff;
 }
 /*# sourceMappingURL=main.css.map */

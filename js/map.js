@@ -51,82 +51,12 @@ const json = {
 
 // JavaScript IIFE
 ;(function() {
-  let Cases = document.querySelector('.Cases')
+  let $map = document.querySelector('.map')
 
-  let sidebar = function() {
-    this.closeCases = document.querySelector('.close-Cases')
-    this.areaDOM = function(areaId) {
-      var newCategory
-      var areaInfo = document.querySelector('#areaInfo')
-      areaInfo.innerHTML = ''
-      // 建立模板
-      newCategory = `
-  <h4 class="title"></h4>
-  <ul id="tabs" class="tabs scrollbar overflow-x"></ul>
-  <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
-  `
-      // 將模板傳回 dom
-      areaInfo.insertAdjacentHTML('beforeend', newCategory)
-      // api 地區英文轉中文，輸出標題 .title
-      var title = document.querySelector('.title')
-      switch (areaId) {
-        case 'Palau':
-          title.textContent = '帛琉案例'
-          break
-        case 'Shanghai':
-          title.textContent = '上海案例'
-          break
-        case 'TaichungArea':
-          title.textContent = '台中案例'
-          break
-        case 'TaipeiArea':
-          title.textContent = '台北案例'
-          break
-        default:
-          title.textContent = null
-      }
-      // tabs 加入地區的年份
-      var year
-      var tabs
-      var yearLi
-      tabs = document.querySelector('#tabs')
-      year = Object.keys(json[areaId].year)
-      year.sort((a, b) => b - a)
-      yearLi = ''
-      for (var i = 0, len = year.length; i < len; i++) {
-        yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
-      }
-      tabs.innerHTML = yearLi
-      var li = Array.from(document.querySelectorAll('#tabs li a'))
-      // 點擊年份切換資訊
-      li.forEach(link => {
-        link.addEventListener('click', function(e) {
-          li.forEach(x => {
-            e.preventDefault()
-            x.classList.remove('active')
-          })
-          e.target.classList.add('active')
-          areaBlock(link.textContent, areaId)
-          // get dom id=year2018 回傳到 year()
-        })
-      })
-    }
-
-    this.areaBlock = function(num, areaId) {
-      var ul, li, str, year
-      ul = document.querySelector(`#areaBlock`)
-      ul.innerHTML = ''
-      li = document.createElement('li')
-      str = ''
-      year = json[areaId].year[num]
-      year.forEach(x => {
-        str += `<li>${x}</li>`
-      })
-      ul.innerHTML = str
-    }
-    this.closeCases.addEventListener('click', removeAreaActive, false)
-  }
-
+  let Cases = document.querySelector('.mapSidebar')
+  // ------------------------------------------------------------------------------------
+  // 地圖函式 start
+  // ------------------------------------------------------------------------------------
   let map = function() {
     this.Coordination = {
       TaichungArea: {
@@ -166,18 +96,21 @@ const json = {
     this.rID = null
     this.f = 0
 
+    let viewBoxInit = '1014, 515.75, 240, 135'
     // 取得 svg
     this.svg = document.querySelector('#map')
+    // 設定預設值
+    this.svg.setAttributeNS(null, 'viewBox', viewBoxInit)
     this.svgViewBox = this.svg
       .getAttribute('viewBox')
       .split(' ')
-      .map(c => Number(c))
+      .map(c => parseFloat(c))
     this.svgMain = document.querySelector('#mapMain')
 
     // 移除選取地區的效果
     this.removeAreaActive = function() {
       Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
-        x.classList.remove('active')
+        x.classList.remove('fill-blue')
       })
       Cases.style.left = '-600px'
     }
@@ -185,10 +118,10 @@ const json = {
     this.addAreaActive = function(e) {
       if (e.target.getAttribute('countryid') === 'Palau') {
         Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
-          palau.classList.add('active')
+          palau.classList.add('fill-blue')
         })
       }
-      e.target.classList.add('active')
+      e.target.classList.add('fill-blue')
       Cases.style.left = '0'
     }
 
@@ -259,7 +192,6 @@ const json = {
           cvb[i] = tg[i]
         }
       }
-
       this.svg.setAttribute('viewBox', cvb.join(' '))
       if (!(f % NF)) {
         f = 0
@@ -343,7 +275,6 @@ const json = {
           // 以滑鼠為中心點縮放
           // 重新取得 viewBox 值  = moveToSVGPoint
           CTM = svg.getScreenCTM()
-
           let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
           let delta
           if (this.getAttribute('id') === 'zoom-out') {
@@ -361,7 +292,7 @@ const json = {
           let middleViewBox = svg
             .getAttribute('viewBox')
             .split(' ')
-            .map(n => Number(n))
+            .map(n => parseFloat(n))
           let moveBackViewBox = `${middleViewBox[0] + delta.dx} ${middleViewBox[1] + delta.dy} ${middleViewBox[2]} ${middleViewBox[3]}`
 
           tg = moveBackViewBox.split(' ')
@@ -377,7 +308,7 @@ const json = {
           // 1. 取得一開始的 viewBox 值，原本是字串，拆成陣列，方便之後運算
           let startViewBox = this.getAttribute('viewBox')
             .split(' ')
-            .map(n => +n)
+            .map(n => parseFloat(n))
           //  2. 取得滑鼠當前 viewport 中 client 座標值
           let startClient = {
             x: e.clientX,
@@ -410,11 +341,13 @@ const json = {
         update()
       }
     }
+
+    // 重置地圖位置與動畫
     this.reset = function() {
       if (!rID && eventMap) {
         nav = eventMap['4']
         if (nav.act === 'reset') {
-          tg = [1014, 485.75, 240, 135]
+          tg = viewBoxInit.split(' ').map(c => parseFloat(c))
           airplanePathGroup.style.display = 'block'
           document.querySelector('#airplane').style.display = 'block'
         }
@@ -437,7 +370,87 @@ const json = {
       } else if (e.type == 'mouseout') {
         tip.style.display = 'none'
       }
+      sidebar()
     }
+
+    // 地區資訊 側邊
+    this.sidebar = function() {
+      this.closeCases = document.querySelector('.close-Cases')
+      this.areaDOM = function(areaId) {
+        var newCategory
+        var areaInfo = document.querySelector('#areaInfo')
+        areaInfo.innerHTML = ''
+        // 建立模板
+        newCategory = `
+  <h4 class="title"></h4>
+  <ul id="tabs" class="tabs scrollbar overflow-x"></ul>
+  <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
+  `
+        // 將模板傳回 dom
+        areaInfo.insertAdjacentHTML('beforeend', newCategory)
+        // api 地區英文轉中文，輸出標題 .title
+        var title = document.querySelector('.title')
+        switch (areaId) {
+          case 'Palau':
+            title.textContent = '帛琉案例'
+            break
+          case 'Shanghai':
+            title.textContent = '上海案例'
+            break
+          case 'TaichungArea':
+            title.textContent = '台中案例'
+            break
+          case 'TaipeiArea':
+            title.textContent = '台北案例'
+            break
+          default:
+            title.textContent = null
+        }
+        // tabs 加入地區的年份
+        var year
+        var tabs
+        var yearLi
+        tabs = document.querySelector('#tabs')
+        year = Object.keys(json[areaId].year)
+        year.sort((a, b) => b - a)
+        yearLi = ''
+        for (var i = 0, len = year.length; i < len; i++) {
+          yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
+        }
+        tabs.innerHTML = yearLi
+        var li = Array.from(document.querySelectorAll('#tabs li a'))
+        // 點擊年份切換資訊
+        li.forEach(link => {
+          link.addEventListener('click', function(e) {
+            li.forEach(x => {
+              e.preventDefault()
+              x.classList.remove('active')
+            })
+            e.target.classList.add('active')
+            areaBlock(link.textContent, areaId)
+            // get dom id=year2018 回傳到 year()
+          })
+        })
+      }
+
+      this.areaBlock = function(num, areaId) {
+        var ul, li, str, year
+        ul = document.querySelector(`#areaBlock`)
+        ul.innerHTML = ''
+        li = document.createElement('li')
+        str = ''
+        year = json[areaId].year[num]
+        year.forEach(x => {
+          str += `<li>${x}</li>`
+        })
+        ul.innerHTML = str
+      }
+      this.closeCases.addEventListener('click', removeAreaActive, false)
+    }
+    // ------------------------------------------------------------------------------------
+    // 地圖函式 ending
+    // ------------------------------------------------------------------------------------
+
     this.pin = function() {
       let s = document.querySelector('#Shanghai')
       let t = document.querySelector('#taiwan')
@@ -533,6 +546,7 @@ const json = {
 
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
+    this.svg.addEventListener('touchmove', this.move, false)
     document.querySelector('#Home').addEventListener('click', this.reset, false)
     document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
@@ -554,6 +568,7 @@ const json = {
     })
   }
   map()
-  sidebar()
+
+  // 執行動畫
   pin()
 })()
