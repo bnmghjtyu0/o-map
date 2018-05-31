@@ -51,9 +51,6 @@ const json = {
 
 // JavaScript IIFE
 ;(function() {
-  let $map = document.querySelector('.map')
-  let Cases = document.querySelector('.mapSidebar')
-
   // ------------------------------------------------------------------------------------
   // 地圖函式 start
   // ------------------------------------------------------------------------------------
@@ -77,16 +74,14 @@ const json = {
       }
     }
 
-    // 所有 DOM 宣告
-    this.config = {
-      btnGroup: {
-        Home: document.querySelector('#Home'),
-        zoomIn: document.querySelector('#zoom-in'),
-        zoomOut: document.querySelector('#zoom-out')
-      },
-      $mapMenu: document.querySelector('#mapMenu'),
-      $closeCases: document.querySelector('.closeCase')
-    }
+    // map DOM 宣告
+    let $Cases = document.querySelector('.mapSidebar'),
+      $map = document.querySelector('.map'),
+      $Home = document.querySelector('#Home'),
+      $zoomIn = document.querySelector('#zoom-in'),
+      $zoomOut = document.querySelector('#zoom-out'),
+      $mapMenu = document.querySelector('#mapMenu'),
+      $closeCases = document.querySelector('.closeCase')
 
     this.airplanePathGroup
     this.isMousedown = false
@@ -122,11 +117,10 @@ const json = {
     }
     // 新增選取地區的效果
     this.openSidebar = function() {
-      Cases.style.left = '0'
+      $Cases.style.left = '0'
     }
     this.closeSidebar = function() {
-      console.log(123)
-      Cases.style.left = '-600px'
+      $Cases.style.left = '-600px'
     }
     this.addAreaActive = function(e) {
       if (e.target.getAttribute('countryid') === 'Palau') {
@@ -554,7 +548,7 @@ const json = {
         }
       })
     }
-    config.$closeCases.addEventListener('click', this.closeSidebar, false)
+    $closeCases.addEventListener('click', this.closeSidebar, false)
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
     this.svg.addEventListener('touchmove', this.move, false)
@@ -568,8 +562,8 @@ const json = {
     document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
-    this.config.btnGroup.zoomOut.addEventListener('click', zoom, false)
-    this.config.btnGroup.zoomIn.addEventListener('click', zoom, false)
+    $zoomOut.addEventListener('click', zoom, false)
+    $zoomIn.addEventListener('click', zoom, false)
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
@@ -577,7 +571,7 @@ const json = {
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
-    this.config.$mapMenu.addEventListener(
+    $mapMenu.addEventListener(
       'click',
       function(e) {
         e.preventDefault()
