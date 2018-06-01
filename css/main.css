@@ -59,13 +59,13 @@ body {
 }
 
 .mapSection {
+  width: 70%;
+  height: 600px;
   position: absolute;
   left: 50%;
   top: 50%;
   margin-top: -300px;
   margin-left: -35%;
-  width: 70%;
-  height: 600px;
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -315,6 +315,27 @@ body {
   position: relative;
 }
 
+.mapSection .map [d].border-primary {
+  fill: none !important;
+  stroke: #57b2e2 !important;
+  stroke-width: 0.1;
+}
+
+.mapSection .map [d].border-primary:hover {
+  fill: none !important;
+}
+
+.mapSection .map .fill-blue {
+  fill: #57b2e2 !important;
+}
+
+.mapSection .map .rounded {
+  border-radius: 100%;
+  display: inline-flex;
+  padding: 5px;
+  outline: none !important;
+}
+
 .mapSection .map .btnWrap {
   position: absolute;
   left: 0;
@@ -331,6 +352,16 @@ body {
   pointer-events: auto;
 }
 
+.mapSection .map .tip {
+  display: none;
+  background: #fff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  margin-left: -60px;
+  margin-top: -30px;
+  padding: 2px 8px;
+  border: 1px solid #57b2e2;
+}
+
 .mapSection .map #map {
   width: 100%;
   height: 100vh;
@@ -339,11 +370,11 @@ body {
 }
 
 .mapSection .map #map #mapMain [d] {
+  fill: #7f7f7f;
   stroke: #7f7f7f;
-}
-
-.mapSection .map #map #mapMain .fill-blue {
-  fill: #57b2e2 !important;
+  stroke-width: 0.05px;
+  transition: 0.7s;
+  cursor: pointer;
 }
 
 .mapSection .map #map #mapMain #taiwan [d] {
@@ -371,5 +402,9 @@ body {
 
 .mapSection .map #map #mapMain #china [aria-label='上海市'] {
   fill: #fff;
+}
+
+.removePointEvent {
+  pointer-events: none;
 }
 /*# sourceMappingURL=main.css.map */

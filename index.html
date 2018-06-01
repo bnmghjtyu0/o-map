@@ -9,55 +9,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <style>
-        body {
-            overflow: hidden;
-        }
-
-        [d] {
-            fill: #7F7F7F;
-            stroke: #fff;
-            stroke-width: 0.05px;
-            transition: .7s;
-            cursor: pointer;
-        }
-
-
-        .tip {
-            display: none;
-            background: #fff;
-            box-shadow: 0 4px 4px rgba(0, 0, 0, .4);
-            margin-left: -60px;
-            margin-top: -30px;
-            padding: 2px 8px;
-            border: 1px solid #57B2E2;
-        }
-
-        [d].border-primary {
-            fill: none !important;
-            stroke: #57B2E2 !important;
-            stroke-width: 0.1;
-        }
-
-        [d].border-primary:hover {
-            fill: none !important
-        }
-
-        .rounded {
-            border-radius: 100%;
-            display: inline-flex;
-            padding: 5px;
-            outline: none !important;
-        }
-    </style>
     <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
 </head>
 
 <body>
-
     <section class="mapSection">
         <a href="" id="mapMenu">
             <i class="material-icons md-36">menu</i>
@@ -89,7 +47,7 @@
             </div>
             <div class="tip"></div>
             <svg id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRadio="xMinYMin meet"
-                xml:space="preserve">
+                viewBox="0 0 1920 1080" xml:space="preserve">
                 <g transform="translate(0,318)">
                     <g id="mapMain" transform="translate(0,0) scale(1.382615904114777)">
                         <path cs="100,100" d="M619.87,393.72L620.37,393.57L620.48,394.41L622.67,393.93L624.99,394.01L626.68,394.1L628.6,392.03L630.7,390.05L632.47,388.15L633,389.2L633.38,391.64L631.95,391.65L631.72,393.65L632.22,394.07L630.95,394.67L630.94,395.92L630.12,397.18L630.05,398.39L629.48,399.03L621.06,397.51L619.98,394.43z"
@@ -960,7 +918,6 @@
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=1899"></script>
     <!-- [客製化] -->
     <script src="js/map.js"></script>
-
 
 </body>
 

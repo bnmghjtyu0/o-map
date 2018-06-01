@@ -52,14 +52,16 @@ body {
   _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize; /* IE 6 */
 }
 
+$mapHeight: 600px;
 .mapSection {
+  width: 70%;
+  height: $mapHeight;
   position: absolute;
   left: 50%;
   top: 50%;
   margin-top: -300px;
   margin-left: -35%;
-  width: 70%;
-  height: 600px;
+
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -85,6 +87,7 @@ body {
     @media (max-width: 767px) {
       width: 90% !important;
     }
+
     .closeCase {
       position: absolute;
       right: 1rem;
@@ -281,12 +284,34 @@ body {
   .map {
     position: relative;
 
+    // 共用樣式
+    [d].border-primary {
+      fill: none !important;
+      stroke: #57b2e2 !important;
+      stroke-width: 0.1;
+    }
+
+    [d].border-primary:hover {
+      fill: none !important;
+    }
+
+    .fill-blue {
+      fill: #57b2e2 !important;
+    }
+    .rounded {
+      border-radius: 100%;
+      display: inline-flex;
+      padding: 5px;
+      outline: none !important;
+    }
+    // 設定
+
     .btnWrap {
       position: absolute;
       left: 0;
       top: 0;
       width: 100%;
-      height: 600px;
+      height: $mapHeight;
       pointer-events: none;
       .btnGroup {
         position: absolute;
@@ -295,6 +320,16 @@ body {
         pointer-events: auto;
       }
     }
+    .tip {
+      display: none;
+      background: #fff;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+      margin-left: -60px;
+      margin-top: -30px;
+      padding: 2px 8px;
+      border: 1px solid #57b2e2;
+    }
+
     #map {
       width: 100%;
       height: 100vh;
@@ -303,11 +338,13 @@ body {
 
       #mapMain {
         [d] {
+          fill: #7f7f7f;
           stroke: #7f7f7f;
+          stroke-width: 0.05px;
+          transition: 0.7s;
+          cursor: pointer;
         }
-        .fill-blue {
-          fill: #57b2e2 !important;
-        }
+
         #taiwan [d] {
           fill: #fff;
           stroke-width: 0.2px;
@@ -339,4 +376,8 @@ body {
       }
     }
   }
+}
+
+.removePointEvent {
+  pointer-events: none;
 }

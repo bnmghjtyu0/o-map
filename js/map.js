@@ -48,9 +48,20 @@ const json = {
     }
   }
 }
+;(function(global, factory) {
+  'use strict'
 
-// JavaScript IIFE
-;(function() {
+  // export as AMD...
+  if (typeof define !== 'undefined' && define.amd) {
+    define('canvgModule', ['rgbcolor', 'stackblur'], factory)
+  }
+  // ...or as browserify
+  else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = factory(require('rgbcolor'), require('stackblur'))
+  }
+
+  global.canvg = factory(global.RGBColor, global.stackBlur)
+})(typeof window !== 'undefined' ? window : this, function(RGBColor, stackBlur) {
   // ------------------------------------------------------------------------------------
   // 地圖函式 start
   // ------------------------------------------------------------------------------------
@@ -75,13 +86,13 @@ const json = {
     }
 
     // map DOM 宣告
-    let $Cases = document.querySelector('.mapSidebar'),
-      $map = document.querySelector('.map'),
-      $Home = document.querySelector('#Home'),
-      $zoomIn = document.querySelector('#zoom-in'),
-      $zoomOut = document.querySelector('#zoom-out'),
-      $mapMenu = document.querySelector('#mapMenu'),
-      $closeCases = document.querySelector('.closeCase')
+    let $Cases = document.querySelector('.mapSidebar')
+    let $map = document.querySelector('.map')
+    let $Home = document.querySelector('#Home')
+    let $zoomIn = document.querySelector('#zoom-in')
+    let $zoomOut = document.querySelector('#zoom-out')
+    let $mapMenu = document.querySelector('#mapMenu')
+    let $closeCases = document.querySelector('.closeCase')
 
     this.airplanePathGroup
     this.isMousedown = false
@@ -96,8 +107,8 @@ const json = {
     this.tg = Array(4)
     this.rID = null
     this.f = 0
-
-    let viewBoxInit = '1014, 515.75, 240, 135'
+    let viewBoxInit = '991.4718017578125, 502.11767578125, 303.75, 183.515625'
+    // let viewBoxInit = '1042.0965576171875, 496.01556396484375, 202.5, 122.34375'
     // 取得 svg
     this.svg = document.querySelector('#map')
     // 設定預設值
@@ -260,6 +271,8 @@ const json = {
           // dir = 滾輪上下滾動
           const dir = e.wheelDeltaY / 120,
             // 視窗座標 轉 svg 座標
+
+            // 滑鼠目前位置為中心縮放
             startClient = {
               x: (newSVGPoint.x = e.clientX),
               y: (newSVGPoint.y = e.clientY)
@@ -268,6 +281,12 @@ const json = {
               x: newSVGPoint.matrixTransform(CTM.inverse()).x,
               y: newSVGPoint.matrixTransform(CTM.inverse()).y
             }
+          let b1 = svg.createSVGPoint()
+          let b1CTM = svg.getScreenCTM()
+          b1.x = svg.getBoundingClientRect().width / 2
+          b1.y = svg.getBoundingClientRect().height / 2
+          const b1Point = b1.matrixTransform(b1CTM.inverse())
+
           // 縮放倍率
           // 宣告結束 ============================================================================
 
@@ -279,15 +298,20 @@ const json = {
             r = 1
           }
           svg.setAttribute('viewBox', `${svgViewBox[0]} ${svgViewBox[1]} ${svgViewBox[2] * r} ${svgViewBox[3] * r}`)
+
+          b2CTM = svg.getScreenCTM()
+          let b2Point = b1.matrixTransform(b2CTM.inverse())
+
           // 以滑鼠為中心點縮放
           // 重新取得 viewBox 值  = moveToSVGPoint
+
           CTM = svg.getScreenCTM()
           let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
           let delta
-          if (this.getAttribute('id') === 'zoom-out') {
+          if (this.getAttribute('id') === 'zoom-out' || this.getAttribute('id') === 'zoom-in') {
             delta = {
-              dx: startSVGPoint.x - moveToSVGPoint.x,
-              dy: startSVGPoint.y - moveToSVGPoint.y
+              dx: b1Point.x - b2Point.x,
+              dy: b1Point.y - b2Point.y
             }
           } else {
             delta = {
@@ -301,7 +325,6 @@ const json = {
             .split(' ')
             .map(n => parseFloat(n))
           let moveBackViewBox = `${middleViewBox[0] + delta.dx} ${middleViewBox[1] + delta.dy} ${middleViewBox[2]} ${middleViewBox[3]}`
-
           tg = moveBackViewBox.split(' ')
         }
         update()
@@ -364,15 +387,13 @@ const json = {
     }
     this.isShowAreaName = function(e) {
       let tip = document.querySelector('.tip'),
-        tipPos = {
-          x: e.offsetX,
-          y: e.offsetY
-        },
+        { offsetX: x, offsetY: y } = e,
         tipId = e.target.getAttribute('aria-label')
+
       tip.textContent = tipId
 
       if (e.type == 'mousemove') {
-        tip.setAttribute(`style`, `position:absolute; left:${tipPos.x}px; top:${tipPos.y}px;display:block`)
+        tip.setAttribute(`style`, `position:absolute; left:${x}px; top:${y}px;display:block`)
         tip.style.display = 'block'
       } else if (e.type == 'mouseout') {
         tip.style.display = 'none'
@@ -383,8 +404,8 @@ const json = {
     // 地區資訊 側邊
     this.sidebar = function() {
       this.areaDOM = function(areaId) {
-        var newCategory
-        var areaInfo = document.querySelector('#areaInfo')
+        let newCategory
+        let areaInfo = document.querySelector('#areaInfo')
         areaInfo.innerHTML = ''
         // 建立模板
         newCategory = `
@@ -413,18 +434,16 @@ const json = {
             title.textContent = null
         }
         // tabs 加入地區的年份
-        var year
-        var tabs
-        var yearLi
+        let year, tabs, yearLi
         tabs = document.querySelector('#tabs')
         year = Object.keys(json[areaId].year)
         year.sort((a, b) => b - a)
         yearLi = ''
-        for (var i = 0, len = year.length; i < len; i++) {
+        for (let i = 0, len = year.length; i < len; i++) {
           yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
         }
         tabs.innerHTML = yearLi
-        var li = Array.from(document.querySelectorAll('#tabs li a'))
+        let li = Array.from(document.querySelectorAll('#tabs li a'))
         // 點擊年份切換資訊
         li.forEach(link => {
           link.addEventListener('click', function(e) {
@@ -456,6 +475,9 @@ const json = {
     // 地圖函式 ending
     // ------------------------------------------------------------------------------------
 
+    // ------------------------------------------------------------------------------------
+    // 飛機沿路徑動畫 + pin
+    // ------------------------------------------------------------------------------------
     this.pin = function() {
       let s = document.querySelector('#Shanghai')
       let t = document.querySelector('#taiwan')
@@ -470,6 +492,9 @@ const json = {
       pin1.setAttributeNS(null, 'href', 'img/pin.svg')
       pin2.setAttributeNS(null, 'href', 'img/pin.svg')
       pin3.setAttributeNS(null, 'href', 'img/pin.svg')
+      pin1.classList.add('removePointEvent')
+      pin2.classList.add('removePointEvent')
+      pin3.classList.add('removePointEvent')
 
       // 圖標位置與大小
       TweenLite.set(pin1, { scale: Coordination.Shanghai.pinScale, x: Coordination.Shanghai.x, y: Coordination.Shanghai.y })
@@ -491,6 +516,8 @@ const json = {
       svgPath01.setAttributeNS(null, 'class', 'border-primary')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
       svgPath02.setAttributeNS(null, 'class', 'border-primary')
+      svgPath01.classList.add('removePointEvent')
+      svgPath02.classList.add('removePointEvent')
 
       // 將物件置入 group
       airplanePathGroup.appendChild(svgPath01)
@@ -548,6 +575,7 @@ const json = {
         }
       })
     }
+
     $closeCases.addEventListener('click', this.closeSidebar, false)
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
@@ -581,7 +609,6 @@ const json = {
     )
   }
   map()
-
   // 執行動畫
   pin()
-})()
+})
