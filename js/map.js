@@ -66,8 +66,8 @@ const json = {
   // 地圖函式 start
   // ------------------------------------------------------------------------------------
   let map = function() {
-    // 定義座標
-    this.Coordination = {
+    // 飛機路線的座標
+    let Coordination = {
       TaichungArea: {
         x: 813.5,
         y: 162.5,
@@ -94,19 +94,25 @@ const json = {
     let $mapMenu = document.querySelector('#mapMenu')
     let $closeCases = document.querySelector('.closeCase')
 
+    // 宣告飛機路徑
     this.airplanePathGroup
+    // true 加入飛機動畫 , false 關閉動畫
     this.isMousedown = false
+
+    // 地圖的四個事件
     this.eventMap = {
       1: { act: 'zoom' },
       2: { act: 'mousemove' },
       3: { act: 'show' },
       4: { act: 'reset' }
     }
-    this.NF = 16
-    this.nav = null
-    this.tg = Array(4)
-    this.rID = null
-    this.f = 0
+
+    // 地圖 init 設定
+    let NF = 16
+    let nav = null
+    let tg = Array(4)
+    let rID = null
+    let f = 0
     let viewBoxInit = '991.4718017578125, 502.11767578125, 303.75, 183.515625'
     // let viewBoxInit = '1042.0965576171875, 496.01556396484375, 202.5, 122.34375'
     // 取得 svg
@@ -119,6 +125,16 @@ const json = {
       .map(c => parseFloat(c))
     this.svgMain = document.querySelector('#mapMain')
 
+    // 新增選取地區的效果
+    this.addAreaActive = function(e) {
+      if (e.target.getAttribute('countryid') === 'Palau') {
+        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
+          palau.classList.add('fill-blue')
+        })
+      }
+      e.target.classList.add('fill-blue')
+      openSidebar()
+    }
     // 移除選取地區的效果
     this.removeAreaActive = function() {
       Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
@@ -130,29 +146,24 @@ const json = {
     this.openSidebar = function() {
       $Cases.style.left = '0'
     }
+    // 關閉側邊欄
     this.closeSidebar = function() {
       $Cases.style.left = '-600px'
     }
-    this.addAreaActive = function(e) {
-      if (e.target.getAttribute('countryid') === 'Palau') {
-        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
-          palau.classList.add('fill-blue')
-        })
-      }
-      e.target.classList.add('fill-blue')
-      openSidebar()
-    }
 
-    this.stopAni = function() {
+    // 停止 requestAnimationFrame
+    this.stopAnimationFrame = function() {
       cancelAnimationFrame(rID)
       rID = null
     }
+
+    // 停止 飛機動畫
     this.stopAirplaneAnimation = function() {
       airplanePathGroup.style.display = 'none'
       document.querySelector('#airplane').style.display = 'none'
     }
 
-    // 計算貝茲曲線
+    // 公式函示: 二元貝茲曲線
     this.svgPathCurv = function(a, b, curv) {
       var x1,
         x2,
@@ -185,6 +196,8 @@ const json = {
       path = s + q + l
       return path
     }
+
+    // 地圖渲染與更新
     this.update = function() {
       let k = ++f / NF,
         j = 1 - k,
@@ -216,71 +229,29 @@ const json = {
         this.svgViewBox.splice(0, 4, ...cvb)
         nav = {}
         tg = Array(4)
-        stopAni()
+        stopAnimationFrame()
       }
     }
-    this.zoomIn = function(e) {
-      if (!rID && eventMap) {
-        nav = eventMap['3']
-        if (nav.act === 'show') {
-          if (this.getAttribute('id') === 'taiwan') {
-            tg = [1083, 519, 90, 50.625]
-          } else if (this.getAttribute('id') === 'Shanghai') {
-            tg = [1099.34375, 499.84375, 60, 33.75]
-          } else if (this.getAttribute('id') === 'palau') {
-            tg = [1146.765625, 581.84375, 90, 50.625]
-          }
-          stopAirplaneAnimation()
-        }
-        update()
-      }
 
-      // areaId
-      let areaId = e.target.getAttribute('countryid')
-
-      // 新增 pin
-      // let pinN = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-      // pinN.setAttributeNS(null, 'href', 'img/pin.svg')
-
-      // 取得點擊地區的座標
-
-      if (e.type === 'click') {
-        removeAreaActive()
-        if (areaId in Coordination || areaId in json) {
-          // 點擊地區後顯示該地區的顏色
-          // 點擊地區後顯該地區的 pin
-          // TweenLite.set(pinN, { scale: Coordination[areaId].pinScale, x: Coordination[areaId].x, y: Coordination[areaId].y })
-
-          // Cases 展開地區資訊
-          areaDOM(areaId)
-          let maxYear = Math.max(...Object.keys(json[areaId].year))
-          areaBlock(maxYear, areaId)
-          addAreaActive(e)
-        }
-      }
-      // svgMain.appendChild(pinN)
-    }
-    // 地圖縮放
+    // 事件一: act:zoom 地圖縮放
     this.zoom = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['1']
         if (nav.act === 'zoom') {
-          let newSVGPoint = svg.createSVGPoint(),
-            CTM = svg.getScreenCTM(),
-            r
-          // dir = 滾輪上下滾動
-          const dir = e.wheelDeltaY / 120,
-            // 視窗座標 轉 svg 座標
+          let newSVGPoint = svg.createSVGPoint() //新增一個 svg point
+          let CTM = svg.getScreenCTM() //新增 CTM
+          let r //新增縮放倍率
 
-            // 滑鼠目前位置為中心縮放
-            startClient = {
-              x: (newSVGPoint.x = e.clientX),
-              y: (newSVGPoint.y = e.clientY)
-            },
-            startSVGPoint = {
-              x: newSVGPoint.matrixTransform(CTM.inverse()).x,
-              y: newSVGPoint.matrixTransform(CTM.inverse()).y
-            }
+          const dir = e.wheelDeltaY / 120 // dir = 滾輪上下滾動
+          // 滑鼠目前位置為中心縮放
+          const startClient = {
+            x: (newSVGPoint.x = e.clientX),
+            y: (newSVGPoint.y = e.clientY)
+          }
+          const startSVGPoint = {
+            x: newSVGPoint.matrixTransform(CTM.inverse()).x,
+            y: newSVGPoint.matrixTransform(CTM.inverse()).y
+          }
           let b1 = svg.createSVGPoint()
           let b1CTM = svg.getScreenCTM()
           b1.x = svg.getBoundingClientRect().width / 2
@@ -330,6 +301,9 @@ const json = {
         update()
       }
     }
+    // 事件一: act:zoom end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // 事件二: act:mousemove 拖曳地圖
     this.move = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['2']
@@ -371,8 +345,44 @@ const json = {
         update()
       }
     }
+    // 事件二: act:mousemove end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // 重置地圖位置與動畫
+    // 事件三: act:show 地圖縮放
+    this.mapFocus = function(e) {
+      e.preventDefault()
+      if (!rID && eventMap) {
+        nav = eventMap['3']
+        if (nav.act === 'show') {
+          if (this.getAttribute('id') === 'taiwan' || this.getAttribute('countryid') === 'TaichungArea') {
+            tg = [1083, 519, 90, 50.625]
+          } else if (this.getAttribute('id') === 'Shanghai' || this.getAttribute('countryid') === 'Shanghai') {
+            tg = [1099.34375, 499.84375, 60, 33.75]
+          } else if (this.getAttribute('id') === 'Palau' || this.getAttribute('countryid') === 'Palau') {
+            tg = [1146.765625, 581.84375, 90, 50.625]
+          }
+          stopAirplaneAnimation()
+        }
+        update()
+      }
+
+      // areaId
+      let areaId = e.target.getAttribute('countryid')
+
+      // 取得點擊地區的座標
+      if (e.type === 'click') {
+        removeAreaActive()
+        if (areaId in Coordination || areaId in json) {
+          // Cases 展開地區資訊
+          areaDOM(areaId)
+          let maxYear = Math.max(...Object.keys(json[areaId].year))
+          areaBlock(maxYear, areaId)
+          addAreaActive(e)
+        }
+      }
+    }
+    // 事件三: act:show end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // 事件四: act:reset 重置地圖位置與動畫
     this.reset = function() {
       if (!rID && eventMap) {
         nav = eventMap['4']
@@ -385,6 +395,9 @@ const json = {
       update()
       removeAreaActive()
     }
+    // 事件四: act:reset end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // mousemove時 出現地區名稱
     this.isShowAreaName = function(e) {
       let tip = document.querySelector('.tip'),
         { offsetX: x, offsetY: y } = e,
@@ -401,7 +414,7 @@ const json = {
       sidebar()
     }
 
-    // 地區資訊 側邊
+    // 側邊欄
     this.sidebar = function() {
       this.areaDOM = function(areaId) {
         let newCategory
@@ -576,29 +589,42 @@ const json = {
       })
     }
 
-    $closeCases.addEventListener('click', this.closeSidebar, false)
+    // svg事件
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
-    this.svg.addEventListener('touchmove', this.move, false)
-    document.querySelector('#Home').addEventListener('click', this.reset, false)
-    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('click', this.zoomIn, false)
-    document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#Shanghai').addEventListener('click', this.zoomIn, false)
-    document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
-    $zoomOut.addEventListener('click', zoom, false)
-    $zoomIn.addEventListener('click', zoom, false)
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
-
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
+
+    // 關閉 sidebar 事件
+    $closeCases.addEventListener('click', this.closeSidebar, false)
+
+    // 重新定位事件
+    document.querySelector('#Home').addEventListener('click', this.reset, false)
+
+    // 台灣事件
+    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#taiwan').addEventListener('click', this.mapFocus, false)
+
+    // 上海事件
+    document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#Shanghai').addEventListener('click', this.mapFocus, false)
+
+    // 帛琉事件
+    document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#palau').addEventListener('click', this.mapFocus, false)
+
+    // 按鈕縮放事件
+    $zoomOut.addEventListener('click', zoom, false)
+    $zoomIn.addEventListener('click', zoom, false)
+
+    // 打開 sidebar hamburger
     $mapMenu.addEventListener(
       'click',
       function(e) {
@@ -607,6 +633,10 @@ const json = {
       },
       false
     )
+    let areaList = Array.from(document.querySelectorAll('.areaList li a'))
+    areaList.map(a => {
+      a.addEventListener('click', mapFocus, false)
+    })
   }
   map()
   // 執行動畫
