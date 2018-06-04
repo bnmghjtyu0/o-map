@@ -2,7 +2,6 @@ $circleSize: 10px 10px;
 $circleOutSize: (nth($circleSize, 1) * 2.2) (nth($circleSize, 2) * 2.2);
 $circleLineY: 15px;
 $circleLineHeight: 1px;
-
 body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
@@ -13,20 +12,25 @@ body {
 .btn-primary {
   background-color: #5db4e5;
 }
+
 /* bs4 */
 
 .text-white {
   color: #fff;
 }
+
 .mt-3 {
   margin-top: 15px;
 }
+
 .mt-5 {
   margin-top: 25px;
 }
+
 .mr-2 {
   margin-right: 10px;
 }
+
 .mb-5 {
   margin-bottom: 25px;
 }
@@ -36,20 +40,28 @@ body {
   cursor: grab !important;
   cursor: -moz-grab !important !important;
   cursor: -webkit-grab !important;
-  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize; /* standard */
-  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize\9; /* IE 8 and below */
-  *cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize; /* IE 7 and below */
-  _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize; /* IE 6 */
+  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize;
+  /* standard */
+  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize\9;
+  /* IE 8 and below */
+  *cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize;
+  /* IE 7 and below */
+  _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/openhand.cur'), n-resize;
+  /* IE 6 */
 }
 
 .touch_mode_grabbing {
   cursor: grabbing !important;
   cursor: -moz-grabbing !important;
   cursor: -webkit-grabbing !important;
-  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize; /* standard */
-  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize\9; /* IE 8 and below */
-  *cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize; /* IE 7 and below */
-  _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize; /* IE 6 */
+  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize;
+  /* standard */
+  cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize\9;
+  /* IE 8 and below */
+  *cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize;
+  /* IE 7 and below */
+  _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize;
+  /* IE 6 */
 }
 
 $mapHeight: 600px;
@@ -61,11 +73,9 @@ $mapHeight: 600px;
   top: 50%;
   margin-top: -300px;
   margin-left: -35%;
-
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-
   #mapMenu {
     position: absolute;
     top: 2rem;
@@ -75,7 +85,6 @@ $mapHeight: 600px;
       color: #fff;
     }
   }
-
   .mapSidebar {
     position: absolute;
     left: -500px;
@@ -87,7 +96,6 @@ $mapHeight: 600px;
     @media (max-width: 767px) {
       width: 90% !important;
     }
-
     .closeCase {
       position: absolute;
       right: 1rem;
@@ -113,7 +121,6 @@ $mapHeight: 600px;
       width: 100%;
       display: flex;
       align-items: stretch;
-
       .left {
         width: 100%;
         /* areaInfo */
@@ -160,7 +167,7 @@ $mapHeight: 600px;
         height: $circleLineHeight;
         background-color: #fff;
         left: 0;
-        top: calc(50% + #{nth($circleSize, 1)} / 2);
+        top: calc(50% +#{nth($circleSize, 1)}) / 2;
       }
       li {
         position: relative;
@@ -223,11 +230,9 @@ $mapHeight: 600px;
         }
       }
     }
-
     .animation-upDown {
       animation: upDown 1s linear alternate infinite;
     }
-
     /* 動畫   */
     @keyframes upDown {
       0% {
@@ -237,7 +242,6 @@ $mapHeight: 600px;
         transform: translate(0, 20px);
       }
     }
-
     @keyframes spread {
       0% {
         transform: scale(0.5);
@@ -246,12 +250,10 @@ $mapHeight: 600px;
         transform: scale(1);
       }
     }
-
     .pattern-circle {
       background-color: transparent;
       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJklEQVQoU2P09fXdvHnzZl8GBgYGZDaIDwKMMAYumrACOlhBsSMBwAAQCePjcEkAAAAASUVORK5CYII=);
     }
-
     .scrollbar {
       &.overflow-x {
         height: 60px;
@@ -280,21 +282,16 @@ $mapHeight: 600px;
       }
     }
   }
-
   .map {
-    position: relative;
-
-    // 共用樣式
+    position: relative; // 共用樣式
     [d].border-primary {
       fill: none !important;
       stroke: #57b2e2 !important;
       stroke-width: 0.1;
     }
-
     [d].border-primary:hover {
       fill: none !important;
     }
-
     .fill-blue {
       fill: #57b2e2 !important;
     }
@@ -303,9 +300,7 @@ $mapHeight: 600px;
       display: inline-flex;
       padding: 5px;
       outline: none !important;
-    }
-    // 設定
-
+    } // 設定
     .btnWrap {
       position: absolute;
       left: 0;
@@ -329,13 +324,11 @@ $mapHeight: 600px;
       padding: 2px 8px;
       border: 1px solid #57b2e2;
     }
-
     #map {
       width: 100%;
       height: 100vh;
       background: #333;
       box-shadow: 0 0 1px 1px #333;
-
       #mapMain {
         [d] {
           fill: #7f7f7f;
@@ -344,32 +337,26 @@ $mapHeight: 600px;
           transition: 0.7s;
           cursor: pointer;
         }
-
         #taiwan [d] {
           fill: #fff;
           stroke-width: 0.2px;
           cursor: default;
         }
-
         #taiwan {
           [countryid='TaichungArea']:hover,
           [countryid='TaipeiArea']:hover {
             fill: #57b2e2 !important;
           }
         }
-
         #palau [d] {
           fill: #fff;
         }
-
         #Shanghai:hover {
           fill: #57b2e2 !important;
         }
-
         #china [d] {
           stroke-width: 0;
         }
-
         #china [aria-label='上海市'] {
           fill: #fff;
         }
@@ -380,4 +367,23 @@ $mapHeight: 600px;
 
 .removePointEvent {
   pointer-events: none;
+}
+
+.areaList {
+  li {
+    display: inline-block;
+    list-style: none;
+    a {
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+      background: #333;
+      &:hover {
+        opacity: 0.8;
+      }
+      &:active {
+        box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.8);
+      }
+    }
+  }
 }

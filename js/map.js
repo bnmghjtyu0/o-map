@@ -94,11 +94,6 @@ const json = {
     let $mapMenu = document.querySelector('#mapMenu')
     let $closeCases = document.querySelector('.closeCase')
 
-    // 宣告飛機路徑
-    this.airplanePathGroup
-    // true 加入飛機動畫 , false 關閉動畫
-    this.isMousedown = false
-
     // 地圖的四個事件
     this.eventMap = {
       1: { act: 'zoom' },
@@ -353,11 +348,11 @@ const json = {
       if (!rID && eventMap) {
         nav = eventMap['3']
         if (nav.act === 'show') {
-          if (this.getAttribute('id') === 'taiwan' || this.getAttribute('countryid') === 'TaichungArea') {
+          if (this.getAttribute('id') === 'taiwan' || e.target.getAttribute('id') === 'taichungLink') {
             tg = [1083, 519, 90, 50.625]
-          } else if (this.getAttribute('id') === 'Shanghai' || this.getAttribute('countryid') === 'Shanghai') {
+          } else if (this.getAttribute('id') === 'Shanghai' || e.target.getAttribute('id') === 'shanghaiLink') {
             tg = [1099.34375, 499.84375, 60, 33.75]
-          } else if (this.getAttribute('id') === 'Palau' || this.getAttribute('countryid') === 'Palau') {
+          } else if (this.getAttribute('id') === 'Palau' || e.target.getAttribute('id') === 'palauLink') {
             tg = [1146.765625, 581.84375, 90, 50.625]
           }
           stopAirplaneAnimation()
@@ -370,6 +365,15 @@ const json = {
 
       // 取得點擊地區的座標
       if (e.type === 'click') {
+        switch (e.target.getAttribute('id')) {
+          case 'taichungLink':
+            areaId = 'TaichungArea'
+            break
+          case 'shanghaiLink':
+            areaId = 'Shanghai'
+          case 'palauLink':
+            areaId = 'Palau'
+        }
         removeAreaActive()
         if (areaId in Coordination || areaId in json) {
           // Cases 展開地區資訊
@@ -415,7 +419,7 @@ const json = {
     }
 
     // 側邊欄
-    this.sidebar = function() {
+    this.sidebar = (function() {
       this.areaDOM = function(areaId) {
         let newCategory
         let areaInfo = document.querySelector('#areaInfo')
@@ -483,7 +487,7 @@ const json = {
         })
         ul.innerHTML = str
       }
-    }
+    })()
     // ------------------------------------------------------------------------------------
     // 地圖函式 ending
     // ------------------------------------------------------------------------------------
@@ -491,6 +495,10 @@ const json = {
     // ------------------------------------------------------------------------------------
     // 飛機沿路徑動畫 + pin
     // ------------------------------------------------------------------------------------
+    // 宣告飛機路徑
+    this.airplanePathGroup
+    // true 加入飛機動畫 , false 關閉動畫
+    this.isMousedown = false
     this.pin = function() {
       let s = document.querySelector('#Shanghai')
       let t = document.querySelector('#taiwan')
@@ -633,8 +641,8 @@ const json = {
       },
       false
     )
-    let areaList = Array.from(document.querySelectorAll('.areaList li a'))
-    areaList.map(a => {
+    let taichungLink = Array.from(document.querySelectorAll('.areaList li a'))
+    taichungLink.forEach(a => {
       a.addEventListener('click', mapFocus, false)
     })
   }
