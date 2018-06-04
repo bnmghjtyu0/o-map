@@ -93,7 +93,7 @@ const data = {
     let $zoomOut = document.querySelector('#zoom-out')
     let $mapMenu = document.querySelector('#mapMenu')
     let $closeCases = document.querySelector('#closeCase')
-    let $homeCases = document.querySelector('#HomeCase')
+    let $prev = document.querySelector('#HomeCase')
     let areaId = ''
 
     this.airplanePathGroup
@@ -197,31 +197,7 @@ const data = {
         stopAni()
       }
     }
-    this.onZoomIn = function(areaId) {
-      if (!rID && eventMap) {
-        nav = eventMap['3']
-        if (areaId === 'TaichungArea') {
-          tg = [1083, 519, 90, 50.625]
-        } else if (areaId === 'Shanghai') {
-          tg = [1099.34375, 499.84375, 60, 33.75]
-        } else if (areaId === 'Palau') {
-          tg = [1146.765625, 581.84375, 90, 50.625]
-        }
-        stopAirplaneAnimation()
-        update()
-      }
-      if (areaId in Coordination || areaId in data) {
-        // 點擊地區後顯示該地區的顏色
-        // 點擊地區後顯該地區的 pin
-        // TweenLite.set(pinN, { scale: Coordination[areaId].pinScale, x: Coordination[areaId].x, y: Coordination[areaId].y })
 
-        // Cases 展開地區資訊
-        areaDOM(areaId)
-        let maxYear = Math.max(...Object.keys(data[areaId].year))
-        areaBlock(maxYear, areaId)
-        // addAreaActive()
-      }
-    }
     this.zoomIn = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['3']
@@ -333,6 +309,7 @@ const data = {
         update()
       }
     }
+    // 地圖移動
     this.move = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['2']
@@ -388,6 +365,7 @@ const data = {
       update()
       removeAreaActive()
     }
+    // mousemove 出現地區名稱
     this.isShowAreaName = function(e) {
       let tip = document.querySelector('.tip'),
         { offsetX: x, offsetY: y } = e,
@@ -403,7 +381,9 @@ const data = {
       }
     }
 
-    // 地區資訊 側邊
+    let areaListAll = document.querySelector('.areaListAll li')
+
+    // 地區資訊 側邊資訊
     this.sidebar = (function() {
       let areaInfo = document.querySelector('#areaInfo')
 
@@ -586,6 +566,24 @@ const data = {
       })
     }
 
+    $closeCases.addEventListener('click', this.closeSidebar, false)
+    $prev.addEventListener('click', this.homeSidebar, false)
+    this.svg.addEventListener('wheel', this.zoom, false)
+    this.svg.addEventListener('mousemove', this.move, false)
+    this.svg.addEventListener('touchmove', this.move, false)
+    document.querySelector('#Home').addEventListener('click', this.reset, false)
+    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#taiwan').addEventListener('click', this.zoomIn, false)
+    document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#Shanghai').addEventListener('click', this.zoomIn, false)
+    document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
+    document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
+    $zoomOut.addEventListener('click', zoom, false)
+    $zoomIn.addEventListener('click', zoom, false)
+
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
@@ -599,7 +597,7 @@ const data = {
       'click',
       function(e) {
         e.preventDefault()
-        $homeCases.style.display = 'none'
+        $prev.style.display = 'none'
         openSidebar() //打開 sidebar
         let areaDetail = document.querySelector('.areaDetail')
         areaDetail.classList.remove('active')
@@ -642,23 +640,6 @@ const data = {
       areaDOM(areaId)
       HomeCase.style.display = 'none'
     }
-    $closeCases.addEventListener('click', this.closeSidebar, false)
-    $homeCases.addEventListener('click', this.homeSidebar, false)
-    this.svg.addEventListener('wheel', this.zoom, false)
-    this.svg.addEventListener('mousemove', this.move, false)
-    this.svg.addEventListener('touchmove', this.move, false)
-    document.querySelector('#Home').addEventListener('click', this.reset, false)
-    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('click', this.zoomIn, false)
-    document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#Shanghai').addEventListener('click', this.zoomIn, false)
-    document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
-    $zoomOut.addEventListener('click', zoom, false)
-    $zoomIn.addEventListener('click', zoom, false)
   }
   map()
   // 執行動畫
