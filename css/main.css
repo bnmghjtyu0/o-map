@@ -59,13 +59,8 @@ body {
 }
 
 .mapSection {
-  width: 70%;
-  height: 600px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -300px;
-  margin-left: -35%;
+  width: 100%;
+  height: 100%;
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -100,14 +95,22 @@ body {
   }
 }
 
-.mapSection .mapSidebar .closeCase {
+.mapSection .mapSidebar .mapSidebar-button {
   position: absolute;
-  right: 1rem;
-  top: 1rem;
   z-index: 1023;
 }
 
-.mapSection .mapSidebar .closeCase i {
+.mapSection .mapSidebar .mapSidebar-button.left {
+  left: 1rem;
+  top: 1rem;
+}
+
+.mapSection .mapSidebar .mapSidebar-button.right {
+  right: 1rem;
+  top: 1rem;
+}
+
+.mapSection .mapSidebar .mapSidebar-button i {
   color: #fff;
 }
 
@@ -341,7 +344,7 @@ body {
   left: 0;
   top: 0;
   width: 100%;
-  height: 600px;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -406,5 +409,42 @@ body {
 
 .removePointEvent {
   pointer-events: none;
+}
+
+.areaDetail {
+  display: none;
+}
+
+.areaDetail.active {
+  display: block;
+}
+
+.areaListAll {
+  padding: 0;
+  display: none;
+}
+
+.areaListAll.active {
+  display: block;
+}
+
+.areaListAll li {
+  list-style: none !important;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.areaListAll li a {
+  display: inline-block;
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 16px;
+  text-align: center;
+  background: #333;
+  text-decoration: none;
+}
+
+.areaListAll li a:hover, .areaListAll li a:active {
+  background: #222;
 }
 /*# sourceMappingURL=main.css.map */

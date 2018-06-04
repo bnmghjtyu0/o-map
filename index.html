@@ -13,6 +13,7 @@
                 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
                 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
             <![endif]-->
+
 </head>
 
 <body>
@@ -21,12 +22,28 @@
             <i class="material-icons md-36">menu</i>
         </a>
         <article class="mapSidebar">
-            <a href="#" class="closeCase">
+            <a href="#" id="HomeCase" class="mapSidebar-button left">
+                <i class="material-icons md-36">keyboard_arrow_left</i>
+            </a>
+            <a href="#" id="closeCase" class="mapSidebar-button right">
                 <i class="material-icons md-36">close</i>
             </a>
             <div class="Cases-body">
                 <div class="left col-xs-12 col-sm-6 mt-5">
-                    <div id="areaInfo" class="pattern-circle text-white"></div>
+                    <ul class="areaListAll active">
+                        <li>
+                            <a href="#" onclick="onZoomIn('Palau')">帛琉</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="onZoomIn('Shanghai')">上海</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="onZoomIn('TaichungArea')">台中</a>
+
+                        </li>
+                        <div id="areaInfo" class="pattern-circle text-white">
+
+                        </div>
                 </div>
             </div>
         </article>
