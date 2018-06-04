@@ -52,15 +52,15 @@ body {
   _cursor: url('https://github.com/bqworks/slider-pro/raw/master/dist/css/images/closedhand.cur'), n-resize; /* IE 6 */
 }
 
-$mapHeight: 100%;
+$mapHeight: 600px;
 .mapSection {
-  width: 100%;
+  width: 70%;
   height: $mapHeight;
-  // position: absolute;
-  // left: 50%;
-  // top: 50%;
-  // margin-top: -300px;
-  // margin-left: -35%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -300px;
+  margin-left: -35%;
 
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
@@ -88,17 +88,11 @@ $mapHeight: 100%;
       width: 90% !important;
     }
 
-    .mapSidebar-button {
+    .closeCase {
       position: absolute;
+      right: 1rem;
+      top: 1rem;
       z-index: 1023;
-      &.left {
-        left: 1rem;
-        top: 1rem;
-      }
-      &.right {
-        right: 1rem;
-        top: 1rem;
-      }
       i {
         color: #fff;
       }
@@ -386,37 +380,4 @@ $mapHeight: 100%;
 
 .removePointEvent {
   pointer-events: none;
-}
-
-.areaDetail {
-  display: none;
-  &.active {
-    display: block;
-  }
-}
-.areaListAll {
-  padding: 0;
-  display: none;
-  &.active {
-    display: block;
-  }
-  li {
-    list-style: none !important;
-    display: inline-block;
-    margin-bottom: 20px;
-
-    a {
-      display: inline-block;
-      color: #fff;
-      padding: 8px 15px;
-      font-size: 16px;
-      text-align: center;
-      background: #333;
-      text-decoration: none;
-      &:hover,
-      &:active {
-        background: #222;
-      }
-    }
-  }
 }

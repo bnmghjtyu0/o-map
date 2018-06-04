@@ -1,5 +1,5 @@
 // Api
-const data = {
+const json = {
   Palau: {
     year: {
       '2020': ['PalauA', 'PalauB'],
@@ -92,9 +92,7 @@ const data = {
     let $zoomIn = document.querySelector('#zoom-in')
     let $zoomOut = document.querySelector('#zoom-out')
     let $mapMenu = document.querySelector('#mapMenu')
-    let $closeCases = document.querySelector('#closeCase')
-    let $prev = document.querySelector('#HomeCase')
-    let areaId = ''
+    let $closeCases = document.querySelector('.closeCase')
 
     this.airplanePathGroup
     this.isMousedown = false
@@ -109,8 +107,8 @@ const data = {
     this.tg = Array(4)
     this.rID = null
     this.f = 0
-    // let viewBoxInit = '991.4718017578125, 502.11767578125, 303.75, 183.515625'
-    let viewBoxInit = '1042.0965576171875, 496.01556396484375, 202.5, 122.34375'
+    let viewBoxInit = '991.4718017578125, 502.11767578125, 303.75, 183.515625'
+    // let viewBoxInit = '1042.0965576171875, 496.01556396484375, 202.5, 122.34375'
     // 取得 svg
     this.svg = document.querySelector('#map')
     // 設定預設值
@@ -120,6 +118,30 @@ const data = {
       .split(' ')
       .map(c => parseFloat(c))
     this.svgMain = document.querySelector('#mapMain')
+
+    // 移除選取地區的效果
+    this.removeAreaActive = function() {
+      Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
+        x.classList.remove('fill-blue')
+      })
+      closeSidebar()
+    }
+    // 新增選取地區的效果
+    this.openSidebar = function() {
+      $Cases.style.left = '0'
+    }
+    this.closeSidebar = function() {
+      $Cases.style.left = '-600px'
+    }
+    this.addAreaActive = function(e) {
+      if (e.target.getAttribute('countryid') === 'Palau') {
+        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
+          palau.classList.add('fill-blue')
+        })
+      }
+      e.target.classList.add('fill-blue')
+      openSidebar()
+    }
 
     this.stopAni = function() {
       cancelAnimationFrame(rID)
@@ -197,7 +219,6 @@ const data = {
         stopAni()
       }
     }
-
     this.zoomIn = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['3']
@@ -215,7 +236,7 @@ const data = {
       }
 
       // areaId
-      areaId = e.target.getAttribute('countryid')
+      let areaId = e.target.getAttribute('countryid')
 
       // 新增 pin
       // let pinN = document.createElementNS('http://www.w3.org/2000/svg', 'image')
@@ -225,14 +246,14 @@ const data = {
 
       if (e.type === 'click') {
         removeAreaActive()
-        if (areaId in Coordination || areaId in data) {
+        if (areaId in Coordination || areaId in json) {
           // 點擊地區後顯示該地區的顏色
           // 點擊地區後顯該地區的 pin
           // TweenLite.set(pinN, { scale: Coordination[areaId].pinScale, x: Coordination[areaId].x, y: Coordination[areaId].y })
 
           // Cases 展開地區資訊
           areaDOM(areaId)
-          let maxYear = Math.max(...Object.keys(data[areaId].year))
+          let maxYear = Math.max(...Object.keys(json[areaId].year))
           areaBlock(maxYear, areaId)
           addAreaActive(e)
         }
@@ -309,7 +330,6 @@ const data = {
         update()
       }
     }
-    // 地圖移動
     this.move = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['2']
@@ -365,7 +385,6 @@ const data = {
       update()
       removeAreaActive()
     }
-    // mousemove 出現地區名稱
     this.isShowAreaName = function(e) {
       let tip = document.querySelector('.tip'),
         { offsetX: x, offsetY: y } = e,
@@ -379,32 +398,25 @@ const data = {
       } else if (e.type == 'mouseout') {
         tip.style.display = 'none'
       }
+      sidebar()
     }
 
-    let areaListAll = document.querySelector('.areaListAll li')
-
-    // 地區資訊 側邊資訊
-    this.sidebar = (function() {
-      let areaInfo = document.querySelector('#areaInfo')
-
+    // 地區資訊 側邊
+    this.sidebar = function() {
       this.areaDOM = function(areaId) {
         let newCategory
+        let areaInfo = document.querySelector('#areaInfo')
         areaInfo.innerHTML = ''
         // 建立模板
-        newCategory = ` 
-        <ul class="areaListAll active"></ul>
-<div class="areaDetail active">
-<h4 class="title"></h4>
-<ul id="tabs" class="tabs scrollbar overflow-x"></ul>
-<ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
-</div>
+        newCategory = `
+  <h4 class="title"></h4>
+  <ul id="tabs" class="tabs scrollbar overflow-x"></ul>
+  <ul id="areaBlock" class="text-white scrollbar overflow-y" style="max-height:450px"></ul>
   `
-        // 將資料帶入模板
+        // 將模板傳回 dom
         areaInfo.insertAdjacentHTML('beforeend', newCategory)
-        // ，輸出標題 .title
+        // api 地區英文轉中文，輸出標題 .title
         var title = document.querySelector('.title')
-
-        // data 地區英文轉中文
         switch (areaId) {
           case 'Palau':
             title.textContent = '帛琉案例'
@@ -420,47 +432,45 @@ const data = {
             break
           default:
             title.textContent = null
-
-            // tabs 加入地區的年份
-            let year, tabs, yearLi
-            tabs = document.querySelector('#tabs')
-            year = Object.keys(data[areaId].year)
-            year.sort((a, b) => b - a)
-            yearLi = ''
-            for (let i = 0, len = year.length; i < len; i++) {
-              yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
-            }
-            tabs.innerHTML = yearLi
-            let li = Array.from(document.querySelectorAll('#tabs li a'))
-            // 點擊年份切換資訊
-            li.forEach(link => {
-              link.addEventListener('click', function(e) {
-                li.forEach(x => {
-                  e.preventDefault()
-                  x.classList.remove('active')
-                })
-                e.target.classList.add('active')
-
-                areaBlock(link.textContent, areaId)
-                // get dom id=year2018 回傳到 year()
-              })
+        }
+        // tabs 加入地區的年份
+        let year, tabs, yearLi
+        tabs = document.querySelector('#tabs')
+        year = Object.keys(json[areaId].year)
+        year.sort((a, b) => b - a)
+        yearLi = ''
+        for (let i = 0, len = year.length; i < len; i++) {
+          yearLi += `<li><a href="#" id="${year[i]}">${year[i]}</a></li>`
+        }
+        tabs.innerHTML = yearLi
+        let li = Array.from(document.querySelectorAll('#tabs li a'))
+        // 點擊年份切換資訊
+        li.forEach(link => {
+          link.addEventListener('click', function(e) {
+            li.forEach(x => {
+              e.preventDefault()
+              x.classList.remove('active')
             })
-        }
-        this.areaBlock = function(num, areaId) {
-          var ul, li, str, year
-          ul = document.querySelector(`#areaBlock`)
-          ul.innerHTML = ''
-          li = document.createElement('li')
-          str = ''
-          year = data[areaId].year[num]
-          year.forEach(x => {
-            str += `<li>${x}</li>`
+            e.target.classList.add('active')
+            areaBlock(link.textContent, areaId)
+            // get dom id=year2018 回傳到 year()
           })
-          ul.innerHTML = str
-        }
+        })
       }
-    })()
 
+      this.areaBlock = function(num, areaId) {
+        var ul, li, str, year
+        ul = document.querySelector(`#areaBlock`)
+        ul.innerHTML = ''
+        li = document.createElement('li')
+        str = ''
+        year = json[areaId].year[num]
+        year.forEach(x => {
+          str += `<li>${x}</li>`
+        })
+        ul.innerHTML = str
+      }
+    }
     // ------------------------------------------------------------------------------------
     // 地圖函式 ending
     // ------------------------------------------------------------------------------------
@@ -567,7 +577,6 @@ const data = {
     }
 
     $closeCases.addEventListener('click', this.closeSidebar, false)
-    $prev.addEventListener('click', this.homeSidebar, false)
     this.svg.addEventListener('wheel', this.zoom, false)
     this.svg.addEventListener('mousemove', this.move, false)
     this.svg.addEventListener('touchmove', this.move, false)
@@ -583,7 +592,6 @@ const data = {
     document.querySelector('#palau').addEventListener('click', this.zoomIn, false)
     $zoomOut.addEventListener('click', zoom, false)
     $zoomIn.addEventListener('click', zoom, false)
-
     this.svg.addEventListener('mousedown', e => {
       isMousedown = true
     })
@@ -591,55 +599,14 @@ const data = {
     this.svg.addEventListener('mouseup', e => {
       isMousedown = false
     })
-
-    // 1.點擊 menu 時
     $mapMenu.addEventListener(
       'click',
       function(e) {
         e.preventDefault()
-        $prev.style.display = 'none'
-        openSidebar() //打開 sidebar
-        let areaDetail = document.querySelector('.areaDetail')
-        areaDetail.classList.remove('active')
+        openSidebar()
       },
       false
     )
-
-    // 移除選取地區的效果
-    this.removeAreaActive = function() {
-      Array.from(document.querySelectorAll('#mapMain [d]')).map(x => {
-        x.classList.remove('fill-blue')
-      })
-      closeSidebar()
-    }
-
-    // 關閉 sidebar
-    this.closeSidebar = function(e) {
-      $Cases.style.left = '-600px'
-    }
-    // sidebar back
-    this.homeSidebar = function() {
-      this.style.display = 'none'
-      let areaDetail = document.querySelector('.areaDetail')
-      areaDetail.classList.remove('active')
-      areaListDOM()
-      // areaListAll.classList.add('active')
-    }
-    this.addAreaActive = function(e) {
-      if (e.target.getAttribute('countryid') === 'Palau') {
-        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
-          palau.classList.add('fill-blue')
-        })
-      }
-      e.target.classList.add('fill-blue')
-      openSidebar()
-    }
-    // 打開 sidebar
-    this.openSidebar = function() {
-      $Cases.style.left = '0'
-      areaDOM(areaId)
-      HomeCase.style.display = 'none'
-    }
   }
   map()
   // 執行動畫
