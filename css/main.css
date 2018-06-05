@@ -18,10 +18,6 @@ body {
   margin-top: 15px;
 }
 
-.mt-5 {
-  margin-top: 25px;
-}
-
 .mr-2 {
   margin-right: 10px;
 }
@@ -59,13 +55,8 @@ body {
 }
 
 .mapSection {
-  width: 70%;
-  height: 600px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -300px;
-  margin-left: -35%;
+  width: 100%;
+  height: 100%;
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -132,6 +123,8 @@ body {
 
 .mapSection .mapSidebar .Cases-body .left {
   width: 100%;
+  margin-top: 60px;
+  padding: 0 20px;
   /* areaInfo */
 }
 
@@ -184,7 +177,7 @@ body {
   height: 1px;
   background-color: #fff;
   left: 0;
-  top: calc(50% +10px)/2;
+  top: calc(50% + 10px / 2);
 }
 
 .mapSection .mapSidebar #tabs li {
@@ -238,7 +231,7 @@ body {
 .mapSection .mapSidebar #tabs li a:hover::before {
   content: '';
   opacity: 1;
-  animation: spread 1200ms linear alternate infinite;
+  animation: spread 1200ms linear infinite;
 }
 
 .mapSection .mapSidebar #tabs li a:hover::after {
@@ -341,7 +334,7 @@ body {
   left: 0;
   top: 0;
   width: 100%;
-  height: 600px;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -350,6 +343,12 @@ body {
   right: 1rem;
   bottom: 1rem;
   pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  .mapSection .map .btnWrap .btnGroup {
+    top: 0;
+  }
 }
 
 .mapSection .map .tip {
@@ -406,6 +405,10 @@ body {
 
 .removePointEvent {
   pointer-events: none;
+}
+
+.areaList {
+  padding-left: 0;
 }
 
 .areaList li {

@@ -23,10 +23,6 @@ body {
   margin-top: 15px;
 }
 
-.mt-5 {
-  margin-top: 25px;
-}
-
 .mr-2 {
   margin-right: 10px;
 }
@@ -64,15 +60,15 @@ body {
   /* IE 6 */
 }
 
-$mapHeight: 600px;
+$mapHeight: 100%;
 .mapSection {
-  width: 70%;
+  width: 100%;
   height: $mapHeight;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -300px;
-  margin-left: -35%;
+  // position: absolute;
+  // left: 50%;
+  // top: 50%;
+  // margin-top: -300px;
+  // margin-left: -35%;
   border-radius: 6px;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -123,6 +119,8 @@ $mapHeight: 600px;
       align-items: stretch;
       .left {
         width: 100%;
+        margin-top: 60px;
+        padding: 0 20px;
         /* areaInfo */
         #areaInfo {
           padding: 30px;
@@ -167,7 +165,7 @@ $mapHeight: 600px;
         height: $circleLineHeight;
         background-color: #fff;
         left: 0;
-        top: calc(50% +#{nth($circleSize, 1)}) / 2;
+        top: calc(50% + #{nth($circleSize, 1)} / 2);
       }
       li {
         position: relative;
@@ -212,7 +210,7 @@ $mapHeight: 600px;
             &::before {
               content: '';
               opacity: 1;
-              animation: spread 1200ms linear alternate infinite;
+              animation: spread 1200ms linear infinite;
             }
             &::after {
               background: #5db4e5;
@@ -313,6 +311,9 @@ $mapHeight: 600px;
         right: 1rem;
         bottom: 1rem;
         pointer-events: auto;
+        @media (max-width: 767px) {
+          top: 0;
+        }
       }
     }
     .tip {
@@ -370,6 +371,7 @@ $mapHeight: 600px;
 }
 
 .areaList {
+  padding-left: 0;
   li {
     display: inline-block;
     list-style: none;

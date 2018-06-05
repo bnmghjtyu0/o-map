@@ -1,24 +1,32 @@
 // Api
 const json = {
-  Palau: {
+  Keelung: {
+    name: '基隆',
     year: {
-      '2020': ['PalauA', 'PalauB'],
-      '2021': ['PalauC', 'PalauD']
+      '2017': ['Keelung']
+    }
+  },
+  Palau: {
+    name: '帛琉',
+    year: {
+      '2017': ['帛琉HIS系統建置']
     }
   },
   Shanghai: {
+    name: '上海',
     year: {
-      '2020': ['ShanghaiA', 'ShanghaiB'],
-      '2021': ['ShanghaiC', 'ShanghaiD']
+      '2017': ['上海真滿網絡科技有限公司-醫德好APP建置']
     }
   },
   TaipeiArea: {
+    name: '台北',
     year: {
       '2012': ['淡江大學', '台北藝術大學'],
       '2013': ['台北科技大學', '台灣大學']
     }
   },
   TaichungArea: {
+    name: '台中',
     year: {
       '2013': ['2017A', '2017B'],
       '2014': ['2017A', '2017B'],
@@ -94,6 +102,16 @@ const json = {
     let $mapMenu = document.querySelector('#mapMenu')
     let $closeCases = document.querySelector('.closeCase')
 
+    // 將 data 地區 render 到 sidebar 連結
+    let areaList = document.querySelector('.areaList')
+    let items = Object.entries(json)
+    let Li = ''
+    for (item of items) {
+      Li += `<li><a href="#" id="${item[0]}Link">${item[1].name}
+      </a></li>`
+    }
+    areaList.innerHTML = Li
+
     // 地圖的四個事件
     this.eventMap = {
       1: { act: 'zoom' },
@@ -108,8 +126,7 @@ const json = {
     let tg = Array(4)
     let rID = null
     let f = 0
-    let viewBoxInit = '991.4718017578125, 502.11767578125, 303.75, 183.515625'
-    // let viewBoxInit = '1042.0965576171875, 496.01556396484375, 202.5, 122.34375'
+    let viewBoxInit = '1021, 484.5683, 227.8125, 137.6367'
     // 取得 svg
     this.svg = document.querySelector('#map')
     // 設定預設值
@@ -299,11 +316,40 @@ const json = {
     // 事件一: act:zoom end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // 事件二: act:mousemove 拖曳地圖
+    var startx = 0
+    var starty = 0
+    var dist = 0
+
+    this.aafn = function(e) {
+      // 阻止滾動
+      if (!rID && eventMap) {
+        nav = eventMap['2']
+        if (nav.act === 'mousemove') {
+          var touchobj = e.changedTouches[0]
+
+          // 1.
+          let startViewBox = this.getAttribute('viewBox')
+            .split(' ')
+            .map(n => parseFloat(n))
+          //  2. 取得滑鼠當前 viewport 中 client 座標值
+          let startClient = {
+            x: touchobj.clientX,
+            y: touchobj.clientY
+          }
+          distx = -(parseInt(startClient.x) - startx) * 0.1
+          disty = -(parseInt(startClient.y) - starty) * 0.1
+          tg = [startViewBox[0] + distx, startViewBox[1] + disty, startViewBox[2], startViewBox[3]]
+          e.preventDefault()
+        }
+        update()
+      }
+    }
     this.move = function(e) {
       if (!rID && eventMap) {
         nav = eventMap['2']
         if (nav.act === 'mousemove') {
-          if (isMousedown === false) return false
+          if (isMousedown === false) return
+
           // 1. 取得一開始的 viewBox 值，原本是字串，拆成陣列，方便之後運算
           let startViewBox = this.getAttribute('viewBox')
             .split(' ')
@@ -313,6 +359,7 @@ const json = {
             x: e.clientX,
             y: e.clientY
           }
+
           //  3. 計算對應回去的 SVG 座標值
           let newSVGPoint = this.createSVGPoint()
           let CTM = this.getScreenCTM()
@@ -339,6 +386,10 @@ const json = {
         }
         update()
       }
+      // if mousemove outside window
+      if (e.which === 0) {
+        isMousedown = false
+      }
     }
     // 事件二: act:mousemove end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -348,12 +399,17 @@ const json = {
       if (!rID && eventMap) {
         nav = eventMap['3']
         if (nav.act === 'show') {
-          if (this.getAttribute('id') === 'taiwan' || e.target.getAttribute('id') === 'taichungLink') {
-            tg = [1083, 519, 90, 50.625]
-          } else if (this.getAttribute('id') === 'Shanghai' || e.target.getAttribute('id') === 'shanghaiLink') {
-            tg = [1099.34375, 499.84375, 60, 33.75]
-          } else if (this.getAttribute('id') === 'Palau' || e.target.getAttribute('id') === 'palauLink') {
-            tg = [1146.765625, 581.84375, 90, 50.625]
+          if (
+            this.getAttribute('id') === 'taiwan' ||
+            e.target.getAttribute('id') === 'TaichungLink' ||
+            e.target.getAttribute('id') === 'KeelungLink' ||
+            e.target.getAttribute('id') === 'TaipeiAreaLink'
+          ) {
+            tg = [1083.3734, 523.3743, 90, 50.625]
+          } else if (this.getAttribute('id') === 'Shanghai' || e.target.getAttribute('id') === 'ShanghaiLink') {
+            tg = [1099.6993, 499.0614, 60, 33.75]
+          } else if (this.getAttribute('id') === 'palau' || e.target.getAttribute('id') === 'PalauLink') {
+            tg = [1142.1247, 577.2285, 101.25, 50.625]
           }
           stopAirplaneAnimation()
         }
@@ -364,16 +420,10 @@ const json = {
       let areaId = e.target.getAttribute('countryid')
 
       // 取得點擊地區的座標
+
       if (e.type === 'click') {
-        switch (e.target.getAttribute('id')) {
-          case 'taichungLink':
-            areaId = 'TaichungArea'
-            break
-          case 'shanghaiLink':
-            areaId = 'Shanghai'
-          case 'palauLink':
-            areaId = 'Palau'
-        }
+        if (e.target.getAttribute('id').indexOf('Link') === -1) return false
+        areaId = e.target.getAttribute('id').replace('Link', '')
         removeAreaActive()
         if (areaId in Coordination || areaId in json) {
           // Cases 展開地區資訊
@@ -415,7 +465,6 @@ const json = {
       } else if (e.type == 'mouseout') {
         tip.style.display = 'none'
       }
-      sidebar()
     }
 
     // 側邊欄
@@ -434,22 +483,13 @@ const json = {
         areaInfo.insertAdjacentHTML('beforeend', newCategory)
         // api 地區英文轉中文，輸出標題 .title
         var title = document.querySelector('.title')
-        switch (areaId) {
-          case 'Palau':
-            title.textContent = '帛琉案例'
-            break
-          case 'Shanghai':
-            title.textContent = '上海案例'
-            break
-          case 'TaichungArea':
-            title.textContent = '台中案例'
-            break
-          case 'TaipeiArea':
-            title.textContent = '台北案例'
-            break
-          default:
-            title.textContent = null
+
+        for (item of Object.entries(json)) {
+          if (item[0] === areaId) {
+            title.textContent = `${item[1].name}案例`
+          }
         }
+
         // tabs 加入地區的年份
         let year, tabs, yearLi
         tabs = document.querySelector('#tabs')
@@ -607,6 +647,20 @@ const json = {
       isMousedown = false
     })
 
+    this.svg.addEventListener(
+      'touchstart',
+      function(evt) {
+        var touchobj = evt.changedTouches[0]
+        startx = parseInt(touchobj.clientX)
+        starty = parseInt(touchobj.clientY)
+        this.addEventListener('touchmove', aafn, true)
+        // this.addEventListener('touchend', function() {
+        //   if (dragging) return
+        // })
+      },
+      false
+    )
+
     // 關閉 sidebar 事件
     $closeCases.addEventListener('click', this.closeSidebar, false)
 
@@ -614,16 +668,25 @@ const json = {
     document.querySelector('#Home').addEventListener('click', this.reset, false)
 
     // 台灣事件
-    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#taiwan').addEventListener('click', this.mapFocus, false)
+    let TaiwanAll = Array.from(document.querySelectorAll('#taiwan path'))
+    TaiwanAll.forEach(taiwan => {
+      taiwan.addEventListener('click', function(e) {
+        let countryid = taiwan.getAttribute('countryid')
+        if (Object.keys(json).includes(countryid)) {
+          console.log(this)
+        }
+      })
+    })
+    // document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
+    // document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
+    // document.querySelector('#taiwan').addEventListener('click', this.mapFocus, false)
 
-    // 上海事件
+    // // 上海事件
     document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#Shanghai').addEventListener('click', this.mapFocus, false)
 
-    // 帛琉事件
+    // // 帛琉事件
     document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('click', this.mapFocus, false)
