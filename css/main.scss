@@ -290,6 +290,14 @@ $mapHeight: 100%;
     [d].border-primary:hover {
       fill: none !important;
     }
+    [d].border-aaa {
+      fill: none !important;
+      stroke: #aaaaaa !important;
+      stroke-width: 0.1 !important;
+    }
+    [d].border-aaa:hover {
+      fill: none !important;
+    }
     .fill-blue {
       fill: #57b2e2 !important;
     }
@@ -333,14 +341,14 @@ $mapHeight: 100%;
       #mapMain {
         [d] {
           fill: #7f7f7f;
-          stroke: #7f7f7f;
-          stroke-width: 0.05px;
+          stroke: #333;
+          stroke-width: 0.1px;
           transition: 0.7s;
           cursor: pointer;
         }
         #taiwan [d] {
           fill: #fff;
-          stroke-width: 0.2px;
+          stroke-width: 0.1px !important;
           cursor: default;
         }
 

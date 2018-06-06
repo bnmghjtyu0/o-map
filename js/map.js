@@ -1,5 +1,20 @@
 // Api
 const json = {
+  Keelung: {
+    name: '基隆',
+    year: {
+      '2017': ['Keelung', '51561616']
+    },
+    country: 'Taiwan'
+  },
+  TaipeiArea: {
+    name: '台北',
+    year: {
+      '2012': ['淡江大學', '台北藝術大學'],
+      '2013': ['台北科技大學', '台灣大學']
+    },
+    country: 'Taiwan'
+  },
   Taoyuan: {
     name: '桃園',
     year: {
@@ -14,17 +29,11 @@ const json = {
     },
     country: 'Taiwan'
   },
-  HsinchuCountry: {
-    name: '新竹縣',
-    year: {
-      '2017': ['新竹縣']
-    },
-    country: 'Taiwan'
-  },
+
   HsinchuCity: {
-    name: '新竹市',
+    name: '新竹',
     year: {
-      '2017': ['新竹市']
+      '2017': ['新竹']
     },
     country: 'Taiwan'
   },
@@ -32,110 +41,6 @@ const json = {
     name: '苗栗',
     year: {
       '2017': ['苗栗']
-    },
-    country: 'Taiwan'
-  },
-  Changhua: {
-    name: '彰化縣',
-    year: {
-      '2017': ['彰化']
-    },
-    country: 'Taiwan'
-  },
-  Nantou: {
-    name: '南投縣',
-    year: {
-      '2017': ['南投']
-    },
-    country: 'Taiwan'
-  },
-  Keelung: {
-    name: '基隆',
-    year: {
-      '2017': ['Keelung']
-    },
-    country: 'Taiwan'
-  },
-  Yunlin: {
-    name: '雲林',
-    year: {
-      '2017': ['雲林']
-    },
-    country: 'Taiwan'
-  },
-  ChiayiCountry: {
-    name: '嘉義縣',
-    year: {
-      '2017': ['嘉義縣']
-    },
-    country: 'Taiwan'
-  },
-  ChiayiCity: {
-    name: '嘉義市',
-    year: {
-      '2017': ['嘉義市']
-    },
-    country: 'Taiwan'
-  },
-  Tainan: {
-    name: '台南',
-    year: {
-      '2017': ['台南']
-    },
-    country: 'Taiwan'
-  },
-  Kaohsiung: {
-    name: '高雄',
-    year: {
-      '2017': ['高雄']
-    },
-    country: 'Taiwan'
-  },
-  Pingtung: {
-    name: '屏東',
-    year: {
-      '2017': ['屏東']
-    },
-    country: 'Taiwan'
-  },
-  Taitung: {
-    name: '台東縣',
-    year: {
-      '2017': ['台東']
-    },
-    country: 'Taiwan'
-  },
-  Hualien: {
-    name: '花蓮縣',
-    year: {
-      '2017': ['花蓮縣']
-    },
-    country: 'Taiwan'
-  },
-  Ilan: {
-    name: '宜蘭縣',
-    year: {
-      '2017': ['宜蘭縣']
-    },
-    country: 'Taiwan'
-  },
-  Palau: {
-    name: '帛琉',
-    year: {
-      '2017': ['帛琉HIS系統建置']
-    }
-  },
-  Shanghai: {
-    name: '上海',
-    year: {
-      '2017': ['上海真滿網絡科技有限公司-醫德好APP建置']
-    }
-  },
-  TaipeiArea: {
-    name: '台北',
-    year: {
-      '2012': ['淡江大學', '台北藝術大學'],
-      '2013': ['台北科技大學', '台灣大學']
     },
     country: 'Taiwan'
   },
@@ -169,6 +74,89 @@ const json = {
       ]
     },
     country: 'Taiwan'
+  },
+  Changhua: {
+    name: '彰化',
+    year: {
+      '2017': ['彰化']
+    },
+    country: 'Taiwan'
+  },
+  Nantou: {
+    name: '南投',
+    year: {
+      '2017': ['南投']
+    },
+    country: 'Taiwan'
+  },
+
+  Yunlin: {
+    name: '雲林',
+    year: {
+      '2017': ['雲林']
+    },
+    country: 'Taiwan'
+  },
+  ChiayiCity: {
+    name: '嘉義',
+    year: {
+      '2017': ['嘉義']
+    },
+    country: 'Taiwan'
+  },
+  Tainan: {
+    name: '台南',
+    year: {
+      '2017': ['台南']
+    },
+    country: 'Taiwan'
+  },
+  Kaohsiung: {
+    name: '高雄',
+    year: {
+      '2017': ['高雄']
+    },
+    country: 'Taiwan'
+  },
+  Pingtung: {
+    name: '屏東',
+    year: {
+      '2017': ['屏東']
+    },
+    country: 'Taiwan'
+  },
+  Taitung: {
+    name: '台東',
+    year: {
+      '2017': ['台東']
+    },
+    country: 'Taiwan'
+  },
+  Hualien: {
+    name: '花蓮',
+    year: {
+      '2017': ['花蓮縣']
+    },
+    country: 'Taiwan'
+  },
+  Ilan: {
+    name: '宜蘭',
+    year: {
+      '2017': ['宜蘭']
+    },
+    country: 'Taiwan'
+  },
+  Palau: {
+    name: '帛琉',
+    year: {
+      '2017': ['帛琉HIS系統建置']
+    }
+  },
+  Shanghai: {
+    name: '上海',
+    year: {
+      '2017': ['上海真滿網絡科技有限公司-醫德好APP建置']
+    }
   }
 }
 ;(function(global, factory) {
@@ -721,9 +709,9 @@ const json = {
         0.6
       )
       svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
-      svgPath01.setAttributeNS(null, 'class', 'border-primary')
+      svgPath01.setAttributeNS(null, 'class', 'border-aaa')
       svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
-      svgPath02.setAttributeNS(null, 'class', 'border-primary')
+      svgPath02.setAttributeNS(null, 'class', 'border-aaa')
       svgPath01.classList.add('removePointEvent')
       svgPath02.classList.add('removePointEvent')
 
