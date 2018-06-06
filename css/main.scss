@@ -343,18 +343,11 @@ $mapHeight: 100%;
           stroke-width: 0.2px;
           cursor: default;
         }
-        #taiwan {
-          [countryid='TaichungArea']:hover,
-          [countryid='TaipeiArea']:hover {
-            fill: #57b2e2 !important;
-          }
-        }
+
         #palau [d] {
           fill: #fff;
         }
-        #Shanghai:hover {
-          fill: #57b2e2 !important;
-        }
+
         #china [d] {
           stroke-width: 0;
         }
@@ -375,6 +368,8 @@ $mapHeight: 100%;
   li {
     display: inline-block;
     list-style: none;
+    margin-bottom: 20px;
+    margin-right: 2px;
     a {
       color: #fff;
       padding: 10px;

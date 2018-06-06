@@ -382,17 +382,8 @@ body {
   cursor: default;
 }
 
-.mapSection .map #map #mapMain #taiwan [countryid='TaichungArea']:hover,
-.mapSection .map #map #mapMain #taiwan [countryid='TaipeiArea']:hover {
-  fill: #57b2e2 !important;
-}
-
 .mapSection .map #map #mapMain #palau [d] {
   fill: #fff;
-}
-
-.mapSection .map #map #mapMain #Shanghai:hover {
-  fill: #57b2e2 !important;
 }
 
 .mapSection .map #map #mapMain #china [d] {
@@ -414,6 +405,8 @@ body {
 .areaList li {
   display: inline-block;
   list-style: none;
+  margin-bottom: 20px;
+  margin-right: 2px;
 }
 
 .areaList li a {

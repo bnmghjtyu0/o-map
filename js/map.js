@@ -1,10 +1,123 @@
 // Api
 const json = {
+  Taoyuan: {
+    name: '桃園',
+    year: {
+      '2017': ['桃園']
+    },
+    country: 'Taiwan'
+  },
+  NewTaipeiCity: {
+    name: '新北市',
+    year: {
+      '2017': ['新北市']
+    },
+    country: 'Taiwan'
+  },
+  HsinchuCountry: {
+    name: '新竹縣',
+    year: {
+      '2017': ['新竹縣']
+    },
+    country: 'Taiwan'
+  },
+  HsinchuCity: {
+    name: '新竹市',
+    year: {
+      '2017': ['新竹市']
+    },
+    country: 'Taiwan'
+  },
+  Miaoli: {
+    name: '苗栗',
+    year: {
+      '2017': ['苗栗']
+    },
+    country: 'Taiwan'
+  },
+  Changhua: {
+    name: '彰化縣',
+    year: {
+      '2017': ['彰化']
+    },
+    country: 'Taiwan'
+  },
+  Nantou: {
+    name: '南投縣',
+    year: {
+      '2017': ['南投']
+    },
+    country: 'Taiwan'
+  },
   Keelung: {
     name: '基隆',
     year: {
       '2017': ['Keelung']
-    }
+    },
+    country: 'Taiwan'
+  },
+  Yunlin: {
+    name: '雲林',
+    year: {
+      '2017': ['雲林']
+    },
+    country: 'Taiwan'
+  },
+  ChiayiCountry: {
+    name: '嘉義縣',
+    year: {
+      '2017': ['嘉義縣']
+    },
+    country: 'Taiwan'
+  },
+  ChiayiCity: {
+    name: '嘉義市',
+    year: {
+      '2017': ['嘉義市']
+    },
+    country: 'Taiwan'
+  },
+  Tainan: {
+    name: '台南',
+    year: {
+      '2017': ['台南']
+    },
+    country: 'Taiwan'
+  },
+  Kaohsiung: {
+    name: '高雄',
+    year: {
+      '2017': ['高雄']
+    },
+    country: 'Taiwan'
+  },
+  Pingtung: {
+    name: '屏東',
+    year: {
+      '2017': ['屏東']
+    },
+    country: 'Taiwan'
+  },
+  Taitung: {
+    name: '台東縣',
+    year: {
+      '2017': ['台東']
+    },
+    country: 'Taiwan'
+  },
+  Hualien: {
+    name: '花蓮縣',
+    year: {
+      '2017': ['花蓮縣']
+    },
+    country: 'Taiwan'
+  },
+  Ilan: {
+    name: '宜蘭縣',
+    year: {
+      '2017': ['宜蘭縣']
+    },
+    country: 'Taiwan'
   },
   Palau: {
     name: '帛琉',
@@ -23,7 +136,8 @@ const json = {
     year: {
       '2012': ['淡江大學', '台北藝術大學'],
       '2013': ['台北科技大學', '台灣大學']
-    }
+    },
+    country: 'Taiwan'
   },
   TaichungArea: {
     name: '台中',
@@ -53,7 +167,8 @@ const json = {
         '衛生福利部食品藥物管理署_106年度「GDP廠商線上申請系統建置案」',
         '機車排氣稽查與定檢站管理計畫'
       ]
-    }
+    },
+    country: 'Taiwan'
   }
 }
 ;(function(global, factory) {
@@ -101,6 +216,8 @@ const json = {
     let $zoomOut = document.querySelector('#zoom-out')
     let $mapMenu = document.querySelector('#mapMenu')
     let $closeCases = document.querySelector('.closeCase')
+    let TaiwanAll = Array.from(document.querySelectorAll('#taiwan path'))
+    let $mapMain = document.querySelector('#mapMain')
 
     // 將 data 地區 render 到 sidebar 連結
     let areaList = document.querySelector('.areaList')
@@ -135,16 +252,25 @@ const json = {
       .getAttribute('viewBox')
       .split(' ')
       .map(c => parseFloat(c))
-    this.svgMain = document.querySelector('#mapMain')
 
     // 新增選取地區的效果
-    this.addAreaActive = function(e) {
-      if (e.target.getAttribute('countryid') === 'Palau') {
-        Array.from(e.target.parentNode.querySelectorAll('path')).map(palau => {
+    this.addAreaActive = function(areaId) {
+      let PalauPath = Array.from(document.querySelectorAll('#palau path'))
+
+      // 點地圖新增地區顏色
+      if (areaId === 'Palau') {
+        PalauPath.map(palau => {
           palau.classList.add('fill-blue')
         })
       }
-      e.target.classList.add('fill-blue')
+
+      // 點 sidebar 連結新增地區顏色
+      let ShagnhaiPath = document.querySelector('#Shanghai')
+      TaiwanAll.push(ShagnhaiPath)
+      TaiwanAll.forEach(area => {
+        if (areaId !== area.getAttribute('countryid')) return
+        area.classList.add('fill-blue')
+      })
       openSidebar()
     }
     // 移除選取地區的效果
@@ -395,44 +521,65 @@ const json = {
 
     // 事件三: act:show 地圖縮放
     this.mapFocus = function(e) {
-      e.preventDefault()
+      let areaId = ''
       if (!rID && eventMap) {
         nav = eventMap['3']
         if (nav.act === 'show') {
-          if (
-            this.getAttribute('id') === 'taiwan' ||
-            e.target.getAttribute('id') === 'TaichungLink' ||
-            e.target.getAttribute('id') === 'KeelungLink' ||
-            e.target.getAttribute('id') === 'TaipeiAreaLink'
-          ) {
-            tg = [1083.3734, 523.3743, 90, 50.625]
-          } else if (this.getAttribute('id') === 'Shanghai' || e.target.getAttribute('id') === 'ShanghaiLink') {
-            tg = [1099.6993, 499.0614, 60, 33.75]
-          } else if (this.getAttribute('id') === 'palau' || e.target.getAttribute('id') === 'PalauLink') {
-            tg = [1142.1247, 577.2285, 101.25, 50.625]
+          if (e.type === 'click') {
+            // 點地圖時
+
+            if (e.target.nodeName === 'path') {
+              let palauId = ''
+              let countryid = this.getAttribute('countryid')
+
+              if (this.getAttribute('id') === 'palau') {
+                let palauPath = Array.from(this.childNodes[1].children)
+                let palauPathId = palauPath.forEach(path => {
+                  palauId = path.getAttribute('countryid')
+                })
+              }
+              if (Object.keys(json).includes(palauId)) {
+                areaId = palauId
+              }
+              if (Object.keys(json).includes(countryid)) {
+                areaId = countryid
+              }
+            }
+            // 點 sidebar 連結時
+            if (e.target.nodeName === 'A') {
+              if (e.target.getAttribute('id').indexOf('Link') === -1) return false
+              areaId = e.target.getAttribute('id').replace('Link', '')
+            }
+            let TaiwanCity = []
+            Object.entries(json).forEach(area => {
+              if (area[1].country !== 'Taiwan') return
+              TaiwanCity.push(area[0])
+            })
+            if (TaiwanCity.includes(areaId)) {
+              tg = [1083.3734, 523.3743, 90, 50.625]
+            } else if (areaId === 'Shanghai') {
+              tg = [1099.6993, 499.0614, 60, 33.75]
+            } else if (areaId === 'Palau') {
+              tg = [1142.1247, 577.2285, 101.25, 50.625]
+            } else {
+              return
+            }
+            stopAirplaneAnimation()
           }
-          stopAirplaneAnimation()
-        }
-        update()
-      }
-
-      // areaId
-      let areaId = e.target.getAttribute('countryid')
-
-      // 取得點擊地區的座標
-
-      if (e.type === 'click') {
-        if (e.target.getAttribute('id').indexOf('Link') === -1) return false
-        areaId = e.target.getAttribute('id').replace('Link', '')
-        removeAreaActive()
-        if (areaId in Coordination || areaId in json) {
-          // Cases 展開地區資訊
-          areaDOM(areaId)
-          let maxYear = Math.max(...Object.keys(json[areaId].year))
-          areaBlock(maxYear, areaId)
-          addAreaActive(e)
+          update()
         }
       }
+
+      // 印出相關資訊 與 地圖 Focus
+      removeAreaActive()
+      if (areaId in Coordination || areaId in json) {
+        // Cases 展開地區資訊
+        areaDOM(areaId)
+        let maxYear = Math.max(...Object.keys(json[areaId].year))
+        areaBlock(maxYear, areaId)
+        addAreaActive(areaId)
+      }
+      e.preventDefault()
     }
     // 事件三: act:show end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -587,7 +734,7 @@ const json = {
       airplanePathGroup.appendChild(pin2)
       airplanePathGroup.appendChild(pin3)
       // 將 group 置入 svg
-      this.svgMain.appendChild(airplanePathGroup)
+      $mapMain.appendChild(airplanePathGroup)
       motionPath = MorphSVGPlugin.pathDataToBezier(svgPath01, { align: '#paperAirplane' })
       var tween,
         opacity = false,
@@ -668,18 +815,12 @@ const json = {
     document.querySelector('#Home').addEventListener('click', this.reset, false)
 
     // 台灣事件
-    let TaiwanAll = Array.from(document.querySelectorAll('#taiwan path'))
     TaiwanAll.forEach(taiwan => {
-      taiwan.addEventListener('click', function(e) {
-        let countryid = taiwan.getAttribute('countryid')
-        if (Object.keys(json).includes(countryid)) {
-          console.log(this)
-        }
-      })
+      taiwan.addEventListener('click', mapFocus, false)
     })
-    // document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
-    // document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
-    // document.querySelector('#taiwan').addEventListener('click', this.mapFocus, false)
+
+    document.querySelector('#taiwan').addEventListener('mousemove', this.isShowAreaName, false)
+    document.querySelector('#taiwan').addEventListener('mouseout', this.isShowAreaName, false)
 
     // // 上海事件
     document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
