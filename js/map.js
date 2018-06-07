@@ -289,43 +289,8 @@ const json = {
       document.querySelector('#airplane').style.display = 'none'
     }
 
-    // 公式函示: 二元貝茲曲線
-    this.svgPathCurv = function(a, b, curv) {
-      var x1,
-        x2,
-        y1,
-        y2,
-        s,
-        k2,
-        controX,
-        controY,
-        q,
-        l,
-        path = ''
-      let L = {
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
-      }
-      var s = 'M' + L.x1 + ',' + L.y1 + ' '
-
-      k2 = -(L.x2 - L.x1) / (L.y2 - L.y1)
-      controX = (L.x2 + L.x1) / 2 + curv * 30
-      controX = controX < 0 ? -controX : controX
-      controY = k2 * (controX - (L.x1 + L.x2) / 2) + (L.y1 + L.y2) / 2
-      controY = controY < 0 ? -controY : controY
-
-      q = 'Q' + controX + ',' + controY + ' '
-      //l=lineto
-      l = L.x2 + ',' + L.y2 + ' '
-      path = s + q + l
-      return path
-    }
-
     // 地圖渲染與更新
     this.update = function() {
-      console.log(tg)
       let k = ++f / NF,
         j = 1 - k,
         cvb = this.svgViewBox
@@ -668,6 +633,41 @@ const json = {
     // 地圖函式 ending
     // ------------------------------------------------------------------------------------
 
+    // 公式函示: 二元貝茲曲線
+    this.svgPathCurv = function(a, b, curv) {
+      var x1,
+        x2,
+        y1,
+        y2,
+        s,
+        k2,
+        controX,
+        controY,
+        q,
+        l,
+        path = ''
+      let L = {
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y
+      }
+      var s = 'M' + L.x1 + ',' + L.y1 + ' '
+
+      k2 = -(L.x2 - L.x1) / (L.y2 - L.y1)
+      controX = (L.x2 + L.x1) / 2 + curv * 30
+      controX = controX < 0 ? -controX : controX
+      controY = k2 * (controX - (L.x1 + L.x2) / 2) + (L.y1 + L.y2) / 2
+      controY = controY < 0 ? -controY : controY
+
+      q = 'Q' + controX + ',' + controY + ' '
+      //l=lineto
+      l = L.x2 + ',' + L.y2 + ' '
+      path = s + q + l
+      console.log(path)
+      return path
+    }
+
     // ------------------------------------------------------------------------------------
     // 飛機沿路徑動畫 + pin
     // ------------------------------------------------------------------------------------
@@ -697,7 +697,6 @@ const json = {
       TweenLite.set(pin1, { scale: Coordination.Shanghai.pinScale, x: Coordination.Shanghai.x, y: Coordination.Shanghai.y })
       TweenLite.set(pin2, { scale: Coordination.TaichungArea.pinScale, x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y })
       TweenLite.set(pin3, { scale: Coordination.Palau.pinScale, x: Coordination.Palau.x, y: Coordination.Palau.y })
-
       // 繪製二元貝茲曲線圖
       let TaichungToShanghaiPath = svgPathCurv(
         { x: Coordination.TaichungArea.x + 0.65, y: Coordination.TaichungArea.y + 1.4 },
@@ -724,22 +723,23 @@ const json = {
       airplanePathGroup.appendChild(pin3)
       // 將 group 置入 svg
       $mapMain.appendChild(airplanePathGroup)
-      motionPath = MorphSVGPlugin.pathDataToBezier(svgPath01, { align: '#paperAirplane' })
+      motionPath1 = MorphSVGPlugin.pathDataToBezier(svgPath01, { align: '#paperAirplane' })
+      motionPath2 = MorphSVGPlugin.pathDataToBezier(svgPath02, { align: '#paperAirplane' })
       var tween,
-        opacity = false,
-        Taichung2Shanghei = [
-          { x: Coordination.Shanghai.x, y: Coordination.Shanghai.y - 4 },
-          { x: 819, y: 150 },
-          { x: 818, y: 157 },
-          { x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y }
-        ],
-        Taichung2Palau = [{ x: 876, y: 220 }, { x: 866, y: 170 }, { x: 853, y: 170 }, { x: Coordination.TaichungArea.x + 4, y: Coordination.TaichungArea.y + 1 }]
+        opacity = false
+      ;(Taichung2Shanghei = [
+        { x: Coordination.Shanghai.x, y: Coordination.Shanghai.y - 4 },
+        { x: 819, y: 150 },
+        { x: 818, y: 157 },
+        { x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y }
+      ]),
+        (Taichung2Palau = [{ x: 876, y: 220 }, { x: 866, y: 170 }, { x: 853, y: 170 }, { x: Coordination.TaichungArea.x + 4, y: Coordination.TaichungArea.y + 1 }])
 
       const tl = new TimelineMax({ repeat: -1 })
       tl.set('#airplane', {
         transformOrigin: '50% 50%',
-        xPercent: 1260,
-        yPercent: 230
+        xPercent: 1250,
+        yPercent: 235
       })
       tl.from('#airplane', 2, {
         bezier: {
