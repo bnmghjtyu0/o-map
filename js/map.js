@@ -813,12 +813,12 @@ const json = {
     // // 上海事件
     document.querySelector('#Shanghai').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#Shanghai').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#Shanghai').addEventListener('click', this.mapFocus, false)
+    document.querySelector('#Shanghai').addEventListener('click', mapFocus, false)
 
     // // 帛琉事件
     document.querySelector('#palau').addEventListener('mousemove', this.isShowAreaName, false)
     document.querySelector('#palau').addEventListener('mouseout', this.isShowAreaName, false)
-    document.querySelector('#palau').addEventListener('click', this.mapFocus, false)
+    document.querySelector('#palau').addEventListener('click', mapFocus, false)
 
     // 按鈕縮放事件
     $zoomOut.addEventListener('click', zoom, false)

@@ -374,7 +374,7 @@ body {
 .mapSection .map #map {
   width: 100%;
   height: 100vh;
-  background: #333;
+  background: #000;
   box-shadow: 0 0 1px 1px #333;
 }
 
@@ -386,9 +386,11 @@ body {
   cursor: pointer;
 }
 
-.mapSection .map #map #mapMain #taiwan [d] {
+.mapSection .map #map #mapMain #taiwan path,
+.mapSection .map #map #mapMain #taiwan polygon {
   fill: #fff;
-  stroke-width: 0.1px !important;
+  stroke-width: 1px;
+  stroke: #fff !important;
   cursor: default;
 }
 
