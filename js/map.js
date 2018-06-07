@@ -325,6 +325,7 @@ const json = {
 
     // 地圖渲染與更新
     this.update = function() {
+      console.log(tg)
       let k = ++f / NF,
         j = 1 - k,
         cvb = this.svgViewBox
@@ -548,7 +549,7 @@ const json = {
             } else if (areaId === 'Shanghai') {
               tg = [1099.6993, 499.0614, 60, 33.75]
             } else if (areaId === 'Palau') {
-              tg = [1142.1247, 577.2285, 101.25, 50.625]
+              tg = [1173.608830859375, 595.295638671875, 37.96875, 18.984375]
             } else {
               return
             }

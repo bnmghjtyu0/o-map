@@ -374,7 +374,7 @@ body {
 .mapSection .map #map {
   width: 100%;
   height: 100vh;
-  background: #000;
+  background: #333;
   box-shadow: 0 0 1px 1px #333;
 }
 
@@ -388,10 +388,15 @@ body {
 
 .mapSection .map #map #mapMain #taiwan path,
 .mapSection .map #map #mapMain #taiwan polygon {
+  vector-effect: non-scaling-stroke;
   fill: #fff;
   stroke-width: 1px;
   stroke: #fff !important;
   cursor: default;
+}
+
+.mapSection .map #map #mapMain #taiwan path:hover {
+  fill: #57b2e2;
 }
 
 .mapSection .map #map #mapMain #palau [d] {
