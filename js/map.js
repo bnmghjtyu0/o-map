@@ -634,40 +634,38 @@ const json = {
     // ------------------------------------------------------------------------------------
 
     // 公式函示: 二元貝茲曲線
-    this.svgPathCurv = function(a, b, curv) {
-      var x1,
-        x2,
-        y1,
-        y2,
-        s,
-        k2,
-        controX,
-        controY,
-        q,
-        l,
-        path = ''
-      let L = {
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
+    this.svgPathCurv = function(a, b, curv, id) {
+      let p0 = `M${a[0]},${a[1]}` //起點
+      let p1 = `${b[0]},${b[1]}` //終點
+      let k = -(b[0] - a[0]) / (b[1] - a[1]) // 中垂線公式
+      let bezier = Array(2)
+
+      if (k < 2 && k > -2) {
+        bezier[0] = (a[0] + b[0]) / 2 + curv * 30
+        bezier[0] = bezier[0] < 0 ? -bezier[0] : bezier[0]
+        bezier[1] = k * (bezier[0] - (a[0] + b[0]) / 2) + (a[1] + b[1]) / 2
+        bezier[1] = bezier[1] < 0 ? -bezier[1] : bezier[1]
+      } else {
+        bezier[1] = (a[1] + b[1]) / 2 + curv * 30
+        bezier[1] = bezier[1] < 0 ? -bezier[1] : bezier[1]
+        bezier[0] = (bezier[1] - (a[1] + b[1]) / 2) / k + (a[0] + b[0]) / 2
+        bezier[0] = bezier[0] < 0 ? -bezier[0] : bezier[0]
       }
-      var s = 'M' + L.x1 + ',' + L.y1 + ' '
+      let q = 'Q' + bezier[0] + ',' + bezier[1] + ' '
 
-      k2 = -(L.x2 - L.x1) / (L.y2 - L.y1)
-      controX = (L.x2 + L.x1) / 2 + curv * 30
-      controX = controX < 0 ? -controX : controX
-      controY = k2 * (controX - (L.x1 + L.x2) / 2) + (L.y1 + L.y2) / 2
-      controY = controY < 0 ? -controY : controY
-
-      q = 'Q' + controX + ',' + controY + ' '
-      //l=lineto
-      l = L.x2 + ',' + L.y2 + ' '
-      path = s + q + l
-      console.log(path)
+      // 建立新的 path Element 元素
+      let d = `${p0} ${q} ${p1}`
+      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      // 新增 path Attribute 屬性
+      path.setAttributeNS(null, 'd', `${d}`)
+      path.setAttributeNS(null, 'id', id)
+      path.setAttributeNS(null, 'style', 'fill:none;stroke:red')
+      // 將 path 傳入 svg
+      svg.appendChild(path)
       return path
     }
-
+    let airplanePath01 = new svgPathCurv([Coordination.TaichungArea.x, Coordination.TaichungArea.y], [Coordination.Shanghai.x, Coordination.Shanghai.y], 0.2, 'airplanePath01')
+    let airplanePath02 = new svgPathCurv([Coordination.TaichungArea.x, Coordination.TaichungArea.y], [Coordination.Palau.x, Coordination.Palau.y], 0.5, 'airplanePath02')
     // ------------------------------------------------------------------------------------
     // 飛機沿路徑動畫 + pin
     // ------------------------------------------------------------------------------------
@@ -681,8 +679,6 @@ const json = {
       let pin1 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       let pin2 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       let pin3 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-      let svgPath01 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-      let svgPath02 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
       airplanePathGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
       airplanePathGroup.setAttributeNS(null, 'id', 'airplanePathGroup')
       // 圖標
@@ -697,61 +693,35 @@ const json = {
       TweenLite.set(pin1, { scale: Coordination.Shanghai.pinScale, x: Coordination.Shanghai.x, y: Coordination.Shanghai.y })
       TweenLite.set(pin2, { scale: Coordination.TaichungArea.pinScale, x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y })
       TweenLite.set(pin3, { scale: Coordination.Palau.pinScale, x: Coordination.Palau.x, y: Coordination.Palau.y })
-      // 繪製二元貝茲曲線圖
-      let TaichungToShanghaiPath = svgPathCurv(
-        { x: Coordination.TaichungArea.x + 0.65, y: Coordination.TaichungArea.y + 1.4 },
-        { x: Coordination.Shanghai.x + 0.65, y: Coordination.Shanghai.y + 1.4 },
-        0.2
-      )
-      let TaichungToPalau = svgPathCurv(
-        { x: Coordination.TaichungArea.x + 0.65, y: Coordination.TaichungArea.y + 1.4 },
-        { x: Coordination.Palau.x + 0.65, y: Coordination.Palau.y + 0.4 },
-        0.6
-      )
-      svgPath01.setAttributeNS(null, 'd', TaichungToShanghaiPath)
-      svgPath01.setAttributeNS(null, 'class', 'border-aaa')
-      svgPath02.setAttributeNS(null, 'd', TaichungToPalau)
-      svgPath02.setAttributeNS(null, 'class', 'border-aaa')
-      svgPath01.classList.add('removePointEvent')
-      svgPath02.classList.add('removePointEvent')
 
       // 將物件置入 group
-      airplanePathGroup.appendChild(svgPath01)
-      airplanePathGroup.appendChild(svgPath02)
       airplanePathGroup.appendChild(pin1)
       airplanePathGroup.appendChild(pin2)
       airplanePathGroup.appendChild(pin3)
+      airplanePathGroup.appendChild(airplanePath01)
+      airplanePathGroup.appendChild(airplanePath02)
       // 將 group 置入 svg
       $mapMain.appendChild(airplanePathGroup)
-      motionPath1 = MorphSVGPlugin.pathDataToBezier(svgPath01, { align: '#paperAirplane' })
-      motionPath2 = MorphSVGPlugin.pathDataToBezier(svgPath02, { align: '#paperAirplane' })
+
       var tween,
         opacity = false
-      ;(Taichung2Shanghei = [
-        { x: Coordination.Shanghai.x, y: Coordination.Shanghai.y - 4 },
-        { x: 819, y: 150 },
-        { x: 818, y: 157 },
-        { x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y }
-      ]),
-        (Taichung2Palau = [{ x: 876, y: 220 }, { x: 866, y: 170 }, { x: 853, y: 170 }, { x: Coordination.TaichungArea.x + 4, y: Coordination.TaichungArea.y + 1 }])
 
-      const tl = new TimelineMax({ repeat: -1 })
-      tl.set('#airplane', {
-        transformOrigin: '50% 50%',
-        xPercent: 1250,
-        yPercent: 235
-      })
+      motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplane' })
+      motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplane' })
+
+      const tl = new TimelineMax({ repeat: 0 })
+      tl.set('#airplane', { xPercent: -50, yPercent: -50, transformOrigin: 'center' })
       tl.from('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: Taichung2Shanghei,
+          values: motionAirplanePath01,
           autoRotate: ['x', 'y', 'rotation', -60, false]
         }
       })
       tl.to('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: Taichung2Shanghei,
+          values: motionAirplanePath01,
           autoRotate: ['x', 'y', 'rotation', 120, false]
         }
       })
@@ -759,7 +729,7 @@ const json = {
       tl.from('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: Taichung2Palau,
+          values: motionAirplanePath02,
           autoRotate: ['x', 'y', 'rotation', -60, false]
         }
       })
@@ -767,7 +737,7 @@ const json = {
       tl.to('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: Taichung2Palau,
+          values: motionAirplanePath02,
           autoRotate: ['x', 'y', 'rotation', 120, false]
         }
       })
