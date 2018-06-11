@@ -180,18 +180,18 @@ const json = {
     // 飛機路線的座標
     let Coordination = {
       TaichungArea: {
-        x: 813.5,
-        y: 162.5,
+        x: 814,
+        y: 163.5,
         pinScale: 0.01
       },
       Shanghai: {
-        x: 815.5,
-        y: 141,
+        x: 816,
+        y: 142.5,
         pinScale: 0.01
       },
       Palau: {
-        x: 861,
-        y: 206,
+        x: 862.2,
+        y: 207,
         pinScale: 0.01
       }
     }
@@ -659,7 +659,7 @@ const json = {
       // 新增 path Attribute 屬性
       path.setAttributeNS(null, 'd', `${d}`)
       path.setAttributeNS(null, 'id', id)
-      path.setAttributeNS(null, 'style', 'fill:none;stroke:red')
+      path.setAttributeNS(null, 'style', 'fill:none;stroke:#aaaaaa')
       // 將 path 傳入 svg
       svg.appendChild(path)
       return path
@@ -669,6 +669,11 @@ const json = {
     // ------------------------------------------------------------------------------------
     // 飛機沿路徑動畫 + pin
     // ------------------------------------------------------------------------------------
+    // 造飛機
+    let airplane = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+    airplane.setAttributeNS(null, 'href', 'img/airplane.svg')
+    airplane.setAttributeNS(null, 'style', 'width:2px')
+    airplane.setAttributeNS(null, 'id', 'airplane')
     // 宣告飛機路徑
     this.airplanePathGroup
     // true 加入飛機動畫 , false 關閉動畫
@@ -690,16 +695,29 @@ const json = {
       pin3.classList.add('removePointEvent')
 
       // 圖標位置與大小
-      TweenLite.set(pin1, { scale: Coordination.Shanghai.pinScale, x: Coordination.Shanghai.x, y: Coordination.Shanghai.y })
-      TweenLite.set(pin2, { scale: Coordination.TaichungArea.pinScale, x: Coordination.TaichungArea.x, y: Coordination.TaichungArea.y })
-      TweenLite.set(pin3, { scale: Coordination.Palau.pinScale, x: Coordination.Palau.x, y: Coordination.Palau.y })
+      TweenLite.set(pin1, {
+        scale: Coordination.Shanghai.pinScale,
+        x: Coordination.Shanghai.x - 23.46 * 0.027,
+        y: Coordination.Shanghai.y - 26.4 * 0.055
+      })
+      TweenLite.set(pin2, {
+        scale: Coordination.TaichungArea.pinScale,
+        x: Coordination.TaichungArea.x - 23.46 * 0.01 * 2.7,
+        y: Coordination.TaichungArea.y - 26.4 * 0.01 * 5.5
+      })
+      TweenLite.set(pin3, {
+        scale: Coordination.Palau.pinScale,
+        x: Coordination.Palau.x - 23.46 * 0.01 * 2.7,
+        y: Coordination.Palau.y - 26.4 * 0.01 * 5.5
+      })
 
       // 將物件置入 group
+      airplanePathGroup.appendChild(airplanePath01)
+      airplanePathGroup.appendChild(airplanePath02)
       airplanePathGroup.appendChild(pin1)
       airplanePathGroup.appendChild(pin2)
       airplanePathGroup.appendChild(pin3)
-      airplanePathGroup.appendChild(airplanePath01)
-      airplanePathGroup.appendChild(airplanePath02)
+      airplanePathGroup.appendChild(airplane)
       // 將 group 置入 svg
       $mapMain.appendChild(airplanePathGroup)
 
@@ -709,28 +727,28 @@ const json = {
       motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplane' })
       motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplane' })
 
-      const tl = new TimelineMax({ repeat: 0 })
+      const tl = new TimelineMax({ repeat: -1 })
       tl.set('#airplane', { xPercent: -50, yPercent: -50, transformOrigin: 'center' })
       tl.from('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: motionAirplanePath01,
-          autoRotate: ['x', 'y', 'rotation', -60, false]
+          values: motionAirplanePath01.reverse(),
+          autoRotate: ['x', 'y', 'rotation', -90, false]
         }
       })
       tl.to('#airplane', 2, {
         bezier: {
           type: 'cubic',
           values: motionAirplanePath01,
-          autoRotate: ['x', 'y', 'rotation', 120, false]
+          autoRotate: ['x', 'y', 'rotation', 90, false]
         }
       })
 
       tl.from('#airplane', 2, {
         bezier: {
           type: 'cubic',
-          values: motionAirplanePath02,
-          autoRotate: ['x', 'y', 'rotation', -60, false]
+          values: motionAirplanePath02.reverse(),
+          autoRotate: ['x', 'y', 'rotation', -90, false]
         }
       })
       // tl.to('#airplane', 0.1, { autoRotate: true })
@@ -738,7 +756,7 @@ const json = {
         bezier: {
           type: 'cubic',
           values: motionAirplanePath02,
-          autoRotate: ['x', 'y', 'rotation', 120, false]
+          autoRotate: ['x', 'y', 'rotation', 90, false]
         }
       })
     }

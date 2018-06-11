@@ -318,12 +318,6 @@ body {
   fill: none !important;
 }
 
-.mapSection .map [d].border-aaa {
-  fill: none !important;
-  stroke: #aaaaaa !important;
-  stroke-width: 0.1 !important;
-}
-
 .mapSection .map [d].border-aaa:hover {
   fill: none !important;
 }
