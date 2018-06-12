@@ -1,4 +1,8 @@
 @charset "UTF-8";
+html {
+  --myColor: green;
+}
+
 body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
@@ -406,6 +410,10 @@ body {
 }
 
 .removePointEvent {
+  pointer-events: none;
+}
+
+#airplanePathGroup {
   pointer-events: none;
 }
 

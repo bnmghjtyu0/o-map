@@ -2,6 +2,9 @@ $circleSize: 10px 10px;
 $circleOutSize: (nth($circleSize, 1) * 2.2) (nth($circleSize, 2) * 2.2);
 $circleLineY: 15px;
 $circleLineHeight: 1px;
+html {
+  --myColor: green;
+}
 body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
@@ -370,6 +373,9 @@ $mapHeight: 100%;
 }
 
 .removePointEvent {
+  pointer-events: none;
+}
+#airplanePathGroup {
   pointer-events: none;
 }
 
