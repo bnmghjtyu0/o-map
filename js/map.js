@@ -723,17 +723,10 @@ const json = {
 
       motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplane' })
       motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplane' })
-      let tl = new TimelineMax({ repeat: -1 })
-
+      let tl = new TimelineMax({ repeat: -1, useFrames: false })
       let i = 0
       tl.set('#airplane', { xPercent: -50, yPercent: -50, transformOrigin: 'center center' })
       tl.from('#airplane', 2, {
-        onUpdate: function() {
-          i++
-          if (i === 96) {
-            this.pause()
-          }
-        },
         bezier: {
           type: 'cubic',
           values: motionAirplanePath01.reverse(),
@@ -741,12 +734,6 @@ const json = {
         }
       })
       tl.to('#airplane', 2, {
-        onUpdate: function() {
-          i++
-          if (i === 194) {
-            this.pause()
-          }
-        },
         bezier: {
           type: 'cubic',
           values: motionAirplanePath01,
@@ -756,7 +743,7 @@ const json = {
       tl.from('#airplane', 2, {
         onUpdate: function() {
           i++
-          if (i === 300) {
+          if (i === 296) {
             this.pause()
           }
         },
@@ -766,20 +753,17 @@ const json = {
           autoRotate: ['x', 'y', 'rotation', -90, false]
         }
       })
-      // tl.to('#airplane', 0.1, { autoRotate: true })
       tl.to('#airplane', 2, {
-        onUpdate: function() {
-          i++
-          if (i === 407) {
-            this.pause(0, true)
-          }
-        },
         bezier: {
           type: 'cubic',
           values: motionAirplanePath02,
           autoRotate: ['x', 'y', 'rotation', 90, false]
         }
       })
+
+      // function restart() {
+      //   tl.to(restart, 0.4, { autoAlpha: 1 })
+      // }
     }
 
     // svg事件
