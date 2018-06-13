@@ -741,12 +741,6 @@ const json = {
         }
       })
       tl.from('#airplane', 2, {
-        onUpdate: function() {
-          i++
-          if (i === 296) {
-            this.pause()
-          }
-        },
         bezier: {
           type: 'cubic',
           values: motionAirplanePath02.reverse(),
@@ -760,10 +754,6 @@ const json = {
           autoRotate: ['x', 'y', 'rotation', 90, false]
         }
       })
-
-      // function restart() {
-      //   tl.to(restart, 0.4, { autoAlpha: 1 })
-      // }
     }
 
     // svg事件
