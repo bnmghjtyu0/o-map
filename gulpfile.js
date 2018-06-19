@@ -7,6 +7,7 @@ gulpPlumber = require('gulp-plumber') // 載入 gulp-plumber
 gulp.task('watch', function() {
   gulp.watch(['css/*.scss', 'css/bootstrap/bootstrap.scss'], ['sass'])
   gulp.watch('*.html', ['html'])
+  gulp.watch('js/*.js', ['js'])
 })
 
 gulp.task('sass', function() {
@@ -29,6 +30,12 @@ gulp.task('html', function() {
     .pipe(gulpPlumber())
     .pipe(connect.reload()) // 當檔案異動後自動重新載入頁面
 })
+gulp.task('js', function() {
+  gulp
+    .src('js/*.js')
+    .pipe(gulpPlumber())
+    .pipe(connect.reload()) // 當檔案異動後自動重新載入頁面
+})
 
 gulp.task('webserver', function() {
   connect.server({
@@ -36,4 +43,4 @@ gulp.task('webserver', function() {
   })
 })
 
-gulp.task('default', ['webserver', 'watch', 'html', 'sass'])
+gulp.task('default', ['webserver', 'watch', 'html', 'sass', 'js'])

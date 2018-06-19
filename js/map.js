@@ -670,10 +670,21 @@ const json = {
     // 飛機沿路徑動畫 + pin
     // ------------------------------------------------------------------------------------
     // 造飛機
-    let airplane = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-    airplane.setAttributeNS(null, 'href', 'img/airplane.svg')
-    airplane.setAttributeNS(null, 'style', 'width:2px')
+    let airplane = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+    // airplane.setAttributeNS(null, 'd', 'M128.65,141.11c0,21.1-18.9,52.7-38.3,52.7-20,0-38.3-31.5-38.3-52.7s17.2-40.6,38.3-40.6S128.65,119.91,128.65,141.11Z')
+    airplane.setAttributeNS(
+      null,
+      'd',
+      'M47,.4a3.73,3.73,0,0,0-3.1,1.77L1.83,109.3a3.47,3.47,0,0,0,.44,3.54,8.34,8.34,0,0,0,3.54.89l40.28-11.07L87.7,113.72a2.93,2.93,0,0,0,3.1-.89h0a2.73,2.73,0,0,0,.44-3.1L50.08,2.61A3,3,0,0,0,47,.4Zm-3.1,20.36L43,96.46l-32.76,8.85Zm39.4,85L49.63,96.9l.89-76.14Z'
+    )
     airplane.setAttributeNS(null, 'id', 'airplane')
+    airplane.setAttributeNS(null, 'style', 'transform:translate(45px ,110px);stroke:#5DB4E5;stroke-width:1px;fill:#5DB4E5;')
+
+    let airplaneRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+    airplaneRect.setAttributeNS(null, 'id', 'airplaneRect')
+    airplaneRect.setAttributeNS(null, 'width', '180px')
+    airplaneRect.setAttributeNS(null, 'height', '227px')
+    airplaneRect.setAttributeNS(null, 'fill', 'none')
     // 宣告飛機路徑
     this.airplanePathGroup
     // true 加入飛機動畫 , false 關閉動畫
@@ -685,7 +696,13 @@ const json = {
       let pin2 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       let pin3 = document.createElementNS('http://www.w3.org/2000/svg', 'image')
       airplanePathGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      airplaneGroupWrap = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      airplaneGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
       airplanePathGroup.setAttributeNS(null, 'id', 'airplanePathGroup')
+      airplaneGroupWrap.setAttributeNS(null, 'id', 'airplaneGroupWrap')
+      airplaneGroup.setAttributeNS(null, 'id', 'airplaneGroup')
+      airplaneGroup.setAttributeNS(null, 'style', 'transform:scale(0.01)')
+
       // 圖標
       pin1.setAttributeNS(null, 'href', 'img/pin.svg')
       pin2.setAttributeNS(null, 'href', 'img/pin.svg')
@@ -717,37 +734,44 @@ const json = {
       airplanePathGroup.appendChild(pin1)
       airplanePathGroup.appendChild(pin2)
       airplanePathGroup.appendChild(pin3)
-      airplanePathGroup.appendChild(airplane)
+      airplanePathGroup.appendChild(airplaneGroupWrap)
+      airplaneGroupWrap.appendChild(airplaneGroup)
+      airplaneGroup.appendChild(airplane)
+      airplaneGroup.appendChild(airplaneRect)
       // 將 group 置入 svg
       $mapMain.appendChild(airplanePathGroup)
 
-      motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplane' })
-      motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplane' })
-      let tl = new TimelineMax({ repeat: -1, useFrames: false, paused: true })
+      motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplaneGroupWrap' })
+      motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplaneGroupWrap' })
+      let tl = new TimelineMax({ repeat: -1, useFrames: false, paused: false })
       let i = 0
-      tl.set('#airplane', { xPercent: -50, yPercent: -50, transformOrigin: 'center center' })
-      tl.from('#airplane', 2, {
+      tl.set('#airplaneGroupWrap', { xPercent: -50, yPercent: -50, transformOrigin: 'center center' })
+      tl.from('#airplaneGroupWrap', 2.8, {
+        ease: Power1.easeInOut,
         bezier: {
           type: 'cubic',
           values: motionAirplanePath01.reverse(),
           autoRotate: ['x', 'y', 'rotation', -90, false]
         }
       })
-      tl.to('#airplane', 2, {
+      tl.to('#airplaneGroupWrap', 2.8, {
+        ease: Power1.easeInOut,
         bezier: {
           type: 'cubic',
           values: motionAirplanePath01,
           autoRotate: ['x', 'y', 'rotation', 90, false]
         }
       })
-      tl.from('#airplane', 2, {
+      tl.from('#airplaneGroupWrap', 3.8, {
+        ease: Power1.easeInOut,
         bezier: {
           type: 'cubic',
           values: motionAirplanePath02.reverse(),
           autoRotate: ['x', 'y', 'rotation', -90, false]
         }
       })
-      tl.to('#airplane', 2, {
+      tl.to('#airplaneGroupWrap', 3.8, {
+        ease: Power1.easeInOut,
         bezier: {
           type: 'cubic',
           values: motionAirplanePath02,
