@@ -723,7 +723,7 @@ const json = {
 
       motionAirplanePath01 = MorphSVGPlugin.pathDataToBezier(airplanePath01, { align: '#airplane' })
       motionAirplanePath02 = MorphSVGPlugin.pathDataToBezier(airplanePath02, { align: '#airplane' })
-      let tl = new TimelineMax({ repeat: -1, useFrames: false })
+      let tl = new TimelineMax({ repeat: -1, useFrames: false, paused: true })
       let i = 0
       tl.set('#airplane', { xPercent: -50, yPercent: -50, transformOrigin: 'center center' })
       tl.from('#airplane', 2, {
