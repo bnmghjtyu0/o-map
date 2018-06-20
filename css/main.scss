@@ -8,7 +8,7 @@ html {
 body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
-  background: #5d59c4;
+  // background: #5d59c4;
 }
 
 // btn
@@ -71,7 +71,7 @@ $mapHeight: 100%;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   #mapMenu {
-    position: absolute;
+    // position: absolute;
     top: 2rem;
     left: 3rem;
     z-index: 999;
@@ -85,10 +85,11 @@ $mapHeight: 100%;
     background: #000;
     width: 500px;
     height: 100vh;
-    z-index: 1024;
+    z-index: 9999;
     transition: left 200ms ease-in;
     @media (max-width: 767px) {
       width: 90% !important;
+      left: -90%;
     }
     .closeCase {
       position: absolute;
@@ -278,12 +279,18 @@ $mapHeight: 100%;
       }
     }
   }
+
+  // path {
+  //   vector-effect: non-scaling-stroke;
+  //   stroke-linecap: round;
+  // }
+
   .map {
     position: relative; // 共用樣式
     [d].border-primary {
       fill: none !important;
       stroke: #57b2e2 !important;
-      stroke-width: 0.1;
+      stroke-width: 1px;
     }
     [d].border-primary:hover {
       fill: none !important;
@@ -322,11 +329,24 @@ $mapHeight: 100%;
     .tip {
       display: none;
       background: #fff;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
       margin-left: -60px;
       margin-top: -30px;
-      padding: 2px 8px;
+      padding: 0.75rem 3rem;
       border: 1px solid #57b2e2;
+      filter: drop-shadow(0px 0 2px #57b2e2);
+      font-size: 1.5rem;
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -0.75rem;
+        left: 50%;
+        margin-left: -0.75rem;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0.75rem 0.75rem 0 0.75rem;
+        border-color: #fff transparent transparent transparent;
+      }
     }
     #map {
       width: 100%;
@@ -343,7 +363,6 @@ $mapHeight: 100%;
         }
         #taiwan path,
         #taiwan polygon {
-          vector-effect: non-scaling-stroke;
           fill: #fff;
           stroke-width: 1px;
           stroke: #fff !important;
@@ -380,13 +399,16 @@ $mapHeight: 100%;
   li {
     display: inline-block;
     list-style: none;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
     margin-right: 2px;
+    // margin-right: 2px;
     a {
+      display: block;
       color: #fff;
       padding: 10px;
       text-decoration: none;
       background: #333;
+      font-size: 1.5rem;
       &:hover {
         opacity: 0.8;
       }
