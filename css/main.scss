@@ -75,6 +75,9 @@ $mapHeight: 100%;
     top: 2rem;
     left: 3rem;
     z-index: 999;
+    @media (max-width: 767px) {
+      display: none;
+    }
     i {
       color: #fff;
     }
@@ -88,8 +91,8 @@ $mapHeight: 100%;
     z-index: 9999;
     transition: left 200ms ease-in;
     @media (max-width: 767px) {
-      width: 90% !important;
-      left: -90%;
+      width: 100% !important;
+      left: -100%;
     }
     .closeCase {
       position: absolute;
@@ -114,16 +117,22 @@ $mapHeight: 100%;
     }
     .Cases-body {
       width: 100%;
+      height: 100%;
       display: flex;
       align-items: stretch;
       .left {
         width: 100%;
+        height: calc(100% - 60px);
         margin-top: 60px;
         padding: 0 20px;
         /* areaInfo */
         #areaInfo {
           padding: 30px;
-          height: 100%;
+          height: calc(100% - 160px);
+          margin-top: 20px;
+          @media (max-width: 767px) {
+            margin-top: 0;
+          }
           .title {
             font-size: 25px;
             margin-bottom: 20px;
@@ -285,6 +294,9 @@ $mapHeight: 100%;
   //   stroke-linecap: round;
   // }
 
+  [d] {
+    stroke-linejoin: round;
+  }
   .map {
     position: relative; // 共用樣式
     [d].border-primary {
@@ -309,7 +321,7 @@ $mapHeight: 100%;
       outline: none !important;
     } // 設定
     .btnWrap {
-      position: absolute;
+      position: fixed;
       left: 0;
       top: 0;
       width: 100%;
@@ -322,7 +334,7 @@ $mapHeight: 100%;
         pointer-events: auto;
         z-index: 1023;
         @media (max-width: 767px) {
-          top: 0;
+          // top: 0;
         }
       }
     }
@@ -396,6 +408,9 @@ $mapHeight: 100%;
 
 .areaList {
   padding-left: 0;
+  @media (max-width: 767px) {
+    display: none;
+  }
   li {
     display: inline-block;
     list-style: none;

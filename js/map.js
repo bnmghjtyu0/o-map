@@ -237,6 +237,7 @@
             nav = eventMap['2']
             if (nav.act === 'mousemove') {
               var touchobj = e.changedTouches[0]
+              console.log(touchobj)
 
               // 1.
               let startViewBox = this.getAttribute('viewBox')
@@ -514,7 +515,7 @@
           'M47,.4a3.73,3.73,0,0,0-3.1,1.77L1.83,109.3a3.47,3.47,0,0,0,.44,3.54,8.34,8.34,0,0,0,3.54.89l40.28-11.07L87.7,113.72a2.93,2.93,0,0,0,3.1-.89h0a2.73,2.73,0,0,0,.44-3.1L50.08,2.61A3,3,0,0,0,47,.4Zm-3.1,20.36L43,96.46l-32.76,8.85Zm39.4,85L49.63,96.9l.89-76.14Z'
         )
         airplane.setAttributeNS(null, 'id', 'airplane')
-        airplane.setAttributeNS(null, 'style', 'transform:translate(45px ,110px);stroke:#5DB4E5;stroke-width:1px;fill:#5DB4E5;')
+        airplane.setAttributeNS(null, 'style', 'transform:translate(0px ,180px) scale(1.8);  stroke:#5DB4E5;stroke-width:1px;fill:#5DB4E5;')
 
         let airplaneRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
         airplaneRect.setAttributeNS(null, 'id', 'airplaneRect')
@@ -631,7 +632,7 @@
           function(evt) {
             var touchobj = evt.changedTouches[0]
             startx = parseInt(touchobj.clientX)
-            starty = parseInt(touchobj.clientY)
+            // starty = parseInt(touchobj.clientY)
             this.addEventListener('touchmove', aafn, true)
             // this.addEventListener('touchend', function() {
             //   if (dragging) return
@@ -681,6 +682,49 @@
         taichungLink.forEach(a => {
           a.addEventListener('click', mapFocus, false)
         })
+
+        let TaiwanFocus = document.querySelector('#TaiwanFocus')
+        TaiwanFocus.addEventListener(
+          'click',
+          function() {
+            if (!rID && eventMap) {
+              nav = eventMap['1']
+              if (nav.act === 'zoom') {
+                tg = [1116.98095703125, 542.00335859375, 20.272865295410156, 12.248187780761715]
+              }
+            }
+            update()
+          },
+          false
+        )
+        let ShanghaiFocus = document.querySelector('#ShanghaiFocus')
+        ShanghaiFocus.addEventListener(
+          'click',
+          function() {
+            if (!rID && eventMap) {
+              nav = eventMap['1']
+              if (nav.act === 'zoom') {
+                tg = [1115.7747802734375, 510.84628461914065, 17.338601276121608, 10.47540351061143]
+              }
+            }
+            update()
+          },
+          false
+        )
+        let PalauFocus = document.querySelector('#PalauFocus')
+        PalauFocus.addEventListener(
+          'click',
+          function() {
+            if (!rID && eventMap) {
+              nav = eventMap['1']
+              if (nav.act === 'zoom') {
+                tg = [1187.3319091796875, 602.2962663085938, 8.009033203125, 4.838790234374999]
+              }
+            }
+            update()
+          },
+          false
+        )
       }
       map()
       // 執行動畫
