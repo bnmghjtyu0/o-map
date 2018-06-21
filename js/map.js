@@ -4,6 +4,46 @@
       return response.json()
     })
     .then(function(json) {
+      // mediaQuery
+      var xs = window.matchMedia('(max-width: 767px)')
+      var sm = window.matchMedia('(min-width: 768px)' && '(max-width: 991px)')
+      var md = window.matchMedia('(min-width: 992px)' && '(max-width: 1199px)')
+      var lg = window.matchMedia('(min-width: 1200px)')
+
+      let TaiwanMediaQuery = {
+        lg: [1078.83740234375, 525.673524609375, 72.081298828125, 43.54911210937499],
+        md: [1074.0513916015625, 525.9494645507813, 72.081298828125, 43.54911210937499],
+        sm: [1073.18115234375, 525.9494645507813, 72.081298828125, 43.54911210937499],
+        xs: [1112.27978515625, 539.3267838867188, 30.409297943115234, 18.372281671142574]
+      }
+      let ShanghaiMediaQuery = {
+        lg: [1095.499837109375, 503.512816015625, 45, 25.3125],
+        md: [1082.1498615234375, 499.110472265625, 60, 33.75],
+        sm: [1094.00279453125, 504.1738910644531, 42.71484375, 24.027099609375],
+        xs: [1115.7747802734375, 510.84628461914065, 17.338601276121608, 10.47540351061143]
+      }
+      let PalauMediaQuery = {
+        lg: [1173.1502126953126, 598.0999599609376, 28.4765625, 14.23828125],
+        md: [1171.601994921875, 598.4458461914063, 28.4765625, 14.23828125],
+        sm: [1175.7451833984376, 600.558333984375, 20.272865295410156, 10.136432647705078],
+        xs: [1187.3319091796875, 602.2962663085938, 8.009033203125, 4.838790234374999]
+      }
+      window.addEventListener('resize', resize, false)
+
+      function resize() {
+        let width = this.visualViewport.width
+        let height = this.visualViewport.height
+        if (xs.matches) {
+          reset()
+        } else if (sm.matches) {
+          reset()
+        } else if (md.matches) {
+          // reset()
+        } else if (lg.matches) {
+          // reset()
+        }
+      }
+
       // ------------------------------------------------------------------------------------
       // 地圖函式 start
       // ------------------------------------------------------------------------------------
@@ -28,12 +68,11 @@
         }
 
         // map DOM 宣告
-        let $Cases = document.querySelector('.mapSidebar')
+        let $sidebar = document.querySelector('.mapSidebar')
         let $map = document.querySelector('.map')
         let $Home = document.querySelector('#Home')
         let $zoomIn = document.querySelector('#zoom-in')
         let $zoomOut = document.querySelector('#zoom-out')
-        let $mapMenu = document.querySelector('#mapMenu')
         let $closeCases = document.querySelector('.closeCase')
         let TaiwanAll = Array.from(document.querySelectorAll('#taiwan path'))
         let $mapMain = document.querySelector('#mapMain')
@@ -62,11 +101,23 @@
         let tg = Array(4)
         let rID = null
         let f = 0
-        let viewBoxInit = '1021, 484.5683, 227.8125, 137.6367'
+
+        let viewBoxInit = {
+          lg: '1021, 484.5683, 227.8125, 137.6367',
+          md: '1021, 484.5683, 227.8125, 137.6367',
+          sm: '1051.5380859375, 503.1901872070313, 170.859375, 103.22752499999999',
+          xs: '1098.1536865234375, 531.8329484375, 57.73015156388283, 34.87862848505973'
+        }
+        // let viewBoxInit = '1021, 484.5683, 227.8125, 137.6367'
+        // let viewBoxInitXS = '1098.1536865234375, 531.8329484375, 57.73015156388283, 34.87862848505973'
         // 取得 svg
         this.svg = document.querySelector('#map')
         // 設定預設值
-        this.svg.setAttributeNS(null, 'viewBox', viewBoxInit)
+        if (xs.matches) {
+          this.svg.setAttributeNS(null, 'viewBox', viewBoxInit.xs)
+        } else {
+          this.svg.setAttributeNS(null, 'viewBox', viewBoxInit.lg)
+        }
         this.svgViewBox = this.svg
           .getAttribute('viewBox')
           .split(' ')
@@ -101,11 +152,11 @@
         }
         // 新增選取地區的效果
         this.openSidebar = function() {
-          $Cases.style.left = '0'
+          $sidebar.classList.add('open')
         }
         // 關閉側邊欄
         this.closeSidebar = function() {
-          $Cases.style.left = '-600px'
+          $sidebar.classList.remove('open')
         }
 
         // 停止 requestAnimationFrame
@@ -122,6 +173,7 @@
 
         // 地圖渲染與更新
         this.update = function() {
+          console.log(tg)
           let k = ++f / NF,
             j = 1 - k,
             cvb = this.svgViewBox
@@ -340,15 +392,51 @@
                   if (area[1].country !== 'Taiwan') return
                   TaiwanCity.push(area[0])
                 })
-                if (TaiwanCity.includes(areaId)) {
-                  tg = [1083.3734, 523.3743, 90, 50.625]
-                } else if (areaId === 'Shanghai') {
-                  tg = [1099.6993, 499.0614, 60, 33.75]
-                } else if (areaId === 'Palau') {
-                  tg = [1173.608830859375, 595.295638671875, 37.96875, 18.984375]
-                } else {
-                  return
+                function resize() {
+                  if (xs.matches) {
+                    if (TaiwanCity.includes(areaId)) {
+                      tg = TaiwanMediaQuery.xs
+                    } else if (areaId === 'Shanghai') {
+                      tg = ShanghaiMediaQuery.xs
+                    } else if (areaId === 'Palau') {
+                      tg = PalauMediaQuery.xs
+                    } else {
+                      return
+                    }
+                  } else if (sm.matches) {
+                    if (TaiwanCity.includes(areaId)) {
+                      tg = TaiwanMediaQuery.sm
+                    } else if (areaId === 'Shanghai') {
+                      tg = ShanghaiMediaQuery.sm
+                    } else if (areaId === 'Palau') {
+                      tg = PalauMediaQuery.sm
+                    } else {
+                      return
+                    }
+                  } else if (md.matches) {
+                    if (TaiwanCity.includes(areaId)) {
+                      tg = TaiwanMediaQuery.md
+                    } else if (areaId === 'Shanghai') {
+                      tg = ShanghaiMediaQuery.md
+                    } else if (areaId === 'Palau') {
+                      tg = PalauMediaQuery.md
+                    } else {
+                      return
+                    }
+                  } else if (lg.matches) {
+                    if (TaiwanCity.includes(areaId)) {
+                      tg = TaiwanMediaQuery.lg
+                    } else if (areaId === 'Shanghai') {
+                      tg = ShanghaiMediaQuery.lg
+                    } else if (areaId === 'Palau') {
+                      tg = PalauMediaQuery.lg
+                    } else {
+                      return
+                    }
+                  }
                 }
+                resize()
+
                 stopAirplaneAnimation()
               }
               update()
@@ -372,8 +460,14 @@
         this.reset = function() {
           if (!rID && eventMap) {
             nav = eventMap['4']
+
             if (nav.act === 'reset') {
-              tg = viewBoxInit.split(' ').map(c => parseFloat(c))
+              if (xs.matches) {
+                tg = viewBoxInit.xs.split(' ').map(c => parseFloat(c))
+              } else {
+                tg = viewBoxInit.lg.split(' ').map(c => parseFloat(c))
+              }
+
               airplanePathGroup.style.display = 'block'
               document.querySelector('#airplane').style.display = 'block'
             }
@@ -669,12 +763,41 @@
         $zoomOut.addEventListener('click', zoom, false)
         $zoomIn.addEventListener('click', zoom, false)
 
-        // 打開 sidebar hamburger
+        // 打開 sidebar hamburger 預設台中地區
+        let $mapMenu = document.querySelector('#mapMenu')
         $mapMenu.addEventListener(
           'click',
           function(e) {
+            if (!rID && eventMap) {
+              nav = eventMap['1']
+              function resize() {
+                if (nav.act === 'zoom') {
+                  if (xs.matches) {
+                    tg = TaiwanMediaQuery.xs
+                  } else if (sm.matches) {
+                    tg = TaiwanMediaQuery.sm
+                  } else if (md.matches) {
+                    tg = TaiwanMediaQuery.md
+                  } else if (lg.matches) {
+                    tg = TaiwanMediaQuery.lg
+                  }
+                }
+              }
+              resize()
+              stopAirplaneAnimation()
+            }
+
             e.preventDefault()
+            removeAreaActive()
             openSidebar()
+            areaDOM('TaichungArea')
+            if ('TaichungArea' in Coordination || 'TaichungArea' in json) {
+              // Cases 展開地區資訊
+              let maxYear = Math.max(...Object.keys(json['TaichungArea'].year))
+              areaBlock(maxYear, 'TaichungArea')
+              addAreaActive('TaichungArea')
+            }
+            update()
           },
           false
         )
@@ -690,8 +813,9 @@
             if (!rID && eventMap) {
               nav = eventMap['1']
               if (nav.act === 'zoom') {
-                tg = [1116.98095703125, 542.00335859375, 20.272865295410156, 12.248187780761715]
+                tg = TaiwanMediaQuery.xs
               }
+              stopAirplaneAnimation()
             }
             update()
           },
@@ -704,8 +828,9 @@
             if (!rID && eventMap) {
               nav = eventMap['1']
               if (nav.act === 'zoom') {
-                tg = [1115.7747802734375, 510.84628461914065, 17.338601276121608, 10.47540351061143]
+                tg = ShanghaiMediaQuery.xs
               }
+              stopAirplaneAnimation()
             }
             update()
           },
@@ -718,9 +843,11 @@
             if (!rID && eventMap) {
               nav = eventMap['1']
               if (nav.act === 'zoom') {
-                tg = [1187.3319091796875, 602.2962663085938, 8.009033203125, 4.838790234374999]
+                tg = PalauMediaQuery.xs
               }
+              stopAirplaneAnimation()
             }
+
             update()
           },
           false

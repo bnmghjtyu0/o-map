@@ -2,6 +2,8 @@ $circleSize: 10px 10px;
 $circleOutSize: (nth($circleSize, 1) * 2.2) (nth($circleSize, 2) * 2.2);
 $circleLineY: 15px;
 $circleLineHeight: 1px;
+// iphoneX
+
 html {
   --myColor: green;
 }
@@ -9,6 +11,10 @@ body {
   font-family: '微軟正黑體', Arial, Helvetica, sans-serif;
   line-height: 1.5em;
   // background: #5d59c4;
+  padding-top: constant(safe-area-inset-top);
+  padding-right: constant(safe-area-inset-right);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-left: constant(safe-area-inset-left);
 }
 
 // btn
@@ -90,10 +96,18 @@ $mapHeight: 100%;
     height: 100vh;
     z-index: 9999;
     transition: left 200ms ease-in;
+    &.open {
+      left: 0;
+    }
+    @media (max-width: 992px) {
+      width: 50% !important;
+      left: -50%;
+    }
     @media (max-width: 767px) {
       width: 100% !important;
       left: -100%;
     }
+
     .closeCase {
       position: absolute;
       right: 1rem;
@@ -333,6 +347,16 @@ $mapHeight: 100%;
         bottom: 1rem;
         pointer-events: auto;
         z-index: 1023;
+        .visible-xs {
+          position: absolute;
+          bottom: 4rem;
+          right: 0;
+          .btn {
+            display: block;
+            background: none;
+            color: #fff;
+          }
+        }
         @media (max-width: 767px) {
           // top: 0;
         }
