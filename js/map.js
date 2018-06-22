@@ -283,31 +283,59 @@
         var starty = 0
         var dist = 0
 
-        this.aafn = function(e) {
-          // 阻止滾動
-          if (!rID && eventMap) {
-            nav = eventMap['2']
-            if (nav.act === 'mousemove') {
-              var touchobj = e.changedTouches[0]
-              console.log(touchobj)
+        // this.aafn = function(e) {
+        //   // 阻止滾動
+        //   if (!rID && eventMap) {
+        //     nav = eventMap['2']
+        //     if (nav.act === 'mousemove') {
+        //       // let deltaX = e.deltaX
+        //       // let deltaY = e.deltaY
+        //       console.log(e)
 
-              // 1.
-              let startViewBox = this.getAttribute('viewBox')
-                .split(' ')
-                .map(n => parseFloat(n))
-              //  2. 取得滑鼠當前 viewport 中 client 座標值
-              let startClient = {
-                x: touchobj.clientX,
-                y: touchobj.clientY
-              }
-              distx = -(parseInt(startClient.x) - startx) * 0.1
-              disty = -(parseInt(startClient.y) - starty) * 0.1
-              tg = [startViewBox[0] + distx, startViewBox[1] + disty, startViewBox[2], startViewBox[3]]
-              e.preventDefault()
-            }
-            update()
-          }
-        }
+        //       // distx = -parseInt(startClient.x) * 0.1
+        //       // disty = -parseInt(startClient.y) * 0.1
+        //       // tg = [startViewBox[0] + distx, startViewBox[1] + disty, startViewBox[2], startViewBox[3]]
+
+        //       // 1. 取得一開始的 viewBox 值，原本是字串，拆成陣列，方便之後運算
+        //       let startViewBox = svg
+        //         .getAttribute('viewBox')
+        //         .split(' ')
+        //         .map(n => parseFloat(n))
+        //       //  2. 取得滑鼠當前 viewport 中 client 座標值
+        //       let startClient = {
+        //         x: e.deltaX,
+        //         y: e.deltaY
+        //       }
+
+        //       //  3. 計算對應回去的 SVG 座標值
+        //       let newSVGPoint = svg.createSVGPoint()
+        //       let CTM = svg.getScreenCTM()
+        //       newSVGPoint.x = startClient.x
+        //       newSVGPoint.y = startClient.y
+        //       let startSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+        //       //  4. 計算拖曳後滑鼠所在的 viewport client 座標值
+        //       let moveToClient = {
+        //         x: e.clientX + e.movementX, //  movement 可以取得滑鼠位移量
+        //         y: e.clientY + e.movementY
+        //       }
+        //       //  5. 計算對應回去的 SVG 座標值
+        //       newSVGPoint = svg.createSVGPoint()
+        //       CTM = svg.getScreenCTM()
+        //       newSVGPoint.x = moveToClient.x
+        //       newSVGPoint.y = moveToClient.y
+        //       let moveToSVGPoint = newSVGPoint.matrixTransform(CTM.inverse())
+        //       //  6. 計算位移量
+        //       let delta = {
+        //         dx: startSVGPoint.x - moveToSVGPoint.x,
+        //         dy: startSVGPoint.y - moveToSVGPoint.y
+        //       }
+        //       tg = [startViewBox[0] + delta.dx, startViewBox[1] + delta.dy, startViewBox[2], startViewBox[3]]
+
+        //       e.preventDefault()
+        //     }
+        //     update()
+        //   }
+        // }
         this.move = function(e) {
           if (!rID && eventMap) {
             nav = eventMap['2']
@@ -721,20 +749,6 @@
           isMousedown = false
         })
 
-        this.svg.addEventListener(
-          'touchstart',
-          function(evt) {
-            var touchobj = evt.changedTouches[0]
-            startx = parseInt(touchobj.clientX)
-            // starty = parseInt(touchobj.clientY)
-            this.addEventListener('touchmove', aafn, true)
-            // this.addEventListener('touchend', function() {
-            //   if (dragging) return
-            // })
-          },
-          false
-        )
-
         // 關閉 sidebar 事件
         $closeCases.addEventListener('click', this.closeSidebar, false)
 
@@ -852,6 +866,48 @@
           },
           false
         )
+
+        // hammerjs
+
+        // this.svg.addEventListener(
+        //   'touchstart',
+        //   function(evt) {
+        //     var touchobj = evt.changedTouches[0]
+        //     startx = parseInt(touchobj.clientX)
+        //     // starty = parseInt(touchobj.clientY)
+        //     this.addEventListener('touchmove', aafn, true)
+        //     // this.addEventListener('touchend', function() {
+        //     //   if (dragging) return
+        //     // })
+        //   },
+        //   false
+        // )
+
+        let svgX = svg.getBBox().x
+        let svgY = svg.getBBox().y
+        let displayImageX = 0
+        let displayImageY = 0
+        let rangeX = 0
+        let rangeMaxX = 0
+        let rangeMinX = 0
+
+        let rangeY = 0
+        let rangeMaxY = 0
+        let rangeMinY = 0
+
+        let displayImageScale = 1
+        function updateDisplayImage(x, y, scale) {
+          const transform = 'translateX(' + x + 'px) translateY(' + y + 'px) translateZ(0px) scale(' + scale + ',' + scale + ')'
+        }
+        function clamp(value, min, max) {
+          return Math.min(Math.max(min, value), max)
+        }
+        var hammerSvg = new Hammer(svg)
+        hammerSvg.on('pan', ev => {
+          displayImageCurrentX = clamp(svgX + ev.deltaX, rangeMinX, rangeMaxX)
+          displayImageCurrentY = clamp(svgY + ev.deltaY, rangeMinY, rangeMaxY)
+          updateDisplayImage(displayImageCurrentX, displayImageCurrentY, displayImageScale)
+        })
       }
       map()
       // 執行動畫
